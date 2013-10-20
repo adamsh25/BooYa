@@ -22,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.example.booya.MazeActivity"
+            android:label="@string/title_activity_maze" >
+        </activity>
+        <activity
+            android:name="com.example.booya.MazeGameActivity"
+            android:label="@string/title_activity_maze_game" >
+        </activity>
     </application>
 
 </manifest>
