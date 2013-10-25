@@ -1,4 +1,7 @@
-package com.example.booya;
+package com.example.booya.UI.Activities;
+
+
+import com.example.booya.R;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -10,7 +13,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
 	}
 
 	@Override

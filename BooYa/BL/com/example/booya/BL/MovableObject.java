@@ -1,4 +1,4 @@
-package com.example.booya;
+package com.example.booya.BL;
 
 /*
  * This base class defines an abstract object which has central location (x,y),
