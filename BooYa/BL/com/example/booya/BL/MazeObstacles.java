@@ -3,10 +3,11 @@ package com.example.booya.BL;
 public enum MazeObstacles 
 {
 	
-	FUTURE_SAFE(0),
-	SAFE(1),
+	SAFE(0),
+	START(1),
     WALL(2),
-	BOOYA(3),
+    FIN(3),
+	BOOYA(4),
 	BOUNTY(15);
 	
 	
@@ -21,13 +22,17 @@ public enum MazeObstacles
 	{
         switch(x) {
 	        case 0:
-	            return FUTURE_SAFE;
-	        case 1:
 	            return SAFE;
+	        case 1:
+	            return START;
 	        case 2:
-	            return BOOYA;
+	            return WALL;
 	        case 3:
-	            return BOUNTY;
+	            return FIN;
+	        case 4:
+	        	return BOOYA;
+	        case 5:
+	        	return BOUNTY;
 	        }
 	        return null;
 	}
