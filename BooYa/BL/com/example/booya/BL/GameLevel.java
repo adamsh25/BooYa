@@ -18,13 +18,26 @@ public abstract class GameLevel
     public final int MaxCols = 10;
 
     // The bricks array that we will be working on.
-    protected int[][] level;
-
+    protected MazeObstacles[][] level;
     // Constructor just creates an empty array of bricks
     public GameLevel()
     {
-        this.level = new int[this.MaxRows][this.MaxCols];
+        this.level = new MazeObstacles[this.MaxRows][this.MaxCols];
     }
+    
+    public void UpdateMazeObstaclesMatrix(int[][] obstacles)
+    {
+    	for(int row = 0; row < this.level.length; row++)
+    	{
+    		for(int col = 0; col < this.level[0].length; col++)
+    		{
+    			this.level[row][col] = MazeObstacles.GetMazeObstacleByValue(obstacles[row][col]);
+    		}
+    	}
+    	
+    }
+    
+    
     
     /*
     private void InitMazeObstacles()
@@ -64,14 +77,14 @@ public abstract class GameLevel
     // else returns False.
     public boolean IsWallAt(int row, int col)
     {
-    	return (this.level[row][col] == MazeObstacles.WALL.GetObstacle());
+    	return (this.level[row][col] == MazeObstacles.WALL);
     }
     
     // Receive a position and 
     // returns MazeObstacle at that position.
     public MazeObstacles MazeObstacleAt(int row, int col)
     {
-    	return MazeObstacles.values()[this.level[row][col]];
+    	return this.level[row][col];
     }
     
     public boolean CheckMonsterTouch(int row, int col, Monster monster)

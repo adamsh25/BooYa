@@ -5,8 +5,8 @@ public enum MazeObstacles
 	
 	FUTURE_SAFE(0),
 	SAFE(1),
-    WALL(3),
-	BOOYA(4),
+    WALL(2),
+	BOOYA(3),
 	BOUNTY(15);
 	
 	
@@ -17,9 +17,19 @@ public enum MazeObstacles
 		
 	}
 	
-	public MazeObstacles GetMazeObstacleByValue(int value)
+	public static MazeObstacles GetMazeObstacleByValue(int x)
 	{
-		return MazeObstacles.values()[value];
+        switch(x) {
+	        case 0:
+	            return FUTURE_SAFE;
+	        case 1:
+	            return SAFE;
+	        case 2:
+	            return BOOYA;
+	        case 3:
+	            return BOUNTY;
+	        }
+	        return null;
 	}
 	
 	public int GetObstacle()
