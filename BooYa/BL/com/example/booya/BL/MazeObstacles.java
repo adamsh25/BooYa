@@ -18,7 +18,8 @@ public enum MazeObstacles
 		
 	}
 	
-	public static MazeObstacles GetMazeObstacleByValue(int x)
+	// Get The Maze Enumerated Obstacle Name By A Given Indexed Number
+	public static MazeObstacles GetMazeObstacleByNumber(int x)
 	{
         switch(x) {
 	        case 0:
@@ -37,7 +38,7 @@ public enum MazeObstacles
 	        return null;
 	}
 	
-	public int GetObstacle()
+	public int GetObstacleValue()
 	{
 		return this.obstacleValue;
 		

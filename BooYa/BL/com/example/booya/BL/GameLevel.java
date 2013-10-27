@@ -2,14 +2,13 @@ package com.example.booya.BL;
 
 public abstract class GameLevel 
 {
-    // Space from the top screen from which the bricks will be drawn
-
+    // Space from the top screen from which the Walls will be drawn
     public final int TopPadding = 25;
  
     // Space between each Wall
     public final int MazeObstaclePadding = 0;
  
-    // Brick Width and Height
+    // Wall Width and Height
     public final int MazeObstacleSize = 15;
 
     // Max number of Walls rows and columns
@@ -17,64 +16,56 @@ public abstract class GameLevel
 
     public final int MaxCols = 10;
 
-    // The bricks array that we will be working on.
+    // The Maze Obstacles array.
     protected MazeObstacles[][] level;
-    // Constructor just creates an empty array of bricks
+    
+    // Constructor just creates an empty array of MazeObstacles
     public GameLevel()
     {
         this.level = new MazeObstacles[this.MaxRows][this.MaxCols];
     }
     
+    // We Give An Array Of Numbers To Init Each Level Easily
+    // But For Easy Work We Will Use An Enumerable Array Of Maze Obstacles
     public void UpdateMazeObstaclesMatrix(int[][] obstacles)
     {
     	for(int row = 0; row < this.level.length; row++)
     	{
     		for(int col = 0; col < this.level[0].length; col++)
     		{
-    			this.level[row][col] = MazeObstacles.GetMazeObstacleByValue(obstacles[row][col]);
+    			this.level[row][col] = MazeObstacles.GetMazeObstacleByNumber(obstacles[row][col]);
     		}
     	}
     	
     }
     
-    
-    
-    /*
-    private void InitMazeObstacles()
-    {
-    	for(int row = 0; row < this.level.length; row++)
-    	{
-    		for(int col = 0; col < this.level[0].length; col++)
-    		{
-    			this.level[row][col] = MazeObstacles.FUTURE_SAFE;
-    		}
-    	}
-    }
-    */
-    
+    // Get The Maze Obstacle Top Place  
     public int GetMazeObstacleTop(int row)
     {
     	return (this.MazeObstacleSize * row);
     }
     
+    // Get The Maze Obstacle Bottom Place
 	public int GetMazeObstacleBottom(int row)
     {
     	return ((this.MazeObstacleSize * row) + this.MazeObstacleSize);    	
     }
     
+	// Get The Maze Obstacle Left Place
     public int GetMazeObstacleLeft(int col)
     {
     	return (this.MazeObstacleSize * col);    	
     }
     
+    // Get The Maze Obstacle Right Place
     public int GetMazeObstacleRight(int col)
     {
     	return ((this.MazeObstacleSize * col) + this.MazeObstacleSize);
     }
     
-    // Receive a position and returns 
-    // True if in that position there is a wall,
-    // else returns False.
+    // Receive A Position And Returns 
+    // True If In That Position There Is An Wall,
+    // Else Returns False.
     public boolean IsWallAt(int row, int col)
     {
     	return (this.level[row][col] == MazeObstacles.WALL);
@@ -87,6 +78,7 @@ public abstract class GameLevel
     	return this.level[row][col];
     }
     
+    // Return True If The Monster Has Touched An Obstacle
     public boolean CheckMonsterTouch(int row, int col, Monster monster)
     {
     	
@@ -102,6 +94,7 @@ public abstract class GameLevel
     	return false;
     }
     
+    // Return True If The Monster Has Touched The Obstacle From His Top
     private boolean IsTouchTop(int row, int col, Monster monster)
     {
     	
@@ -123,6 +116,7 @@ public abstract class GameLevel
     		  );
     }
     
+    // Return True If The Monster Has Touched The Obstacle From His Bottom
     private boolean IsTouchBottom(int row, int col, Monster monster)
     {
     	
@@ -144,6 +138,7 @@ public abstract class GameLevel
     		  );
     }
     
+    // Return True If The Monster Has Touched The Obstacle From His Left
     private boolean IsTouchLeft(int row, int col, Monster monster)
     {
     	return
@@ -164,6 +159,7 @@ public abstract class GameLevel
     		  );
     }
 
+    // Return True If The Monster Has Touched The Obstacle From His Right
     private boolean IsTouchRight(int row, int col, Monster monster)
     {
         return
