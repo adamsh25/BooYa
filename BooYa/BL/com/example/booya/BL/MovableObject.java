@@ -1,5 +1,7 @@
 package com.example.booya.BL;
 
+import android.graphics.Point;
+
 /*
  * This base class defines an abstract object which has central location (x,y),
  * some dimensions which can be determined by calling the methods
@@ -31,6 +33,10 @@ public abstract class MovableObject
 	    //should return the bottom border of the object
 	    public abstract int getBottom();
 	    //This method should move the object
-	    public abstract void move();
+	    public abstract boolean move(Point p);
+	    //
+	    public abstract boolean checkMove();
+	    
+	   
 
 }
