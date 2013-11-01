@@ -13,8 +13,8 @@ public class MonsterView extends View {
 
 	//region members
 	
-	private final int MONSTER_WIDTH = 15;
-	private final int MONSTER_HEIGHT = 15;
+	private int m_monsterWidth = Monster.MONSTER_WIDTH;
+	private int m_monsterHeight = Monster.MONSTER_HEIGHT;
 	
 	private Monster m_theMonster;
 	
@@ -22,9 +22,11 @@ public class MonsterView extends View {
 	
 	//region C'tor
 	
-	public MonsterView(Context context) {
+	public MonsterView(Context context, Monster monster) 
+	{
 		super(context);
-		// TODO Auto-generated constructor stub
+		this.m_theMonster = monster;
+		
 	}
 
 	//endregion
@@ -36,13 +38,13 @@ public class MonsterView extends View {
 		try 
 		{
 			BitmapFactory.Options o = new BitmapFactory.Options();
-			o.outWidth  = MONSTER_WIDTH ;
-			o.outHeight = MONSTER_HEIGHT; 
+			o.outWidth  = m_monsterWidth ;
+			o.outHeight = m_monsterHeight; 
 			monsterBitmap = BitmapFactory.decodeResource(getResources(),
 					R.drawable.monster,o);
 
-/*			monsterBitmap = monsterBitmap.createScaledBitmap(monsterBitmap,
-					MONSTER_WIDTH, MONSTER_HEIGHT, false);*/
+			monsterBitmap = monsterBitmap.createScaledBitmap(monsterBitmap,
+					m_monsterWidth, m_monsterHeight, false);
 		}
 		catch (Exception e) 
 		{

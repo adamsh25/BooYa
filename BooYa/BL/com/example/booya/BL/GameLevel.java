@@ -39,6 +39,24 @@ public abstract class GameLevel
     	
     }
     
+    public MazeObstacles TouchedMazeObstacle(Monster monster)
+    {
+    	for(int row = 0; row < this.level.length; row++)
+    	{
+    		for(int col = 0; col < this.level[0].length; col++)
+    		{
+    			if(CheckMonsterTouch(row, col, monster))
+    			{
+    				if(MazeObstacleAt(row, col) == MazeObstacles.WALL)
+    				{
+    					return MazeObstacleAt(row, col);
+    				}
+    			}
+    		}
+    	}
+    	return (MazeObstacles.SAFE);
+    }
+    
     // Get The Maze Obstacle Top Place  
     public int GetMazeObstacleTop(int row)
     {

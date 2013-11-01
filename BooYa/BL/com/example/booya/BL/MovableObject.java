@@ -9,32 +9,38 @@ import android.graphics.Point;
  */
 public abstract class MovableObject 
 {
-		protected int x; //current horizontal position of the center of the object
-	    protected int y; //current vertical position of the center of the object
+		protected float x; //current horizontal position of the center of the object
+	    protected float y; //current vertical position of the center of the object
 	   
 	    // Return the center horizontal position of the object
-	    public int getX()
+	    public float getX()
 	    {
 	    	return x;
 	    }
 
 	    // Return the center vertical position of the object
-	    public int getY()
+	    public float getY()
 	    {
 	        return y;
 	    }
 
 	    //should return the left border of the object
-	    public abstract int getLeft();
+	    public abstract float getLeft();
+	    
 	    //should return the right border of the object
-	    public abstract int getRight();
+	    public abstract float getRight();
+	    
 	    //should return the top border of the object
-	    public abstract int getTop();
+	    public abstract float getTop();
+	    
 	    //should return the bottom border of the object
-	    public abstract int getBottom();
+	    public abstract float getBottom();
+	    
 	    //This method should move the object
-	    public abstract boolean move(Point p);
-	    //
+	    public abstract boolean move(float xPos, float yPos);
+	   
+	    //This method should check if the move is correct,
+	    //	and doesn't exit the screen boundaries.
 	    public abstract boolean checkMove();
 	    
 	   

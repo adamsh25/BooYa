@@ -1,7 +1,5 @@
 package com.example.booya.BL;
 
-import android.graphics.Point;
-
 public class Monster extends MovableObject
 {
 
@@ -10,30 +8,31 @@ public class Monster extends MovableObject
 	//region finals
 	
 
-	private final int HEIGHT = 15;
-	private final int WIDTH = 15;
+	public static final int MONSTER_HEIGHT = 10;
+	public static final int MONSTER_WIDTH = 10;
 	
 	
 	//endregion
 	
 	private int m_screenWidth = 500;
 	private int m_screenHeight = 500;
-	private float m_monsterDestination;
 	
 	
 	//endregion
 	
 	//region Properties
 	
-	public float getMonsterDestination()
+/*	public  get()
+
 	{
-		return this.m_monsterDestination;
+		return (this.);
 	}
 	
-	public void setMonsterDestinantion(float monsterDestination)
+	public void set(float )
 	{
-		this.m_monsterDestination = monsterDestination;
+		this. = 
 	}
+	*/
 	
 	//endregion
 		
@@ -45,7 +44,6 @@ public class Monster extends MovableObject
 		this.y = startY;
 		this.m_screenWidth = screenWidth;
 		this.m_screenHeight = screenHeight;
-		this.m_monsterDestination = 1;
 	}
 	
 	//endregion
@@ -53,27 +51,27 @@ public class Monster extends MovableObject
 	//region Methods
 	
 	@Override
-	public int getLeft() {
+	public float getLeft() {
 		// TODO Auto-generated method stub
 		return x;
 	}
 
 	@Override
-	public int getRight() {
+	public float getRight() {
 		// TODO Auto-generated method stub
-		return x + WIDTH;
+		return x + MONSTER_WIDTH;
 	}
 
 	@Override
-	public int getTop() {
+	public float getTop() {
 		// TODO Auto-generated method stub
 		return y;
 	}
 
 	@Override
-	public int getBottom() {
+	public float getBottom() {
 		// TODO Auto-generated method stub
-		return y + HEIGHT;
+		return y + MONSTER_HEIGHT;
 	}
 	
 
@@ -134,10 +132,10 @@ public class Monster extends MovableObject
     	return(canMoveDown() && canMoveUp() && canMoveLeft() && canMoveRight());
     }
 	@Override
-	public boolean move(Point p) 
+	public boolean move(float xPos, float yPos) 
 	{
-		this.x = p.x;
-		this.y = p.y;
+		this.x = xPos;
+		this.y = yPos;
 		return checkMove();
 	}
 

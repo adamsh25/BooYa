@@ -50,7 +50,7 @@ public class GameLevelView extends View{
 		}
 	}
 	
-	protected void setGameLevel(GameLevel level) 
+	public void setGameLevel(GameLevel level) 
 	{
 		this.m_level = level;
 	}
@@ -60,8 +60,8 @@ public class GameLevelView extends View{
 		if(this.m_wallPaint == null)
 		{
 			this.m_wallPaint = new Paint();
-			this.m_wallPaint.setStrokeWidth(2);
-			this.m_wallPaint.setColor(Color.BLACK);
+			this.m_wallPaint.setStrokeWidth(200);
+			this.m_wallPaint.setColor(Color.RED);
 		}
 		return (this.m_wallPaint);
 	}
