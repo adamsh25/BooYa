@@ -8,13 +8,12 @@
         android:targetSdkVersion="18" />
 
     <application
-        android:debuggable="true"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.booya.UI.Activities.MainActivity"
+            android:name="com.example.booya.MainActivity"
             android:label="@string/app_name" >
 
         </activity>
@@ -23,7 +22,7 @@
             android:label="@string/title_activity_maze" >
         </activity>
         <activity
-            android:name="com.example.booya.UI.Activities.MazeGameActivity"
+            android:name="com.example.booya.MazeGameActivity"
             android:label="@string/title_activity_maze_game" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

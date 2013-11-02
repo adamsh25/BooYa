@@ -1,4 +1,4 @@
-package com.example.booya.UI.Activities;
+package com.example.booya;
 
 
 

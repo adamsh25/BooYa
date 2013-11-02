@@ -1,6 +1,8 @@
 package com.example.booya.BL;
 
-import com.example.booya.UI.Activities.MazeGameActivity;
+import com.example.booya.MazeGameActivity;
+
+
 
 public abstract class GameLevel 
 {
