@@ -1,4 +1,4 @@
-package com.example.booya.UI.Activities;
+package com.example.booya;
 
 
 
@@ -7,6 +7,7 @@ import com.example.booya.BL.GameLevel;
 import com.example.booya.BL.GameLevel1;
 import com.example.booya.BL.MazeObstacles;
 import com.example.booya.BL.Monster;
+import com.example.booya.R.menu;
 import com.example.booya.UI.Views.GameLevelView;
 import com.example.booya.UI.Views.MazeView;
 import com.example.booya.UI.Views.MonsterView;
