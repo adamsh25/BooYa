@@ -26,7 +26,7 @@ public class MazeGameActivity extends Activity {
 	private GameLevel m_currentLevel;
 	GameLevelView gameLevelView;
 	MonsterView monsterView;
-	int screenWidth, screenHeight;
+	public static int screenWidth, screenHeight;
 	public static boolean b_canMove = true;
 	//endregion
 	
@@ -43,7 +43,7 @@ public class MazeGameActivity extends Activity {
 		
 		Display display = getWindowManager().getDefaultDisplay();
 
-		/*	api 13 
+		/*	api 13+
 		 * Point size = new Point();	
 		 *  display.getSize(size);
 			screenWidth = size.x;
@@ -58,7 +58,7 @@ public class MazeGameActivity extends Activity {
 	    gameLevelView = new GameLevelView(this);
 		gameLevelView.setGameLevel(m_currentLevel);
 		
-		m_monster = new Monster(0, 0, screenWidth, screenHeight);
+		m_monster = new Monster(5, (0.8f)*screenHeight, screenWidth, screenHeight);
 		monsterView = new MonsterView(this, m_monster); 
 		
 		m_mazeView = new MazeView(this);
@@ -73,16 +73,37 @@ public class MazeGameActivity extends Activity {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) 
 	{
+
+		if(!b_canMove)
+		{
+			try 
+			{
+				Thread.sleep(2000);
+			} 
+			catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			b_canMove = true;
+		}
 		
+
 		boolean isLegalMove = m_monster.move(event.getX(), event.getY());
-		m_mazeView.setViews(gameLevelView, monsterView);
-		setContentView(m_mazeView);
-		if(!b_canMove || !isLegalMove)
+		try 
+		{
+			Thread.sleep(20);
+		} 
+		catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(!isLegalMove)
 		{
 			
 			try 
 			{
-				Thread.sleep(1000);
+				Thread.sleep(5000);
 			} 
 			catch (InterruptedException e)
 			{
@@ -90,7 +111,7 @@ public class MazeGameActivity extends Activity {
 
 				e.printStackTrace();
 			}
-			b_canMove = true;
+			
 		}
 
 		MazeObstacles touchedMazeObstacle = m_currentLevel.TouchedMazeObstacle(m_monster);
@@ -100,11 +121,20 @@ public class MazeGameActivity extends Activity {
 		case START:
 			break;
 		case WALL: 
-			m_monster.move(0, 0);
 			b_canMove = false;
+			m_monster.move(5, (0.6f)*screenHeight);
 			break;
-		case FIN:  m_monster.move(screenWidth - 50, screenHeight - 55);
-				   b_canMove = false;
+		case FIN:  
+			
+			try 
+			{
+				Thread.sleep(5000);
+			} 
+			catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			m_monster.move(0, (0.8f)*screenHeight);
 			break;
 		case BOOYA:
 			break;
@@ -115,6 +145,9 @@ public class MazeGameActivity extends Activity {
 		default:
 				break;
 		}
+
+		m_mazeView.setViews(gameLevelView, monsterView);
+		setContentView(m_mazeView);
 		return true;
 	}
 	

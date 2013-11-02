@@ -1,5 +1,7 @@
 package com.example.booya.BL;
 
+import com.example.booya.UI.Activities.MazeGameActivity;
+
 public class Monster extends MovableObject
 {
 
@@ -8,14 +10,15 @@ public class Monster extends MovableObject
 	//region finals
 	
 
-	public static final int MONSTER_HEIGHT = 10;
-	public static final int MONSTER_WIDTH = 10;
+	public static final int MONSTER_HEIGHT = (int)((0.035) * MazeGameActivity.screenHeight);
+	public static final int MONSTER_WIDTH = (int)((0.045) * MazeGameActivity.screenWidth);
 	
 	
 	//endregion
 	
-	private int m_screenWidth = 500;
-	private int m_screenHeight = 500;
+	
+	private int m_nScreenWidth = MazeGameActivity.screenWidth;
+	private int m_nScreenHeight = MazeGameActivity.screenHeight;
 	
 	
 	//endregion
@@ -38,12 +41,12 @@ public class Monster extends MovableObject
 		
 	//region C'tor
 	
-	public Monster(int startX, int startY, int screenWidth, int screenHeight)
+	public Monster(float startX, float startY, int screenWidth, int screenHeight)
 	{
 		this.x = startX;
 		this.y = startY;
-		this.m_screenWidth = screenWidth;
-		this.m_screenHeight = screenHeight;
+		this.m_nScreenWidth = screenWidth;
+		this.m_nScreenHeight = screenHeight;
 	}
 	
 	//endregion
@@ -51,31 +54,31 @@ public class Monster extends MovableObject
 	//region Methods
 	
 	@Override
-	public float getLeft() {
+	public synchronized float getLeft() {
 		// TODO Auto-generated method stub
 		return x;
 	}
 
 	@Override
-	public float getRight() {
+	public synchronized float getRight() {
 		// TODO Auto-generated method stub
 		return x + MONSTER_WIDTH;
 	}
 
 	@Override
-	public float getTop() {
+	public synchronized float getTop() {
 		// TODO Auto-generated method stub
 		return y;
 	}
 
 	@Override
-	public float getBottom() {
+	public synchronized float getBottom() {
 		// TODO Auto-generated method stub
-		return y + MONSTER_HEIGHT;
+		return y - MONSTER_HEIGHT;
 	}
 	
 
-    public boolean canMoveLeft()
+    public synchronized boolean canMoveLeft()
     {
     	if(getLeft() > 0)
     	{
@@ -88,9 +91,9 @@ public class Monster extends MovableObject
     	}
     }
        
-    public boolean canMoveRight()
+    public synchronized boolean canMoveRight()
     {
-    	if(getRight() < m_screenWidth)
+    	if(getRight() < m_nScreenWidth)
     	{
 			return true;
     	}
@@ -102,9 +105,9 @@ public class Monster extends MovableObject
     	
     }
     
-    public boolean canMoveUp()
+    public synchronized boolean canMoveUp()
     {
-    	if(getTop() < m_screenHeight)
+    	if(getTop() < m_nScreenHeight)
     	{
 			return true;
     	}
@@ -115,7 +118,7 @@ public class Monster extends MovableObject
     	}
     }
     
-    public boolean canMoveDown()
+    public synchronized boolean canMoveDown()
     {
     	if(getBottom() > 0)
     	{
@@ -127,12 +130,12 @@ public class Monster extends MovableObject
     		return false;
     	}
     }
-    public boolean checkMove()
+    public synchronized boolean checkMove()
     {
     	return(canMoveDown() && canMoveUp() && canMoveLeft() && canMoveRight());
     }
 	@Override
-	public boolean move(float xPos, float yPos) 
+	public synchronized boolean move(float xPos, float yPos) 
 	{
 		this.x = xPos;
 		this.y = yPos;

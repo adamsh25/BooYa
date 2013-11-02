@@ -4,6 +4,7 @@ import com.example.booya.BL.GameLevel;
 import com.example.booya.BL.MazeObstacles;
 
 import android.content.Context;
+import android.database.CursorWrapper;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -38,35 +39,15 @@ public class GameLevelView extends View{
 			{
 				MazeObstacles curMazeObstacle = this.m_level.MazeObstacleAt(i, j);
 				
-				
-				
-				if( curMazeObstacle == MazeObstacles.START)
-				{
-					canvas.drawRect(this.m_level.GetMazeObstacleLeft(j),
-									this.m_level.GetMazeObstacleTop(i),
-									this.m_level.GetMazeObstacleRight(j),
-									this.m_level.GetMazeObstacleBottom(i),
-									this.getStartPaint());
-					
-				}
-				
-				if(curMazeObstacle == MazeObstacles.WALL)
-				{
-					canvas.drawRect(this.m_level.GetMazeObstacleLeft(j),
-									this.m_level.GetMazeObstacleTop(i),
-									this.m_level.GetMazeObstacleRight(j),
-									this.m_level.GetMazeObstacleBottom(i),
-									this.getWallPaint());
-					
-				}
-				
-				if(curMazeObstacle == MazeObstacles.FIN)
+				if(curMazeObstacle == MazeObstacles.FIN 
+				   || curMazeObstacle == MazeObstacles.START
+				   || curMazeObstacle == MazeObstacles.WALL)
 				{
 					canvas.drawRect(this.m_level.GetMazeObstacleLeft(j),
 							this.m_level.GetMazeObstacleTop(i),
 							this.m_level.GetMazeObstacleRight(j),
 							this.m_level.GetMazeObstacleBottom(i),
-							this.getFinishPaint());
+							this.getObstaclePaint(curMazeObstacle));
 				}
 			}
 			
@@ -78,41 +59,36 @@ public class GameLevelView extends View{
 		this.m_level = level;
 	}
 	
-	protected Paint getWallPaint()
+	protected Paint getObstaclePaint(MazeObstacles obstacle)
 	{
 		if(this.m_wallPaint == null)
 		{
 			this.m_wallPaint = new Paint();
 			this.m_wallPaint.setStrokeWidth(10);
-			this.m_wallPaint.setColor(Color.RED);
 		}
-		this.m_wallPaint.setColor(Color.RED);
+		
+		switch(obstacle)
+		{
+		case BOOYA:
+			break;
+		case BOUNTY:
+			break;
+		case FIN: this.m_wallPaint.setColor(Color.BLUE);
+			break;
+		case SAFE:
+			break;
+		case START:this.m_wallPaint.setColor(Color.WHITE);
+			break;
+		case WALL: this.m_wallPaint.setColor(Color.RED);
+			break;
+		default:
+			break;
+		
+		}
+
 		return (this.m_wallPaint);
 	}
 	
-	protected Paint getFinishPaint()
-	{
-		if(this.m_wallPaint == null)
-		{
-			this.m_wallPaint = new Paint();
-			this.m_wallPaint.setStrokeWidth(10);
-			this.m_wallPaint.setColor(Color.BLUE);
-		}
-		this.m_wallPaint.setColor(Color.BLUE);
-		return (this.m_wallPaint);
-	}
-	
-	protected Paint getStartPaint()
-	{
-		if(this.m_wallPaint == null)
-		{
-			this.m_wallPaint = new Paint();
-			this.m_wallPaint.setStrokeWidth(10);
-			this.m_wallPaint.setColor(Color.WHITE);
-		}
-		this.m_wallPaint.setColor(Color.WHITE);
-		return (this.m_wallPaint);
-	}
 	
     //endregion
 	

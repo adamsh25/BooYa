@@ -43,7 +43,7 @@ public class MonsterView extends View {
 			monsterBitmap = BitmapFactory.decodeResource(getResources(),
 					R.drawable.monster,o);
 
-			monsterBitmap = monsterBitmap.createScaledBitmap(monsterBitmap,
+			monsterBitmap = Bitmap.createScaledBitmap(monsterBitmap,
 					m_monsterWidth, m_monsterHeight, false);
 		}
 		catch (Exception e) 
