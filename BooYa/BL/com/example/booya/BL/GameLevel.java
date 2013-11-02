@@ -93,12 +93,28 @@ public abstract class GameLevel
     					return (x);
     				}
 				}
-/*    			if(isMonsterTouchedObstacle(row, col, monster))
-    			{
-    					return MazeObstacleAt(row, col);
-    			}*/
+
     		}
     	}
+    	
+    	for(int row = 0; row < this.level.length; row++)
+    	{
+    		for(int col = 0; col < this.level[0].length; col++)
+    		{
+    			if(isMonsterTouchedObstacle(row, col, monster))
+    			{
+    					x = MazeObstacleAt(row, col);
+    					if(x == MazeObstacles.WALL)
+    					{
+    						return (x);
+    					}
+    			}
+
+    		}
+    	}
+    	
+    	
+
     	return (x);
     }
     
