@@ -26,6 +26,8 @@ public class MazeGameActivity extends Activity {
 	private GameLevel m_currentLevel;
 	GameLevelView gameLevelView;
 	MonsterView monsterView;
+	int screenWidth, screenHeight;
+	public static boolean b_canMove = true;
 	//endregion
 	
 	//region Methods
@@ -38,7 +40,7 @@ public class MazeGameActivity extends Activity {
 		
 		//region initialise members
 		
-		int screenWidth, screenHeight;
+		
 		Display display = getWindowManager().getDefaultDisplay();
 
 		/*	api 13 
@@ -72,21 +74,46 @@ public class MazeGameActivity extends Activity {
 	public boolean onTouchEvent(MotionEvent event) 
 	{
 		
-		boolean canMove = m_monster.move(event.getX(), event.getY());
-		if(!canMove)
-		{
-			m_monster.move(0, 0);
-		}
+		boolean isLegalMove = m_monster.move(event.getX(), event.getY());
 		m_mazeView.setViews(gameLevelView, monsterView);
 		setContentView(m_mazeView);
-		if(m_currentLevel.TouchedMazeObstacle(m_monster) == MazeObstacles.WALL)
+		if(!b_canMove || !isLegalMove)
 		{
 			
-			String s = "Game Over - Start Again"; 
-			@SuppressWarnings("unused")
-			String s2 = s + "what?";
+			try 
+			{
+				Thread.sleep(1000);
+			} 
+			catch (InterruptedException e)
+			{
+
+
+				e.printStackTrace();
+			}
+			b_canMove = true;
+		}
+
+		MazeObstacles touchedMazeObstacle = m_currentLevel.TouchedMazeObstacle(m_monster);
+		
+		switch(touchedMazeObstacle)
+		{
+		case START:
+			break;
+		case WALL: 
 			m_monster.move(0, 0);
-					 
+			b_canMove = false;
+			break;
+		case FIN:  m_monster.move(screenWidth - 50, screenHeight - 55);
+				   b_canMove = false;
+			break;
+		case BOOYA:
+			break;
+		case SAFE:
+			break;
+		case BOUNTY:
+			break;
+		default:
+				break;
 		}
 		return true;
 	}

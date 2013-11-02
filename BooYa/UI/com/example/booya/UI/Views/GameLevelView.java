@@ -36,7 +36,21 @@ public class GameLevelView extends View{
 		{
 			for (int j = 0; j < this.m_level.MaxCols; j++) 
 			{
-				if(this.m_level.MazeObstacleAt(i, j) == MazeObstacles.WALL)
+				MazeObstacles curMazeObstacle = this.m_level.MazeObstacleAt(i, j);
+				
+				
+				
+				if( curMazeObstacle == MazeObstacles.START)
+				{
+					canvas.drawRect(this.m_level.GetMazeObstacleLeft(j),
+									this.m_level.GetMazeObstacleTop(i),
+									this.m_level.GetMazeObstacleRight(j),
+									this.m_level.GetMazeObstacleBottom(i),
+									this.getStartPaint());
+					
+				}
+				
+				if(curMazeObstacle == MazeObstacles.WALL)
 				{
 					canvas.drawRect(this.m_level.GetMazeObstacleLeft(j),
 									this.m_level.GetMazeObstacleTop(i),
@@ -44,6 +58,15 @@ public class GameLevelView extends View{
 									this.m_level.GetMazeObstacleBottom(i),
 									this.getWallPaint());
 					
+				}
+				
+				if(curMazeObstacle == MazeObstacles.FIN)
+				{
+					canvas.drawRect(this.m_level.GetMazeObstacleLeft(j),
+							this.m_level.GetMazeObstacleTop(i),
+							this.m_level.GetMazeObstacleRight(j),
+							this.m_level.GetMazeObstacleBottom(i),
+							this.getFinishPaint());
 				}
 			}
 			
@@ -60,11 +83,37 @@ public class GameLevelView extends View{
 		if(this.m_wallPaint == null)
 		{
 			this.m_wallPaint = new Paint();
-			this.m_wallPaint.setStrokeWidth(200);
+			this.m_wallPaint.setStrokeWidth(10);
 			this.m_wallPaint.setColor(Color.RED);
 		}
+		this.m_wallPaint.setColor(Color.RED);
 		return (this.m_wallPaint);
 	}
+	
+	protected Paint getFinishPaint()
+	{
+		if(this.m_wallPaint == null)
+		{
+			this.m_wallPaint = new Paint();
+			this.m_wallPaint.setStrokeWidth(10);
+			this.m_wallPaint.setColor(Color.BLUE);
+		}
+		this.m_wallPaint.setColor(Color.BLUE);
+		return (this.m_wallPaint);
+	}
+	
+	protected Paint getStartPaint()
+	{
+		if(this.m_wallPaint == null)
+		{
+			this.m_wallPaint = new Paint();
+			this.m_wallPaint.setStrokeWidth(10);
+			this.m_wallPaint.setColor(Color.WHITE);
+		}
+		this.m_wallPaint.setColor(Color.WHITE);
+		return (this.m_wallPaint);
+	}
+	
     //endregion
 	
 	

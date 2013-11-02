@@ -3,13 +3,13 @@ package com.example.booya.BL;
 public abstract class GameLevel 
 {
     // Space from the top screen from which the Walls will be drawn
-    public final int TopPadding = 25;
+    public final int TopPadding = 0;
  
     // Space between each Wall
-    public final int MazeObstaclePadding = 0;
+    public final int MazeObstaclePadding = 50;
  
     // Wall Width and Height
-    public final int MazeObstacleSize = 15;
+    public final int MazeObstacleSize = 25;
 
     // Max number of Walls rows and columns
     public final int MaxRows = 10;
