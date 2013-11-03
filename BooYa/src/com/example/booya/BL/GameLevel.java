@@ -12,7 +12,7 @@ public abstract class GameLevel
 	//region members
 	
     // Space from the top screen from which the Walls will be drawn 
-    public final float TOP_PADDING = ((0.2f) * MazeGameActivity.screenHeight);
+    public final float TOP_PADDING = ((0.1f) * MazeGameActivity.screenHeight);
  
     // Wall Width and Height - Preferred To Be A Square
     public final float MazeObstacleSize = ((0.1f) * MazeGameActivity.screenWidth);
