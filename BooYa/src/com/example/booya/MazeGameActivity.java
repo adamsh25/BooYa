@@ -21,6 +21,10 @@ import android.view.MotionEvent;
 public class MazeGameActivity extends Activity {
 
 	//region members
+	
+	/**
+	 * Initialise members
+	 */
 	private MazeView m_mazeView;
 	private Monster m_monster;
 	private GameLevel m_currentLevel;
@@ -28,10 +32,16 @@ public class MazeGameActivity extends Activity {
 	MonsterView monsterView;
 	public static int screenWidth, screenHeight;
 	public static boolean b_canMove = true;
+	
 	//endregion
 	
 	//region Methods
 	
+	//region Events
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -70,6 +80,9 @@ public class MazeGameActivity extends Activity {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onTouchEvent(android.view.MotionEvent)
+	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) 
 	{
@@ -151,6 +164,9 @@ public class MazeGameActivity extends Activity {
 		return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
@@ -159,5 +175,8 @@ public class MazeGameActivity extends Activity {
 		return true;
 	}
 
+	//endregion
+	
+	
 	//endregion
 }

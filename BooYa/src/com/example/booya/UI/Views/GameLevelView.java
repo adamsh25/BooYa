@@ -4,49 +4,73 @@ import com.example.booya.BL.GameLevel;
 import com.example.booya.BL.MazeObstacles;
 
 import android.content.Context;
-import android.database.CursorWrapper;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
-public class GameLevelView extends View{
+public class GameLevelView extends View
+{
 
 	//region members
-	private GameLevel m_level; // The Wall Array
-	private Paint m_wallPaint;
+	
+	
+	/**
+	 * Declare members
+	 */
+	private GameLevel m_level; // The Game Level Logic
+	private Paint m_wallPaint; // The Wall Design Member 
+	
 	//endregion
 
 
 	//region C'tor
+	
+	/**
+	 * Empty C'tor
+	 * @param context
+	 */
 	public GameLevelView(Context context) 
 	{
 		super(context);
-		// TODO Auto-generated constructor stub
 	}
+	
 	//endregion
 	
 	
 	//region Methods
 
+	//region Events
+
+	/* 
+	 * Draws The Game Maze
+	 * @see android.view.View#onDraw(android.graphics.Canvas)
+	 */
 	@Override
 	protected void onDraw(Canvas canvas) 
 	{
 		super.onDraw(canvas);
-		for (int i = 0; i < this.m_level.MaxRows; i++) 
+		
+		// runs through all the wall matrix rows
+		for (int row = 0; row < this.m_level.MaxRows; row++) 
 		{
-			for (int j = 0; j < this.m_level.MaxCols; j++) 
+			// runs throught all the wall columns
+			for (int col = 0; col < this.m_level.MaxCols; col++) 
 			{
-				MazeObstacles curMazeObstacle = this.m_level.MazeObstacleAt(i, j);
+				// gets the maze obstacle type by the current row an column.
+				MazeObstacles curMazeObstacle = this.m_level.MazeObstacleAt(row, col);
 				
+				// draws only START, WALLS AND FIN
 				if(curMazeObstacle == MazeObstacles.FIN 
 				   || curMazeObstacle == MazeObstacles.START
 				   || curMazeObstacle == MazeObstacles.WALL)
 				{
-					canvas.drawRect(this.m_level.GetMazeObstacleLeft(j),
-							this.m_level.GetMazeObstacleTop(i),
-							this.m_level.GetMazeObstacleRight(j),
-							this.m_level.GetMazeObstacleBottom(i),
+					// Draws A Rectangle By His Left, Top, Right And Bottom Pixel Place.
+					//  Designed By A Paint Member For Each Obstacle Type.
+					canvas.drawRect(this.m_level.GetMazeObstacleLeft(col),
+							this.m_level.GetMazeObstacleTop(row),
+							this.m_level.GetMazeObstacleRight(col),
+							this.m_level.GetMazeObstacleBottom(row),
 							this.getObstaclePaint(curMazeObstacle));
 				}
 			}
@@ -54,13 +78,32 @@ public class GameLevelView extends View{
 		}
 	}
 	
-	public void setGameLevel(GameLevel level) 
+	//endregion
+	
+	
+	/**
+	 * Set The Level Of The Game To Draw View By A Specific Level.
+	 * @param level
+	 */
+	public void setGameLevel(GameLevel level)
 	{
+	
 		this.m_level = level;
 	}
 	
+
+	
+	
+	/**
+	 * The Method Is Used To Uniquely Paint Each Obstacle For Drawing.
+	 * Creates And Gets The Paint From An Obstacle Type.
+	 * @param obstacle - The Obstacle To Draw For.
+	 * @return A Paint Object
+	 */
 	protected Paint getObstaclePaint(MazeObstacles obstacle)
 	{
+		
+		// Creates A Paint Member Only Ones (Singleton)
 		if(this.m_wallPaint == null)
 		{
 			this.m_wallPaint = new Paint();
@@ -69,24 +112,30 @@ public class GameLevelView extends View{
 		
 		switch(obstacle)
 		{
-		case BOOYA:
-			break;
-		case BOUNTY:
-			break;
-		case FIN: this.m_wallPaint.setColor(Color.BLUE);
-			break;
-		case SAFE:
-			break;
-		case START:this.m_wallPaint.setColor(Color.WHITE);
-			break;
-		case WALL: this.m_wallPaint.setColor(Color.RED);
-			break;
-		default:
-			break;
-		
+			case BOOYA:
+				break;
+			case BOUNTY:
+				break;
+			// Set Fin Obstacle Color 	
+			case FIN: 
+				this.m_wallPaint.setColor(Color.BLUE);
+				break;
+			case SAFE:
+				break;
+			// Set Start Obstacle Color
+			case START:
+				this.m_wallPaint.setColor(Color.WHITE);
+				break;
+			// Set Wall Obstacle Color
+			case WALL: 
+				this.m_wallPaint.setColor(Color.RED);
+				break;
+			default:
+				break;
 		}
-
+	
 		return (this.m_wallPaint);
+		
 	}
 	
 	

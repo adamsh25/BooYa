@@ -14,8 +14,8 @@ public class Monster extends MovableObject
 	//region finals
 	
 
-	public static final int MONSTER_HEIGHT = (int)((0.035) * MazeGameActivity.screenHeight);
-	public static final int MONSTER_WIDTH = (int)((0.045) * MazeGameActivity.screenWidth);
+	public static final int MONSTER_HEIGHT = (int)((0.035f) * MazeGameActivity.screenHeight);
+	public static final int MONSTER_WIDTH = (int)((0.045f) * MazeGameActivity.screenWidth);
 	
 	
 	//endregion

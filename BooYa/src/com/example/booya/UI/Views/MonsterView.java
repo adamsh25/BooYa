@@ -13,15 +13,21 @@ public class MonsterView extends View {
 
 	//region members
 	
+	/**
+	 * 
+	 */
 	private int m_monsterWidth = Monster.MONSTER_WIDTH;
 	private int m_monsterHeight = Monster.MONSTER_HEIGHT;
-	
 	private Monster m_theMonster;
 	
 	//endregion
 	
 	//region C'tor
 	
+	/**
+	 * @param context
+	 * @param monster
+	 */
 	public MonsterView(Context context, Monster monster) 
 	{
 		super(context);
@@ -32,6 +38,12 @@ public class MonsterView extends View {
 	//endregion
 	
 	//region Methods
+	
+	
+	/**
+	 * @return
+	 * @throws Exception
+	 */
 	private Bitmap getMonsterBitmap() throws Exception
 	{
 		Bitmap monsterBitmap = null;
@@ -53,6 +65,9 @@ public class MonsterView extends View {
 		return monsterBitmap;
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.view.View#onDraw(android.graphics.Canvas)
+	 */
 	@Override
 	protected void onDraw(Canvas canvas) {
 

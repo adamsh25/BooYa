@@ -2,31 +2,36 @@ package com.example.booya.BL;
 
 import com.example.booya.MazeGameActivity;
 
-
-
+/**
+ * @author adam
+ *
+ */
 public abstract class GameLevel 
 {
+	
 	//region members
 	
     // Space from the top screen from which the Walls will be drawn 
     public final float TOP_PADDING = ((0.2f) * MazeGameActivity.screenHeight);
  
-    // Wall Width and Height
+    // Wall Width and Height - Preferred To Be A Square
     public final float MazeObstacleSize = ((0.1f) * MazeGameActivity.screenWidth);
 
     // Max number of Walls rows and columns
     public final int MaxRows = 10;
-
     public final int MaxCols = 10;
 
-    // The Maze Obstacles array.
+    // The Maze Obstacles matrix.
     protected MazeObstacles[][] level;
     
     //endregion
     
     //region C'tor
     
-    // Constructor just creates an empty array of MazeObstacles
+    /**
+     * Empty C'tor
+     * Creates An Empty Array Of MazeObstacles
+     */
     public GameLevel()
     {
         this.level = new MazeObstacles[this.MaxRows][this.MaxCols];
@@ -36,25 +41,45 @@ public abstract class GameLevel
 
     //region Properties
     
-    // Get The Maze Obstacle Top Place  
+    
+    /**
+     * Get The Maze Obstacle Top Place By Row Place In Pixels
+     * @param row - The Row Place To Calculate The Obstacle Place.
+     * @return The Top Place On The Screen In Pixel.
+     */
     public float GetMazeObstacleTop(int row)
     {
     	return ((this.MazeObstacleSize * row) + TOP_PADDING);
     }
     
-    // Get The Maze Obstacle Bottom Place
+    /**
+     * Get The Maze Obstacle Bottom Place By Row Place In Pixels
+     * @param row - The Row Place To Calculate The Obstacle Place.
+     * @return The Top Place On The Screen In Pixel.
+     */
 	public float GetMazeObstacleBottom(int row)
     {
-    	return (GetMazeObstacleTop(row) - this.MazeObstacleSize);    	
+		// To Get The Bottom Place We Need To Add The Obstacle Size
+		//  	And Not To Subtract It, Because We Get From The Screen 
+		//											The Y Pixel Place Reversed. 
+    	return (GetMazeObstacleTop(row) + this.MazeObstacleSize);    	
     }
     
-	// Get The Maze Obstacle Left Place
+    /**
+     * Get The Maze Obstacle Left Place By Column Place In Pixels
+     * @param col - The Row Place To Calculate The Obstacle Place.
+     * @return The Top Place On The Screen In Pixel.
+     */
     public float GetMazeObstacleLeft(int col)
     {
     	return (this.MazeObstacleSize * col);    	
     }
     
-    // Get The Maze Obstacle Right Place
+    /**
+     * Get The Maze Obstacle Right Place By Column Place In Pixels
+     * @param col - The Row Place To Calculate The Obstacle Place.
+     * @return The Top Place On The Screen In Pixel.
+     */
     public float GetMazeObstacleRight(int col)
     {
     	return ((this.MazeObstacleSize * col) + this.MazeObstacleSize);
@@ -64,14 +89,17 @@ public abstract class GameLevel
     
     //region Methods
     
-    // We Give An Array Of Numbers To Init Each Level Easily
+    // We Give An Array Of Numbers To Draw Each Level Easily
     // But For Easy Work We Will Use An Enumerable Array Of Maze Obstacles
     public void UpdateMazeObstaclesMatrix(int[][] obstacles)
     {
-    	for(int row = 0; row < this.level.length; row++)
+    	// runs through matrix rows
+    	for(int row = 0; row < this.MaxRows; row++)
     	{
-    		for(int col = 0; col < this.level[0].length; col++)
+    		// runs through matrix columns
+    		for(int col = 0; col < this.MaxCols; col++)
     		{
+    			// Construct Level Obstacle Type Matrix By Level Integer Matrix. 
     			this.level[row][col] = MazeObstacles.GetMazeObstacleByNumber(obstacles[row][col]);
     		}
     	}
@@ -79,63 +107,84 @@ public abstract class GameLevel
     }
 
     // 
+    /**
+     * Get The Maze Obstacle That The Monster Has Touched.
+     * @param monster - To Get Is Place In The Screen.
+     * @return The Touched Maze Obstacle Name.
+     */
     public synchronized MazeObstacles TouchedMazeObstacle(Monster monster)
     {
 
     	MazeObstacles x = MazeObstacles.SAFE;
-    	for(int row = 0; row < this.level.length; row++)
+    	
+    	
+    	for(int row = 0; row < this.MaxRows; row++)
     	{
-    		for(int col = 0; col < this.level[0].length; col++)
+    		for(int col = 0; col < this.MaxCols; col++)
     		{
-    			if(IsMonsterInsideBoundaries(row, col, monster))
+    			// checks if the monster is inside an obstacle
+    			if(isMonsterInsideObstacle(row, col, monster))
     			{
+    				// returns in witch obstacle the monster is.
     				x = MazeObstacleAt(row, col);
-    				if(x!= MazeObstacles.SAFE)
-    				{
-    					return (x);
-    				}
+    				return (x);
 				}
 
     		}
     	}
     	
-    	for(int row = 0; row < this.level.length; row++)
+    	// only if the monster is between different boundaries.
+    	for(int row = 0; row < this.MaxRows; row++)
     	{
-    		for(int col = 0; col < this.level[0].length; col++)
+    		for(int col = 0; col < this.MaxCols; col++)
     		{
+    			// checks if monster touches the edge of a boundary
     			if(isMonsterTouchedObstacle(row, col, monster))
     			{
     					x = MazeObstacleAt(row, col);
-    					if(x == MazeObstacles.WALL)
-    					{
-    						return (x);
-    					}
+    					// if the monster touches the edge of a boundary
+    					return (x);
     			}
 
     		}
     	}
     	
-    	
-
     	return (x);
     }
     
-    // Receive A Position And Returns 
-    // True If In That Position There Is An Wall,
-    // Else Returns False.
+
+    /**
+     * Checks If There Is A Wall At The row, column Position
+     * @param row - Y Position
+     * @param col - X Position
+     * @return boolean True/False
+     */
     public boolean IsWallAt(int row, int col)
     {
     	return (this.level[row][col] == MazeObstacles.WALL);
     }
     
-    // Receive a position and 
-    // returns MazeObstacle at that position.
+
+    /**
+     * Receive a position and 
+     * returns MazeObstacle at that position.
+     * @param row
+     * @param col
+     * @return
+     */
     public MazeObstacles MazeObstacleAt(int row, int col)
     {
     	return (this.level[row][col]);
     }
     
-    // Return True If The Monster Has Touched An Obstacle
+    
+    /**
+     * Checks If The Monster Has Touched The Obstacle.
+     * @param row - the Y place.
+     * @param col - the X place.
+     * @param monster
+     * @return boolean True\False
+     */
     public synchronized boolean isMonsterTouchedObstacle(int row, int col, Monster monster)
     {
     	if(
@@ -152,7 +201,14 @@ public abstract class GameLevel
     	}
     }
     
-    // Return True If The Monster Has Touched The Obstacle From His Top
+    
+    /**
+     * Checks If The Monster Has Touched The Obstacle Top Side.
+     * @param row - the Y place.
+     * @param col - the X place.
+     * @param monster
+     * @return boolean True\False
+     */
     private boolean IsTouchTop(int row, int col, Monster monster)
     {
     		 if
@@ -180,7 +236,14 @@ public abstract class GameLevel
     		 }
     }
     
-    // Return True If The Monster Has Touched The Obstacle From His Bottom
+    
+    /**
+     * Checks If The Monster Has Touched The Obstacle Bottom Side.
+     * @param row - the Y place.
+     * @param col - the X place.
+     * @param monster
+     * @return boolean True\False
+     */
     private boolean IsTouchBottom(int row, int col, Monster monster)
     {
     	if
@@ -200,15 +263,22 @@ public abstract class GameLevel
     			)
     		  )
     	{
-    		return true;
+    		return (true);
     	}
     	else
     	{
-    		return false;
+    		return (false);
     	}
     }
     
-    // Return True If The Monster Has Touched The Obstacle From His Left
+    
+    /**
+     * Checks If The Monster Has Touched The Obstacle Left Side.
+     * @param row - the Y place.
+     * @param col - the X place.
+     * @param monster
+     * @return boolean True\False
+     */
     private boolean IsTouchLeft(int row, int col, Monster monster)
     {
     	if
@@ -236,7 +306,14 @@ public abstract class GameLevel
     	}
     }
 
-    // Return True If The Monster Has Touched The Obstacle From His Right
+    
+    /**
+     * Checks If The Monster Has Touched The Obstacle Right Side.
+     * @param row - the Y place.
+     * @param col - the X place.
+     * @param monster
+     * @return boolean True\False
+     */
     private boolean IsTouchRight(int row, int col, Monster monster)
     {
         if
@@ -246,13 +323,13 @@ public abstract class GameLevel
            		&&
            		monster.getBottom()  >=  this.GetMazeObstacleTop(row)
            		||
-           		monster.getTop() <=  this.GetMazeObstacleBottom(row)
+           		monster.getTop() 	 <=  this.GetMazeObstacleBottom(row)
            		&&
-           		monster.getTop() >=  this.GetMazeObstacleTop(row)
+           		monster.getTop()     >=  this.GetMazeObstacleTop(row)
            		)
            		&&
            		(
-           		monster.getRight()   == this.GetMazeObstacleLeft(col)
+           		monster.getRight()   ==  this.GetMazeObstacleLeft(col)
        			)
        		  )
         {
@@ -264,8 +341,15 @@ public abstract class GameLevel
         }
     }
     
-    // Return True If The Monster 
-    private boolean IsMonsterInsideBoundaries(int row, int col, Monster monster)
+    
+    /**
+     * Checks If The Monster is Inside The Obstacle.
+     * @param row - the Y place.
+     * @param col - the X place.
+     * @param monster
+     * @return boolean True\False
+     */
+    private synchronized boolean isMonsterInsideObstacle(int row, int col, Monster monster)
     {
         if
        		 (
@@ -289,4 +373,5 @@ public abstract class GameLevel
     }
 
 //endregion
+
 }
