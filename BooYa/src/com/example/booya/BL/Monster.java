@@ -58,31 +58,31 @@ public class Monster extends MovableObject
 	//region Methods
 	
 	@Override
-	public synchronized float getLeft() {
+	public float getLeft() {
 		// TODO Auto-generated method stub
 		return x;
 	}
 
 	@Override
-	public synchronized float getRight() {
+	public float getRight() {
 		// TODO Auto-generated method stub
 		return x + MONSTER_WIDTH;
 	}
 
 	@Override
-	public synchronized float getTop() {
+	public float getTop() {
 		// TODO Auto-generated method stub
 		return y;
 	}
 
 	@Override
-	public synchronized float getBottom() {
+	public float getBottom() {
 		// TODO Auto-generated method stub
 		return y - MONSTER_HEIGHT;
 	}
 	
 
-    public synchronized boolean canMoveLeft()
+    public boolean canMoveLeft()
     {
     	if(getLeft() > 0)
     	{
@@ -95,7 +95,7 @@ public class Monster extends MovableObject
     	}
     }
        
-    public synchronized boolean canMoveRight()
+    public boolean canMoveRight()
     {
     	if(getRight() < m_nScreenWidth)
     	{
@@ -109,7 +109,7 @@ public class Monster extends MovableObject
     	
     }
     
-    public synchronized boolean canMoveUp()
+    public boolean canMoveUp()
     {
     	if(getTop() < m_nScreenHeight)
     	{
@@ -122,7 +122,7 @@ public class Monster extends MovableObject
     	}
     }
     
-    public synchronized boolean canMoveDown()
+    public boolean canMoveDown()
     {
     	if(getBottom() > 0)
     	{
@@ -134,12 +134,12 @@ public class Monster extends MovableObject
     		return false;
     	}
     }
-    public synchronized boolean checkMove()
+    public boolean checkMove()
     {
     	return(canMoveDown() && canMoveUp() && canMoveLeft() && canMoveRight());
     }
 	@Override
-	public synchronized boolean move(float xPos, float yPos) 
+	public boolean move(float xPos, float yPos) 
 	{
 		this.x = xPos;
 		this.y = yPos;

@@ -12,7 +12,11 @@ public abstract class GameLevel
 	//region members
 	
     // Space from the top screen from which the Walls will be drawn 
-    public final float TOP_PADDING = ((0.13f) * MazeGameActivity.screenHeight);
+<<<<<<< HEAD
+    public final float TOP_    public final float TOP_PADDING = ((0.27f) * MazeGameActivity.screenHeight);PADDING = ((0.13f) * MazeGameActivity.screenHeight);
+=======
+    public final float TOP_PADDING = ((0.27f) * MazeGameActivity.screenHeight);
+>>>>>>> branch 'Maze' of https://github.com/ronlut/BooYa.git
  
     // Wall Width and Height - Preferred To Be A Square
     public final float MazeObstacleSize = ((0.1f) * MazeGameActivity.screenWidth);
@@ -112,7 +116,7 @@ public abstract class GameLevel
      * @param monster - To Get Is Place In The Screen.
      * @return The Touched Maze Obstacle Name.
      */
-    public synchronized MazeObstacles TouchedMazeObstacle(Monster monster)
+    public MazeObstacles TouchedMazeObstacle(Monster monster)
     {
 
     	MazeObstacles x = MazeObstacles.SAFE;
@@ -144,7 +148,11 @@ public abstract class GameLevel
     	}
     	
     	// only if the monster is between different boundaries.
+<<<<<<< HEAD
     	//for(int row = 0; row < this.MaxRows; row++)
+=======
+/*    	for(int row = 0; row < this.MaxRows; row++)
+>>>>>>> branch 'Maze' of https://github.com/ronlut/BooYa.git
     	{
     		//for(int col = 0; col < this.MaxCols; col++)
     		{
@@ -157,7 +165,7 @@ public abstract class GameLevel
     			}
 
     		}
-    	}
+    	}*/
     	
     	return (x);
     }
@@ -195,7 +203,7 @@ public abstract class GameLevel
      * @param monster
      * @return boolean True\False
      */
-    public synchronized boolean isMonsterTouchedObstacle(int row, int col, Monster monster)
+    public boolean isMonsterTouchedObstacle(int row, int col, Monster monster)
     {
     	if(
 			IsTouchTop(row, col, monster) || IsTouchBottom(row, col, monster)
@@ -369,7 +377,7 @@ public abstract class GameLevel
      * @param monster
      * @return boolean True\False
      */
-    private synchronized boolean isMonsterInsideObstacle(int row, int col, Monster monster)
+    private boolean isMonsterInsideObstacle(int row, int col, Monster monster)
     {
         if
        		 (
@@ -377,10 +385,20 @@ public abstract class GameLevel
            	    &&
            		monster.getRight()   <=  this.GetMazeObstacleRight(col)
        			&&
+<<<<<<< HEAD
            		monster.getBottom()  >=  this.GetMazeObstacleBottom(row)
+=======
+           		monster.getBottom()  <  this.GetMazeObstacleBottom(row)
+>>>>>>> branch 'Maze' of https://github.com/ronlut/BooYa.git
            		&&
+<<<<<<< HEAD
            		monster.getTop()     >=  this.GetMazeObstacleTop(row)
            		
+=======
+           		monster.getTop()     >  this.GetMazeObstacleTop(row)
+           		&& MazeObstacleAt(row, col) != MazeObstacles.SAFE
+           	    
+>>>>>>> branch 'Maze' of https://github.com/ronlut/BooYa.git
        		  )
         {
         	return (true);
