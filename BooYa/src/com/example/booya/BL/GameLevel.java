@@ -360,7 +360,8 @@ public abstract class GameLevel
            		monster.getBottom()  <  this.GetMazeObstacleBottom(row)
            		&&
            		monster.getTop()     >  this.GetMazeObstacleTop(row)
-           		
+           		&& MazeObstacleAt(row, col) != MazeObstacles.SAFE
+           	    
        		  )
         {
         	return (true);
