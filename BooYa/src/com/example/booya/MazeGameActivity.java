@@ -89,34 +89,20 @@ public class MazeGameActivity extends Activity {
 
 		if(!b_canMove)
 		{
-			m_monster.move(5, (0.6f)*screenHeight);
-			m_mazeView.setViews(gameLevelView, monsterView);
-			setContentView(m_mazeView);
 			try 
 			{
-				Thread.sleep(10);
+				Thread.sleep(2000);
 			} 
 			catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if(event.getX()>=5 && event.getX()<=5 && event.getY() >= (0.8f)*screenHeight +1 && event.getY()<= (0.8f)*screenHeight -1)
-			{
-				b_canMove = true;
-			}
-			else
-			{
-				return true;
-			}
+			b_canMove = true;
 		}
 		
 
-<<<<<<< HEAD
-		boolean isLegalMove = m_monster.move(event.getX(), event.getY());	
-		if(!isLegalMove)
-=======
 		boolean isLegalMove = m_monster.move(event.getX(), event.getY());
-/*		try 
+		try 
 		{
 			Thread.sleep(20);
 		} 
@@ -124,34 +110,36 @@ public class MazeGameActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		*/
-/*		if(!isLegalMove)
->>>>>>> branch 'Maze' of https://github.com/ronlut/BooYa.git
+		
+		if(!isLegalMove)
 		{
 			
 			try 
 			{
-				Thread.sleep(1000000);
+				Thread.sleep(5000);
 			} 
 			catch (InterruptedException e)
 			{
 
+
 				e.printStackTrace();
 			}
 			
-		}*/
+		}
 
 		MazeObstacles touchedMazeObstacle = m_currentLevel.TouchedMazeObstacle(m_monster);
-
+		
 		switch(touchedMazeObstacle)
 		{
 		case START:
 			break;
 		case WALL: 
 			b_canMove = false;
+			m_monster.move(5, (0.6f)*screenHeight);
 			break;
 		case FIN:  
-/*			try 
+			
+			try 
 			{
 				Thread.sleep(5000);
 			} 
@@ -159,7 +147,7 @@ public class MazeGameActivity extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			m_monster.move(0, (0.8f)*screenHeight);*/
+			m_monster.move(0, (0.8f)*screenHeight);
 			break;
 		case BOOYA:
 			break;
@@ -171,17 +159,8 @@ public class MazeGameActivity extends Activity {
 				break;
 		}
 
-<<<<<<< HEAD
 		m_mazeView.setViews(gameLevelView, monsterView);
 		setContentView(m_mazeView);
-
-=======
-		if(b_canMove)
-		{
-			m_mazeView.setViews(gameLevelView, monsterView);
-			setContentView(m_mazeView);
-		}
->>>>>>> branch 'Maze' of https://github.com/ronlut/BooYa.git
 		return true;
 	}
 	
