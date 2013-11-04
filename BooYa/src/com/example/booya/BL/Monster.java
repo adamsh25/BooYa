@@ -78,7 +78,7 @@ public class Monster extends MovableObject
 	@Override
 	public float getBottom() {
 		// TODO Auto-generated method stub
-		return y - MONSTER_HEIGHT;
+		return y + MONSTER_HEIGHT;
 	}
 	
 

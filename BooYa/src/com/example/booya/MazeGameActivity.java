@@ -87,7 +87,7 @@ public class MazeGameActivity extends Activity {
 	public boolean onTouchEvent(MotionEvent event) 
 	{
 
-		if(!b_canMove)
+/*		if(!b_canMove)
 		{
 			try 
 			{
@@ -98,25 +98,17 @@ public class MazeGameActivity extends Activity {
 				e.printStackTrace();
 			}
 			b_canMove = true;
-		}
+		}*/
 		
 
 		boolean isLegalMove = m_monster.move(event.getX(), event.getY());
-		try 
-		{
-			Thread.sleep(20);
-		} 
-		catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(!isLegalMove)
 		{
 			
 			try 
 			{
-				Thread.sleep(5000);
+				Thread.sleep(10);
 			} 
 			catch (InterruptedException e)
 			{
@@ -138,15 +130,6 @@ public class MazeGameActivity extends Activity {
 			m_monster.move(5, (0.6f)*screenHeight);
 			break;
 		case FIN:  
-			
-			try 
-			{
-				Thread.sleep(5000);
-			} 
-			catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			m_monster.move(0, (0.8f)*screenHeight);
 			break;
 		case BOOYA:
