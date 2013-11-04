@@ -146,7 +146,7 @@ public class MazeGameActivity extends Activity {
 			b_canMove = false;
 			break;
 		case FIN:  
-			try 
+/*			try 
 			{
 				Thread.sleep(5000);
 			} 
@@ -154,7 +154,7 @@ public class MazeGameActivity extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			m_monster.move(0, (0.8f)*screenHeight);
+			m_monster.move(0, (0.8f)*screenHeight);*/
 			break;
 		case BOOYA:
 			break;
