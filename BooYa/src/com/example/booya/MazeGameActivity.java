@@ -17,6 +17,8 @@ import android.app.Activity;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MotionEvent;
+import android.view.View.OnDragListener;
+import android.view.View.OnTouchListener;
 
 public class MazeGameActivity extends Activity {
 
@@ -32,7 +34,7 @@ public class MazeGameActivity extends Activity {
 	MonsterView monsterView;
 	public static int screenWidth, screenHeight;
 	public static boolean b_canMove = true;
-	
+	private static long time = 0;
 	//endregion
 	
 	//region Methods
@@ -80,13 +82,26 @@ public class MazeGameActivity extends Activity {
 	}
 
 
+    
+	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onTouchEvent(android.view.MotionEvent)
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) 
 	{
-
+		long l1 = event.getEventTime();
+		long l2 = l1;
+		l1 = l1 - time;
+		if(l1 > 500)
+		{
+			m_monster.move(5, (0.8f)*screenHeight);
+			m_mazeView.setViews(gameLevelView, monsterView);
+			setContentView(m_mazeView);
+			time = l2;
+			return true;
+		}
+		time = l2;
 /*		if(!b_canMove)
 		{
 			try 
@@ -128,6 +143,14 @@ public class MazeGameActivity extends Activity {
 		case WALL: 
 			b_canMove = false;
 			m_monster.move(5, (0.6f)*screenHeight);
+			try 
+			{
+				Thread.sleep(5000);
+			} 
+			catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 		case FIN:  
 			m_monster.move(0, (0.8f)*screenHeight);
