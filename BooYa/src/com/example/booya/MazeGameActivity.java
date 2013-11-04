@@ -101,16 +101,7 @@ public class MazeGameActivity extends Activity {
 		}
 		
 
-		boolean isLegalMove = m_monster.move(event.getX(), event.getY());
-		try 
-		{
-			Thread.sleep(20);
-		} 
-		catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		boolean isLegalMove = m_monster.move(event.getX(), event.getY());	
 		if(!isLegalMove)
 		{
 			
@@ -128,7 +119,7 @@ public class MazeGameActivity extends Activity {
 		}
 
 		MazeObstacles touchedMazeObstacle = m_currentLevel.TouchedMazeObstacle(m_monster);
-		
+
 		switch(touchedMazeObstacle)
 		{
 		case START:
@@ -161,6 +152,7 @@ public class MazeGameActivity extends Activity {
 
 		m_mazeView.setViews(gameLevelView, monsterView);
 		setContentView(m_mazeView);
+
 		return true;
 	}
 	

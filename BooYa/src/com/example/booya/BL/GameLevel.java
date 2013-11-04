@@ -12,7 +12,7 @@ public abstract class GameLevel
 	//region members
 	
     // Space from the top screen from which the Walls will be drawn 
-    public final float TOP_PADDING = ((0.1f) * MazeGameActivity.screenHeight);
+    public final float TOP_PADDING = ((0.13f) * MazeGameActivity.screenHeight);
  
     // Wall Width and Height - Preferred To Be A Square
     public final float MazeObstacleSize = ((0.1f) * MazeGameActivity.screenWidth);
@@ -127,6 +127,16 @@ public abstract class GameLevel
     			{
     				// returns in witch obstacle the monster is.
     				x = MazeObstacleAt(row, col);
+    				try 
+    				{
+    					Thread.sleep(50);
+    				} 
+    				catch (InterruptedException e)
+    				{
+
+
+    					e.printStackTrace();
+    				}
     				return (x);
 				}
 
@@ -134,16 +144,16 @@ public abstract class GameLevel
     	}
     	
     	// only if the monster is between different boundaries.
-    	for(int row = 0; row < this.MaxRows; row++)
+    	//for(int row = 0; row < this.MaxRows; row++)
     	{
-    		for(int col = 0; col < this.MaxCols; col++)
+    		//for(int col = 0; col < this.MaxCols; col++)
     		{
     			// checks if monster touches the edge of a boundary
-    			if(isMonsterTouchedObstacle(row, col, monster))
+    			//if(isMonsterTouchedObstacle(row, col, monster))
     			{
-    					x = MazeObstacleAt(row, col);
+    					//x = MazeObstacleAt(row, col);
     					// if the monster touches the edge of a boundary
-    					return (x);
+    					//return (x);
     			}
 
     		}
@@ -212,21 +222,23 @@ public abstract class GameLevel
     private boolean IsTouchTop(int row, int col, Monster monster)
     {
     		 if
-    		 (
-    		    (
-        		monster.getLeft()  <=  this.GetMazeObstacleRight(col)
-        		&&
-        		monster.getLeft()  >=  this.GetMazeObstacleLeft(col)
-        			||
-        		monster.getRight() <=  this.GetMazeObstacleRight(col)
-        		&&
-        		monster.getRight() >=  this.GetMazeObstacleLeft(col)
-        		)
-        		&&
-        		(
-        		monster.getTop()   == this.GetMazeObstacleBottom(row)	
-    			)
-    		  )
+       		 (
+	         		    (
+		             		(monster.getLeft()  <=  this.GetMazeObstacleRight(col)
+		             		&&
+		             		monster.getLeft()  >=  this.GetMazeObstacleLeft(col))
+	             		||
+		             		(monster.getRight() <=  this.GetMazeObstacleRight(col)
+		             		&&
+		             		monster.getRight() >=  this.GetMazeObstacleLeft(col))
+	             		)
+             		&&
+	             		(
+	             		monster.getBottom() == this.GetMazeObstacleTop(row)	
+	             		&&
+	             		MazeObstacleAt(row, col) == MazeObstacles.WALL
+	         			)
+         		  )
     		 {
     			 return (true);
     		 }
@@ -248,19 +260,22 @@ public abstract class GameLevel
     {
     	if
     		 (
-    		    (
-        		monster.getLeft()  <=  this.GetMazeObstacleRight(col)
-        		&&
-        		monster.getLeft()  >=  this.GetMazeObstacleLeft(col)
+	    		    
+	        		(
+    				(monster.getLeft()  <=  this.GetMazeObstacleRight(col)
+	        		&&
+	        		monster.getLeft()  >=  this.GetMazeObstacleLeft(col))
         		||
-        		monster.getRight() <=  this.GetMazeObstacleRight(col)
+	        		(monster.getRight() <=  this.GetMazeObstacleRight(col)
+	        		&&
+	        		monster.getRight() >=  this.GetMazeObstacleLeft(col))
+	        		)
         		&&
-        		monster.getRight() >=  this.GetMazeObstacleLeft(col)
-        		)
-        		&&
-        		(
-        		monster.getBottom() == this.GetMazeObstacleTop(row)	
-    			)
+	        		(
+	        		monster.getTop() == this.GetMazeObstacleBottom(row)	
+	        		&&
+	        		MazeObstacleAt(row, col) == MazeObstacles.WALL
+	    			)
     		  )
     	{
     		return (true);
@@ -281,23 +296,26 @@ public abstract class GameLevel
      */
     private boolean IsTouchLeft(int row, int col, Monster monster)
     {
-    	if
-    		 (
-    		    (
-        		monster.getBottom()  <=  this.GetMazeObstacleBottom(row)
-        		&&
-        		monster.getBottom()  >=  this.GetMazeObstacleTop(row)
-        		||
-        		monster.getTop() <=  this.GetMazeObstacleBottom(row)
-        		&&
-        		monster.getTop() >=  this.GetMazeObstacleTop(row)
-        		)
-        		&&
-        		(
-        		monster.getLeft()   == this.GetMazeObstacleRight(col)
-    			)
-    		  )
+        if
+  		 (
+	  		    (
+		      		(monster.getBottom()  <=  this.GetMazeObstacleBottom(row)
+		      		&&
+		      		monster.getBottom()  >=  this.GetMazeObstacleTop(row))
+				||
+		      		(monster.getTop() 	 <=  this.GetMazeObstacleBottom(row)
+		      		&&
+		      		monster.getTop()     >=  this.GetMazeObstacleTop(row))
+	      		)
+      		&&
+	      		(
+	      		monster.getRight()   ==  this.GetMazeObstacleLeft(col)
+	      		&&
+	      		MazeObstacleAt(row, col) == MazeObstacles.WALL
+	  			)
+  		  )
     	{
+        	//works
     		return (true);
     	}
     	else
@@ -318,22 +336,24 @@ public abstract class GameLevel
     {
         if
        		 (
-       		    (
-           		monster.getBottom()  <=  this.GetMazeObstacleBottom(row)
+	       		    (
+		           		(monster.getBottom()  <=  this.GetMazeObstacleBottom(row)
+		           		&&
+		           		monster.getBottom()  >=  this.GetMazeObstacleTop(row))
+	           		||
+		           		(monster.getTop() 	 <=  this.GetMazeObstacleBottom(row)
+		           		&&
+		           		monster.getTop()     >=  this.GetMazeObstacleTop(row))
+	           		)
            		&&
-           		monster.getBottom()  >=  this.GetMazeObstacleTop(row)
-           		||
-           		monster.getTop() 	 <=  this.GetMazeObstacleBottom(row)
-           		&&
-           		monster.getTop()     >=  this.GetMazeObstacleTop(row)
-           		)
-           		&&
-           		(
-           		monster.getRight()   ==  this.GetMazeObstacleLeft(col)
-       			)
+	           		(
+	           		monster.getLeft()   ==  this.GetMazeObstacleRight(col)
+	        		&&
+	        		MazeObstacleAt(row, col) == MazeObstacles.WALL
+	       			)
        		  )
         {
-        	return (true);
+        	return (false);
         }
         else
         {
@@ -353,13 +373,13 @@ public abstract class GameLevel
     {
         if
        		 (
-           		monster.getLeft()    >  this.GetMazeObstacleLeft(col)
+           		monster.getLeft()    >=  this.GetMazeObstacleLeft(col)
            	    &&
-           		monster.getRight()   <  this.GetMazeObstacleRight(col)
+           		monster.getRight()   <=  this.GetMazeObstacleRight(col)
        			&&
-           		monster.getBottom()  >  this.GetMazeObstacleBottom(row)
+           		monster.getBottom()  >=  this.GetMazeObstacleBottom(row)
            		&&
-           		monster.getTop()     <  this.GetMazeObstacleTop(row)
+           		monster.getTop()     >=  this.GetMazeObstacleTop(row)
            		
        		  )
         {
