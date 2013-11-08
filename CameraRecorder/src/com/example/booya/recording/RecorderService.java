@@ -125,10 +125,50 @@ public class RecorderService extends Service {
 			Log.d(TAG, e.getMessage());
 			e.printStackTrace();
 			return false;
-		} catch (IOException e) {
-			Log.d(TAG, e.getMessage());
+		} catch (Exception ex) {
+			Log.d(TAG, ex.getMessage());
+			ex.printStackTrace();
+			
+			try
+			{
+			mServiceCamera.reconnect();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+			try
+			{
+				mServiceCamera.stopPreview();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+			try
+			{
+				mMediaRecorder.release();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+			try
+			{
+				mServiceCamera.release();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		mServiceCamera = null;
+			
 			return false;
+		}
+		finally
+		{
+			
 		}
 	}
 	
@@ -150,7 +190,7 @@ public class RecorderService extends Service {
 	}
 
 	public void stopRecording() {
-		Toast.makeText(getBaseContext(), "Recording Stopped", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(getBaseContext(), "Recording Stopped", Toast.LENGTH_SHORT).show();
 		try {
 			mServiceCamera.reconnect();
 		} catch (IOException e) {

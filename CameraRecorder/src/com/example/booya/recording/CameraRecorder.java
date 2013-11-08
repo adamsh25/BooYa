@@ -2,6 +2,7 @@ package com.example.booya.recording;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,8 +30,9 @@ public class CameraRecorder extends Activity
      
 		mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView1);
 		mSurfaceHolder = mSurfaceView.getHolder();
+		mSurfaceHolder.setFormat(PixelFormat.TRANSPARENT);
 		//mSurfaceHolder.addCallback(this);
-		mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		//mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		
 		Button btnStart = (Button) findViewById(R.id.StartService);
 		btnStart.setOnClickListener(new View.OnClickListener()
