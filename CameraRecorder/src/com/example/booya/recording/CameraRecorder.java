@@ -30,7 +30,6 @@ public class CameraRecorder extends Activity
      
 		mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView1);
 		mSurfaceHolder = mSurfaceView.getHolder();
-		mSurfaceHolder.setFormat(PixelFormat.TRANSPARENT);
 		//mSurfaceHolder.addCallback(this);
 		//mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		
