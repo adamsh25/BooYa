@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
+import android.widget.Toast;
 
 public class MazeGameActivity extends Activity {
 
@@ -70,7 +71,7 @@ public class MazeGameActivity extends Activity {
 	    gameLevelView = new GameLevelView(this);
 		gameLevelView.setGameLevel(m_currentLevel);
 		
-		m_monster = new Monster(5, (0.8f)*screenHeight, screenWidth, screenHeight);
+		m_monster = new Monster(m_currentLevel.GetStartPosition().x, m_currentLevel.GetStartPosition().y, screenWidth, screenHeight);
 		monsterView = new MonsterView(this, m_monster); 
 		
 		m_mazeView = new MazeView(this);
@@ -90,18 +91,23 @@ public class MazeGameActivity extends Activity {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) 
 	{
-		long l1 = event.getEventTime();
-		long l2 = l1;
-		l1 = l1 - time;
-		if(l1 > 500)
-		{
-			m_monster.move(5, (0.8f)*screenHeight);
-			m_mazeView.setViews(gameLevelView, monsterView);
-			setContentView(m_mazeView);
-			time = l2;
-			return true;
-		}
-		time = l2;
+		//long l1 = event.getEventTime();
+		//long l2 = l1;
+		//l1 = l1 - time;
+		//if(l1 > 500)
+		//{
+			//m_monster.move(5, (0.8f)*screenHeight);
+			//m_mazeView.setViews(gameLevelView, monsterView);
+			//setContentView(m_mazeView);
+			//time = l2;
+			//return true;
+		//}
+		//time = l2;
+		
+
+		
+		
+		
 /*		if(!b_canMove)
 		{
 			try 
@@ -118,23 +124,45 @@ public class MazeGameActivity extends Activity {
 
 		boolean isLegalMove = m_monster.move(event.getX(), event.getY());
 		
-		if(!isLegalMove)
-		{
-			
-			try 
-			{
-				Thread.sleep(10);
-			} 
-			catch (InterruptedException e)
-			{
-
-
-				e.printStackTrace();
-			}
-			
-		}
+//		if(!isLegalMove)
+//		{
+//			
+//			try 
+//			{
+//				Thread.sleep(10);
+//			} 
+//			catch (InterruptedException e)
+//			{
+//
+//
+//				e.printStackTrace();
+//			}
+//			
+//		}
 
 		MazeObstacles touchedMazeObstacle = m_currentLevel.TouchedMazeObstacle(m_monster);
+//		m_mazeView.setViews(gameLevelView, monsterView);
+//		setContentView(m_mazeView);
+		if(!b_canMove)
+		{
+			if(!m_currentLevel.isMonsterInsideObstacle(11,0,m_monster))
+			{
+				int x = 5;
+				return (true);				
+			}
+			else
+			{
+				b_canMove = true;
+			}
+			//if(!(touchedMazeObstacle == touchedMazeObstacle.START))
+			{
+			//	return (true);
+			}
+			//else
+			{
+			//	b_canMove = true;
+			}
+		}
 		
 		switch(touchedMazeObstacle)
 		{
@@ -142,15 +170,9 @@ public class MazeGameActivity extends Activity {
 			break;
 		case WALL: 
 			b_canMove = false;
-			m_monster.move(5, (0.6f)*screenHeight);
-			try 
-			{
-				Thread.sleep(5000);
-			} 
-			catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			m_monster.move(m_currentLevel.GetStartPosition().x, m_currentLevel.GetStartPosition().y);
+			Toast t = Toast.makeText(getApplicationContext(), "Wall",Toast.LENGTH_SHORT);
+			t.show();
 			break;
 		case FIN:  
 			m_monster.move(0, (0.8f)*screenHeight);

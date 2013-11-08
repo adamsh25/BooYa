@@ -14,8 +14,8 @@ public class Monster extends MovableObject
 	//region finals
 	
 
-	public static final int MONSTER_HEIGHT = (int)((0.035f) * MazeGameActivity.screenHeight);
-	public static final int MONSTER_WIDTH = (int)((0.045f) * MazeGameActivity.screenWidth);
+	public static final float MONSTER_SIZE = (float)((0.015f) * MazeGameActivity.screenHeight);
+	//public static final int MONSTER_WIDTH = (int)((0.035f) * MazeGameActivity.screenWidth);
 	
 	
 	//endregion
@@ -28,18 +28,6 @@ public class Monster extends MovableObject
 	//endregion
 	
 	//region Properties
-	
-/*	public  get()
-
-	{
-		return (this.);
-	}
-	
-	public void set(float )
-	{
-		this. = 
-	}
-	*/
 	
 	//endregion
 		
@@ -66,7 +54,7 @@ public class Monster extends MovableObject
 	@Override
 	public float getRight() {
 		// TODO Auto-generated method stub
-		return x + MONSTER_WIDTH;
+		return x + MONSTER_SIZE;
 	}
 
 	@Override
@@ -78,7 +66,7 @@ public class Monster extends MovableObject
 	@Override
 	public float getBottom() {
 		// TODO Auto-generated method stub
-		return y + MONSTER_HEIGHT;
+		return y + MONSTER_SIZE;
 	}
 	
 

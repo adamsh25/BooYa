@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.view.View;
 
 public class MazeView extends View 
@@ -43,7 +44,8 @@ public class MazeView extends View
 	{
 		// TODO Auto-generated method stub
 		super.onDraw(canvas);
-		canvas.drawBitmap(this.m_backgroundBitmap, 1, 1, null);
+		//canvas.drawBitmap(this.m_backgroundBitmap, 1, 1, null);
+		canvas.drawColor(Color.BLACK);
 		this.m_levelView.draw(canvas);
 		this.m_monsterView.draw(canvas);
 	}

@@ -1,5 +1,7 @@
 package com.example.booya.BL;
 
+import android.graphics.PointF;
+
 import com.example.booya.MazeGameActivity;
 
 /**
@@ -18,8 +20,13 @@ public abstract class GameLevel
     public final float MazeObstacleSize = ((0.1f) * MazeGameActivity.screenWidth);
 
     // Max number of Walls rows and columns
-    public final int MaxRows = 10;
+    public final int MaxRows = 12;
     public final int MaxCols = 10;
+    
+    protected abstract int GetStartPosX();
+    protected abstract int GetStartPosY();
+    
+    protected int startPosY;
 
     // The Maze Obstacles matrix.
     protected MazeObstacles[][] level;
@@ -353,7 +360,7 @@ public abstract class GameLevel
      * @param monster
      * @return boolean True\False
      */
-    private boolean isMonsterInsideObstacle(int row, int col, Monster monster)
+    public boolean isMonsterInsideObstacle(int row, int col, Monster monster)
     {
         if
        		 (
@@ -375,6 +382,15 @@ public abstract class GameLevel
         	return (false);
         }
     }
+    public PointF GetStartPosition()
+    {
+    	float x = (this.GetMazeObstacleLeft(GetStartPosX()) + this.GetMazeObstacleRight(GetStartPosX()))/2;
+    	float y = (this.GetMazeObstacleTop(GetStartPosY()) + this.GetMazeObstacleBottom(GetStartPosY()))/2;
+    	return (new PointF(x,y));
+    }
+    
+    
+		
 
 //endregion
 
