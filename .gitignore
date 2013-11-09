@@ -27,3 +27,6 @@ proguard/
 *.ipr
 *.iws
 .idea/
+
+# Rony added to stop conflicting project properties
+project.properties
