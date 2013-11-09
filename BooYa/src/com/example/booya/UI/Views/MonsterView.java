@@ -2,7 +2,6 @@ package com.example.booya.UI.Views;
 
 import com.example.booya.R;
 import com.example.booya.BL.Monster;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

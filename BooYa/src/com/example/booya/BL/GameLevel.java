@@ -13,15 +13,24 @@ public abstract class GameLevel
 	
 	//region members
 	
-    // Space from the top screen from which the Walls will be drawn 
-    public final float TOP_PADDING = ((0.125f) * MazeGameActivity.screenHeight);
- 
-    // Wall Width and Height - Preferred To Be A Square
-    public final float MazeObstacleSize = ((0.1f) * MazeGameActivity.screenWidth);
 
+    
     // Max number of Walls rows and columns
-    public final int MaxRows = 12;
-    public final int MaxCols = 10;
+    public static final int MaxRows = 12;
+    public static final int MaxCols = 12;
+    
+    // Wall Width and Height - Preferred To Be A Square
+    public static final float MazeObstacleSize = ((0.4f) *
+												  ((MazeGameActivity.screenWidth /  MaxCols) +
+												  (MazeGameActivity.screenHeight / MaxRows)));		
+    
+    // Space from the top screen from which the Walls will be drawn 
+    public static final float TOP_PADDING = ((0.35f) * 
+    		(MazeGameActivity.screenHeight - (MazeObstacleSize*MaxRows)));
+ 
+    // Space from the top screen from which the Walls will be drawn 
+    public static final float LEFT_PADDING = ((0.35f) * 
+    		(MazeGameActivity.screenWidth - (MazeObstacleSize*MaxCols)));
     
     protected abstract int GetStartPosX();
     protected abstract int GetStartPosY();
@@ -79,7 +88,7 @@ public abstract class GameLevel
      */
     public float GetMazeObstacleLeft(int col)
     {
-    	return (this.MazeObstacleSize * col);    	
+    	return (this.MazeObstacleSize * col) + LEFT_PADDING;    	
     }
     
     /**
@@ -89,7 +98,7 @@ public abstract class GameLevel
      */
     public float GetMazeObstacleRight(int col)
     {
-    	return ((this.MazeObstacleSize * col) + this.MazeObstacleSize);
+    	return (GetMazeObstacleLeft(col) + this.MazeObstacleSize);
     }
     
     //endregion
@@ -231,8 +240,10 @@ public abstract class GameLevel
         		)
         		&&
         		(
-        				monster.getBottom()         == this.GetMazeObstacleTop(row)
-    	        		&& MazeObstacleAt(row, col) == MazeObstacles.WALL 
+        				//check why not
+    	        		monster.getBottom()  <= (this.GetMazeObstacleBottom(row))
+    	        		&&
+    	        		monster.getBottom()  >= (this.GetMazeObstacleTop(row) - 0.1)
     			)
     		  )
     		 {
@@ -267,8 +278,10 @@ public abstract class GameLevel
         		)
         		&&
         		(
-	        		monster.getTop() == this.GetMazeObstacleBottom(row)	
-	        		&& MazeObstacleAt(row, col) == MazeObstacles.WALL
+	        		monster.getTop() >= (this.GetMazeObstacleBottom(row)+0.1)
+	        		&&
+	        		monster.getTop() <= this.GetMazeObstacleTop(row)
+	        		
     			)
     		  )
     	{
@@ -303,8 +316,8 @@ public abstract class GameLevel
         		)
         		&&
         		(
-	        		monster.getLeft()           == this.GetMazeObstacleRight(col)
-	        		&& MazeObstacleAt(row, col) == MazeObstacles.WALL
+    	           		monster.getLeft()    >=  this.GetMazeObstacleLeft(col)
+    	           		&& monster.getLeft() <=  (this.GetMazeObstacleRight(col)+0.1)
     			)
     		  )
     	{
@@ -339,8 +352,9 @@ public abstract class GameLevel
            		)
            		&&
            		(
-	           		monster.getRight()   ==  this.GetMazeObstacleLeft(col)
-	           		&& MazeObstacleAt(row, col) == MazeObstacles.WALL
+           				//check why not
+    	           		monster.getRight()    >=  (this.GetMazeObstacleLeft(col))
+    	           		&& monster.getRight() <=  (this.GetMazeObstacleRight(col))
        			)
        		  )
         {

@@ -14,8 +14,7 @@ public class Monster extends MovableObject
 	//region finals
 	
 
-	public static final float MONSTER_SIZE = (float)((0.015f) * MazeGameActivity.screenHeight);
-	//public static final int MONSTER_WIDTH = (int)((0.035f) * MazeGameActivity.screenWidth);
+	public static final float MONSTER_SIZE = (float)((0.30f) * GameLevel.MazeObstacleSize);
 	
 	
 	//endregion
@@ -60,19 +59,20 @@ public class Monster extends MovableObject
 	@Override
 	public float getTop() {
 		// TODO Auto-generated method stub
-		return y;
+		return y - MONSTER_SIZE;
 	}
 
 	@Override
-	public float getBottom() {
+	public float getBottom() 
+	{
 		// TODO Auto-generated method stub
-		return y + MONSTER_SIZE;
+		return y;
 	}
 	
 
     public boolean canMoveLeft()
     {
-    	if(getLeft() > 0)
+    	if(getLeft() > GameLevel.LEFT_PADDING)
     	{
 			return true;
     	}
@@ -85,7 +85,7 @@ public class Monster extends MovableObject
        
     public boolean canMoveRight()
     {
-    	if(getRight() < m_nScreenWidth)
+    	if(getRight() < ((GameLevel.MaxCols * GameLevel.MazeObstacleSize) - GameLevel.LEFT_PADDING + GameLevel.MazeObstacleSize))
     	{
 			return true;
     	}
@@ -99,7 +99,7 @@ public class Monster extends MovableObject
     
     public boolean canMoveUp()
     {
-    	if(getTop() < m_nScreenHeight)
+    	if(getTop() > GameLevel.TOP_PADDING)
     	{
 			return true;
     	}
@@ -112,7 +112,7 @@ public class Monster extends MovableObject
     
     public boolean canMoveDown()
     {
-    	if(getBottom() > 0)
+    	if(getBottom() <  ((GameLevel.MazeObstacleSize * GameLevel.MaxRows)  + GameLevel.TOP_PADDING))
     	{
 			return true;
     	}
