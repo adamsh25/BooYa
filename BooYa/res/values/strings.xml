@@ -6,5 +6,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_maze">Maze</string>
     <string name="title_activity_maze_game">MazeGameActivity</string>
+    <string name="title_activity_game">GameActivity</string>
 
 </resources>

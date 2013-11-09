@@ -1,6 +1,6 @@
 package com.example.booya.recording;
 
-import com.android.camerarecorder.R;
+import com.example.booya.R;
 
 import android.os.Bundle;
 import android.app.Activity;
