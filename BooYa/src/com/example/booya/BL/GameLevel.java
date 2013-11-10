@@ -20,9 +20,10 @@ public abstract class GameLevel
     public static final int MaxCols = 12;
     
     // Wall Width and Height - Preferred To Be A Square
-    public static final float MazeObstacleSize = ((0.4f) *
-												  ((MazeGameActivity.screenWidth /  MaxCols) +
-												  (MazeGameActivity.screenHeight / MaxRows)));		
+    private static final float screenSize = Math.min(MazeGameActivity.screenWidth,MazeGameActivity.screenHeight);
+    public static final float MazeObstacleSize = //((0.4f) * 
+    		(Math.min((screenSize /  MaxCols), (screenSize / MaxRows)));
+		
     
     // Space from the top screen from which the Walls will be drawn 
     public static final float TOP_PADDING = ((0.35f) * 
