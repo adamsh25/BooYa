@@ -21,17 +21,18 @@ public abstract class GameLevel
     
     // Wall Width and Height - Preferred To Be A Square
     private static final float screenSize = Math.min(MazeGameActivity.screenWidth,MazeGameActivity.screenHeight);
+    private static final float minColRow = Math.min(MaxRows, MaxCols);
     public static final float MazeObstacleSize = //((0.4f) * 
-    		(Math.min((screenSize /  MaxCols), (screenSize / MaxRows)));
+    		(Math.min((screenSize /  minColRow), (screenSize / minColRow)));
 		
     
     // Space from the top screen from which the Walls will be drawn 
-    public static final float TOP_PADDING = ((0.35f) * 
-    		(MazeGameActivity.screenHeight - (MazeObstacleSize*MaxRows)));
+    public static final float TOP_PADDING = ((0.25f) * 
+    		Math.max((MazeGameActivity.screenHeight - MazeGameActivity.screenWidth), 0));
  
     // Space from the top screen from which the Walls will be drawn 
-    public static final float LEFT_PADDING = ((0.35f) * 
-    		(MazeGameActivity.screenWidth - (MazeObstacleSize*MaxCols)));
+    public static final float LEFT_PADDING =  
+    		Math.max((MazeGameActivity.screenWidth - MazeGameActivity.screenHeight), 0);
     
     protected abstract int GetStartPosX();
     protected abstract int GetStartPosY();
@@ -202,14 +203,16 @@ public abstract class GameLevel
      * @param monster
      * @return boolean True\False
      */
-    public boolean isMonsterTouchedObstacle(int row, int col, Monster monster)
+    public  boolean isMonsterTouchedObstacle(int row, int col, Monster monster)
     {
+    	
     	if(
 			IsTouchTop(row, col, monster) || IsTouchBottom(row, col, monster)
 			||
 			IsTouchLeft(row, col, monster) || IsTouchRight(row, col, monster)
 		  )
     	{
+
     		return (true);
     	}
     	else

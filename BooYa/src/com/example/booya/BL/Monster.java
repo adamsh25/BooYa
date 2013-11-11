@@ -127,7 +127,7 @@ public class Monster extends MovableObject
     	return(canMoveDown() && canMoveUp() && canMoveLeft() && canMoveRight());
     }
 	@Override
-	public boolean move(float xPos, float yPos) 
+	public synchronized boolean move(float xPos, float yPos) 
 	{
 		this.x = xPos;
 		this.y = yPos;
