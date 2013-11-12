@@ -88,6 +88,7 @@ public class RecorderService extends Service {
 //			mServiceCamera.setParameters(p);
 
 			
+			// TODO: deal better with exceptions, releases on pauses/stops, initialization on start/resume
 			
 			
 			
@@ -114,6 +115,20 @@ public class RecorderService extends Service {
 //				Log.e(TAG, e.getMessage());
 //				e.printStackTrace();
 //			}
+			
+			if (android.os.Build.VERSION.SDK_INT>=9) {
+
+			    // attempt to rotate the video 90 degrees. 
+			    try {
+			        mMediaRecorder.setOrientationHint(270);
+			       Log.d(TAG, "orientation rotated 270");
+			    } catch (Exception e) {
+			        Log.d(TAG, "error trying setOrientationHint"+ e.getMessage());
+			        e.printStackTrace();
+			    }           
+			} else {
+			    Log.d(TAG, "orientation set skipped ");
+			}
 			
 			mMediaRecorder.prepare();
 			mMediaRecorder.start(); 
@@ -191,19 +206,23 @@ public class RecorderService extends Service {
 
 	public void stopRecording() {
 		//Toast.makeText(getBaseContext(), "Recording Stopped", Toast.LENGTH_SHORT).show();
-		try {
-			mServiceCamera.reconnect();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			mServiceCamera.reconnect();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		mMediaRecorder.stop();
 		mMediaRecorder.reset();
 		
-		mServiceCamera.stopPreview();
+		
 		mMediaRecorder.release();
+		
+		mServiceCamera.stopPreview();
 		
 		mServiceCamera.release();
 		mServiceCamera = null;
+		
+		mRecordingStatus = false;
 	}
 }

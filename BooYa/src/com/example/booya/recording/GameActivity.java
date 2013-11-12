@@ -29,6 +29,7 @@ public class GameActivity extends Activity {
 				Intent intent = new Intent(GameActivity.this, RecorderService.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				stopService(intent);
+				finish();
 			}
 		});
 	}
