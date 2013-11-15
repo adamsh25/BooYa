@@ -1,6 +1,5 @@
 package com.example.booya.BL;
 
-import android.graphics.Point;
 
 /*
  * This base class defines an abstract object which has central location (x,y),

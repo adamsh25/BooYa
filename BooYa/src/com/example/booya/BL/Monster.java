@@ -1,11 +1,5 @@
 package com.example.booya.BL;
 
-import com.example.booya.MazeGameActivity;
-
-
-
-
-
 public class Monster extends MovableObject
 {
 
@@ -14,14 +8,12 @@ public class Monster extends MovableObject
 	//region finals
 	
 
-	public static final float MONSTER_SIZE = (float)((0.85f) * GameLevel.MazeObstacleSize);
+	public static final float MONSTER_SIZE = (float)((0.70f) * GameLevel.MAZE_OBSTACLE_SIZE);
 	
 	
 	//endregion
 	
 	
-	private int m_nScreenWidth = MazeGameActivity.screenWidth;
-	private int m_nScreenHeight = MazeGameActivity.screenHeight;
 	
 	
 	//endregion
@@ -32,12 +24,10 @@ public class Monster extends MovableObject
 		
 	//region C'tor
 	
-	public Monster(float startX, float startY, int screenWidth, int screenHeight)
+	public Monster(float startX, float startY)
 	{
 		this.x = startX;
 		this.y = startY;
-		this.m_nScreenWidth = screenWidth;
-		this.m_nScreenHeight = screenHeight;
 	}
 	
 	//endregion
