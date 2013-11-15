@@ -18,9 +18,6 @@ import android.content.Intent;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MotionEvent;
-import android.view.View.OnDragListener;
-import android.view.View.OnTouchListener;
-import android.widget.Toast;
 
 public class MazeGameActivity extends Activity
 {
@@ -37,7 +34,6 @@ public class MazeGameActivity extends Activity
 	MonsterView monsterView;
 	public static int screenWidth, screenHeight;
 	
-	private static long time = 0;
 	
 	// flag - true if the player has touched a wall.
 	public static boolean b_playerHasTouchedWall = false;
@@ -81,7 +77,7 @@ public class MazeGameActivity extends Activity
 	    gameLevelView = new GameLevelView(this);
 		gameLevelView.setGameLevel(m_currentLevel);
 		
-		m_monster = new Monster(m_currentLevel.GetStartPosition().x, m_currentLevel.GetStartPosition().y, screenWidth, screenHeight);
+		m_monster = new Monster(m_currentLevel.getStartPosition().x, m_currentLevel.getStartPosition().y);
 		monsterView = new MonsterView(this, m_monster); 
 		
 		m_mazeView = new MazeView(this);
@@ -126,7 +122,7 @@ public class MazeGameActivity extends Activity
 
 		
 		// Gets The Maze Obstacle The Monster Has Touched.
-		MazeObstacles touchedMazeObstacle = m_currentLevel.TouchedMazeObstacle(m_monster);
+		MazeObstacles touchedMazeObstacle = m_currentLevel.touchedMazeObstacle(m_monster);
 		
 		if(!b_canMove)// If The Monster Has Left The Monster - Stopped Touching Him.
 		{
@@ -228,7 +224,7 @@ public class MazeGameActivity extends Activity
 		b_canMove = false;
 		
 		// The Monster Return To Start Position
-		m_monster.move(m_currentLevel.GetStartPosition().x, m_currentLevel.GetStartPosition().y);
+		m_monster.move(m_currentLevel.getStartPosition().x, m_currentLevel.getStartPosition().y);
 		
 		// Set The Views To Paint The Monster In Start Position
 		m_mazeView.setViews(gameLevelView, monsterView);

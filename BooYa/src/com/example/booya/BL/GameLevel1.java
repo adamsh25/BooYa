@@ -1,6 +1,4 @@
 package com.example.booya.BL;
-import android.graphics.Point;
-import android.graphics.PointF;
 
 public class GameLevel1 extends GameLevel 
 {
@@ -49,7 +47,7 @@ public class GameLevel1 extends GameLevel
 	public GameLevel1()
 	{
 		// Uses The Number Matrix To Create An Obstacles Matrix.
-		UpdateMazeObstaclesMatrix(newLevel);
+		updateMazeObstaclesMatrix(newLevel);
 	}
 
 

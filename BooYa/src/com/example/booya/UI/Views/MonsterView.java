@@ -1,24 +1,22 @@
 package com.example.booya.UI.Views;
 
-import com.example.booya.R;
 import com.example.booya.BL.Monster;
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
-public class MonsterView extends View {
+@SuppressLint("ViewConstructor")
+public class MonsterView extends View
+{
 
 	//region members
 	
 	/**
 	 * 
 	 */
-	private float m_monsterWidth = Monster.MONSTER_SIZE;
-	private float m_monsterHeight = Monster.MONSTER_SIZE;
 	private Paint m_monsterPaint; // The Wall Design Member
 	private Monster m_theMonster;
 	

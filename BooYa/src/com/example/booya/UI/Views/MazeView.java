@@ -1,9 +1,6 @@
 package com.example.booya.UI.Views;
-import com.example.booya.R;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.View;
@@ -15,7 +12,6 @@ public class MazeView extends View
 	
 	private MonsterView m_monsterView;
 	private GameLevelView m_levelView;
-	private Bitmap m_backgroundBitmap;	
 	
 	//endregion
 	
@@ -24,8 +20,7 @@ public class MazeView extends View
 	public MazeView(Context context)
 	{
 		super(context);
-		m_backgroundBitmap = BitmapFactory.
-				decodeResource(getResources(), R.drawable.back);
+
 	}
 	
 	

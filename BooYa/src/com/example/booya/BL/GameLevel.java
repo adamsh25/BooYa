@@ -16,14 +16,14 @@ public abstract class GameLevel
 
     
     // Max number of Walls rows and columns
-    public static final int MaxRows = 32;
-    public static final int MaxCols = 32;
+    public static final int MAX_ROWS = 32;
+    public static final int MAX_COLS = 32;
     
     // Wall Width and Height - Preferred To Be A Square
-    private static final float screenSize = Math.min(MazeGameActivity.screenWidth,MazeGameActivity.screenHeight);
-    private static final float minColRow = Math.min(MaxRows, MaxCols);
-    public static final float MazeObstacleSize = //((0.4f) * 
-    		(Math.min((screenSize /  minColRow), (screenSize / minColRow)));
+    private static  final float SCREEN_SIZE = Math.min(MazeGameActivity.screenWidth,MazeGameActivity.screenHeight);
+    private static  final float MIN_COL_ROW = Math.min(MAX_ROWS, MAX_COLS);
+    public  static  final float MAZE_OBSTACLE_SIZE = //((0.4f) * 
+    		(Math.min((SCREEN_SIZE /  MIN_COL_ROW), (SCREEN_SIZE / MIN_COL_ROW)));
 		
     
     // Space from the top screen from which the Walls will be drawn 
@@ -37,7 +37,6 @@ public abstract class GameLevel
     protected abstract int GetStartPosX();
     protected abstract int GetStartPosY();
     
-    protected int startPosY;
 
     // The Maze Obstacles matrix.
     protected MazeObstacles[][] level;
@@ -52,7 +51,7 @@ public abstract class GameLevel
      */
     public GameLevel()
     {
-        this.level = new MazeObstacles[this.MaxRows][this.MaxCols];
+        this.level = new MazeObstacles[GameLevel.MAX_ROWS][GameLevel.MAX_COLS];
     }
     
     //endregion
@@ -67,7 +66,7 @@ public abstract class GameLevel
      */
     public float GetMazeObstacleTop(int row)
     {
-    	return ((this.MazeObstacleSize * row) + TOP_PADDING);
+    	return ((GameLevel.MAZE_OBSTACLE_SIZE * row) + TOP_PADDING);
     }
     
     /**
@@ -80,7 +79,7 @@ public abstract class GameLevel
 		// To Get The Bottom Place We Need To Add The Obstacle Size
 		//  	And Not To Subtract It, Because We Get From The Screen 
 		//											The Y Pixel Place Reversed. 
-    	return (GetMazeObstacleTop(row) + this.MazeObstacleSize);    	
+    	return (GetMazeObstacleTop(row) + GameLevel.MAZE_OBSTACLE_SIZE);    	
     }
     
     /**
@@ -90,7 +89,7 @@ public abstract class GameLevel
      */
     public float GetMazeObstacleLeft(int col)
     {
-    	return (this.MazeObstacleSize * col) + LEFT_PADDING;    	
+    	return (GameLevel.MAZE_OBSTACLE_SIZE * col) + LEFT_PADDING;    	
     }
     
     /**
@@ -100,7 +99,7 @@ public abstract class GameLevel
      */
     public float GetMazeObstacleRight(int col)
     {
-    	return (GetMazeObstacleLeft(col) + this.MazeObstacleSize);
+    	return (GetMazeObstacleLeft(col) + GameLevel.MAZE_OBSTACLE_SIZE);
     }
     
     //endregion
@@ -109,13 +108,13 @@ public abstract class GameLevel
     
     // We Give An Array Of Numbers To Draw Each Level Easily
     // But For Easy Work We Will Use An Enumerable Array Of Maze Obstacles
-    public void UpdateMazeObstaclesMatrix(int[][] obstacles)
+    public void updateMazeObstaclesMatrix(int[][] obstacles)
     {
     	// runs through matrix rows
-    	for(int row = 0; row < this.MaxRows; row++)
+    	for(int row = 0; row < GameLevel.MAX_ROWS; row++)
     	{
     		// runs through matrix columns
-    		for(int col = 0; col < this.MaxCols; col++)
+    		for(int col = 0; col < GameLevel.MAX_COLS; col++)
     		{
     			// Construct Level Obstacle Type Matrix By Level Integer Matrix. 
     			this.level[row][col] = MazeObstacles.GetMazeObstacleByNumber(obstacles[row][col]);
@@ -130,39 +129,25 @@ public abstract class GameLevel
      * @param monster - To Get Is Place In The Screen.
      * @return The Touched Maze Obstacle Name.
      */
-    public MazeObstacles TouchedMazeObstacle(Monster monster)
+    public MazeObstacles touchedMazeObstacle(Monster monster)
     {
-
+    	// return SAFE Obstacle By Default.
     	MazeObstacles x = MazeObstacles.SAFE;
     	
     	
-/*    	for(int row = 0; row < this.MaxRows; row++)
+    	// Runs Through All The Maze Level Matrix
+    	for(int row = 0; row < GameLevel.MAX_ROWS; row++)
     	{
-    		for(int col = 0; col < this.MaxCols; col++)
+    		for(int col = 0; col < GameLevel.MAX_COLS; col++)
     		{
-    			// checks if the monster is inside an obstacle
-    			if(isMonsterInsideObstacle(row, col, monster))
-    			{
-    				// returns in witch obstacle the monster is.
-    				x = MazeObstacleAt(row, col);
-    				return (x);
-				}
-
-    		}
-    	}*/
-    	
-    	// only if the monster is between different boundaries.
-    	for(int row = 0; row < this.MaxRows; row++)
-    	{
-    		for(int col = 0; col < this.MaxCols; col++)
-    		{
-    			// checks if monster touches the edge of a boundary
+    			// If The Monster Touches The Edge Of A "Dangerous Obstacle".
     			if(isMonsterTouchedObstacle(row, col, monster))
     			{
-    					x = MazeObstacleAt(row, col);
-    					if(x != MazeObstacles.SAFE)
+    					x = mazeObstacleAt(row, col);
+    					if(x != MazeObstacles.SAFE)// Only If We Touched A Different
+    											   //   Obstacle From The Safe Obstacle
     					{
-    						// if the monster touches the edge of a boundary
+    						// If The Monster Touches The Edge Of A "Dangerous Obstacle".
     						return (x);
     					}
     			}
@@ -170,19 +155,8 @@ public abstract class GameLevel
     		}
     	}
     	
+    	// Return Safe Obstacle Because No Other "Dangerous Obstacle" Has Been Touched.
     	return (x);
-    }
-    
-
-    /**
-     * Checks If There Is A Wall At The row, column Position
-     * @param row - Y Position
-     * @param col - X Position
-     * @return boolean True/False
-     */
-    public boolean IsWallAt(int row, int col)
-    {
-    	return (this.level[row][col] == MazeObstacles.WALL);
     }
     
 
@@ -193,7 +167,7 @@ public abstract class GameLevel
      * @param col
      * @return
      */
-    public MazeObstacles MazeObstacleAt(int row, int col)
+    public MazeObstacles mazeObstacleAt(int row, int col)
     {
     	return (this.level[row][col]);
     }
@@ -210,9 +184,9 @@ public abstract class GameLevel
     {
     	
     	if(
-			IsTouchTop(row, col, monster) || IsTouchBottom(row, col, monster)
+			isTouchTop(row, col, monster) || isTouchBottom(row, col, monster)
 			||
-			IsTouchLeft(row, col, monster) || IsTouchRight(row, col, monster)
+			isTouchLeft(row, col, monster) || isTouchRight(row, col, monster)
 		  )
     	{
 
@@ -232,7 +206,7 @@ public abstract class GameLevel
      * @param monster
      * @return boolean True\False
      */
-    private boolean IsTouchTop(int row, int col, Monster monster)
+    private boolean isTouchTop(int row, int col, Monster monster)
     {
     		 if
     		 (
@@ -269,7 +243,7 @@ public abstract class GameLevel
      * @param monster
      * @return boolean True\False
      */
-    private boolean IsTouchBottom(int row, int col, Monster monster)
+    private boolean isTouchBottom(int row, int col, Monster monster)
     {
     	if
     		 (
@@ -307,7 +281,7 @@ public abstract class GameLevel
      * @param monster
      * @return boolean True\False
      */
-    private boolean IsTouchRight(int row, int col, Monster monster)
+    private boolean isTouchRight(int row, int col, Monster monster)
     {
     	if
     		 (
@@ -327,7 +301,6 @@ public abstract class GameLevel
     			)
     		  )
     	{
-    		// Works!
     		return (true);
     	}
     	else
@@ -344,7 +317,7 @@ public abstract class GameLevel
      * @param monster
      * @return boolean True\False
      */
-    private boolean IsTouchLeft(int row, int col, Monster monster)
+    private boolean isTouchLeft(int row, int col, Monster monster)
     {
         if
        		 (
@@ -374,7 +347,11 @@ public abstract class GameLevel
     }
     
 
-    public PointF GetStartPosition()
+    /**
+     * 
+     * @return
+     */
+    public PointF getStartPosition()
     {
     	float x = (this.GetMazeObstacleLeft(GetStartPosX()) + this.GetMazeObstacleRight(GetStartPosX()))/2;
     	float y = (this.GetMazeObstacleTop(GetStartPosY()) + this.GetMazeObstacleBottom(GetStartPosY()))/2;
@@ -388,7 +365,7 @@ public abstract class GameLevel
 
     
     
-    //region Not In Use  
+    //region Not Yet In Use - Maby We Will Need This Code  
     
     /**
         * Checks If The Monster is Inside The Obstacle.
@@ -397,7 +374,7 @@ public abstract class GameLevel
         * @param monster
         * @return boolean True\False
         */
-       public boolean isMonsterInsideObstacle(int row, int col, Monster monster)
+    /*   public boolean isMonsterInsideObstacle(int row, int col, Monster monster)
        {
            if
           		 (
@@ -418,7 +395,7 @@ public abstract class GameLevel
            {
            	return (false);
            }
-       }
+       }*/
        
        //endregion
     

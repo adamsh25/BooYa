@@ -52,13 +52,13 @@ public class GameLevelView extends View
 		super.onDraw(canvas);
 		
 		// runs through all the wall matrix rows
-		for (int row = 0; row < this.m_level.MaxRows; row++) 
+		for (int row = 0; row < GameLevel.MAX_ROWS; row++) 
 		{
 			// runs throught all the wall columns
-			for (int col = 0; col < this.m_level.MaxCols; col++) 
+			for (int col = 0; col < GameLevel.MAX_COLS; col++) 
 			{
 				// gets the maze obstacle type by the current row an column.
-				MazeObstacles curMazeObstacle = this.m_level.MazeObstacleAt(row, col);
+				MazeObstacles curMazeObstacle = this.m_level.mazeObstacleAt(row, col);
 				
 
 					// Draws A Rectangle By His Left, Top, Right And Bottom Pixel Place.
