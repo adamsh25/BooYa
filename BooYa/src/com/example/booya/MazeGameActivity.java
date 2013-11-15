@@ -10,6 +10,8 @@ import com.example.booya.BL.Monster;
 import com.example.booya.UI.Views.GameLevelView;
 import com.example.booya.UI.Views.MazeView;
 import com.example.booya.UI.Views.MonsterView;
+import com.example.booya.recording.GameActivity;
+import com.example.booya.recording.RecorderService;
 
 
 import android.os.Bundle;
@@ -28,7 +30,7 @@ public class MazeGameActivity extends Activity
 	//region members
 	
 	/**
-	 * Initialise members
+	 * Initialize members
 	 */
 	private MazeView m_mazeView;
 	private Monster m_monster;
@@ -58,6 +60,11 @@ public class MazeGameActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
+		
+		
+		// Recording stuff
+		Intent intent = new Intent(this, RecorderService.class);
+		startService(intent);
 		
 		//region initialise members
 		
@@ -155,6 +162,8 @@ public class MazeGameActivity extends Activity
 			case FIN:  
 				break;
 			case BOOYA:
+				// Touched BooYa area
+				onTouchBooya(event);
 				break;
 			case SAFE:
 				break;
@@ -208,8 +217,35 @@ public class MazeGameActivity extends Activity
 		    // Setting Touched Wall Flag To True. 
 		    b_playerHasTouchedWall  = true;
 		    
+		    // Stopping the service, which stops the video recording
+			Intent intentService = new Intent(this, RecorderService.class);
+			intentService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			stopService(intentService);
+		    
 		    // Making An Intent Of The Maze Game Start Menu Activity.
 			Intent intent = new Intent(this, GenericGameActivity.class);
+			
+			// Starting The Activity.
+			startActivity(intent);
+			
+	   }
+
+	}
+	
+	private void onTouchBooya(MotionEvent event)
+	{
+	   // Gets The Motion Action Type.
+	   final int action = event.getAction();
+
+	   // Safe Check - The New Intent Will Be Created Only If The Player Touches
+	   // The Wall While Moving Is Finger - On Slide Only.
+	   if(action == MotionEvent.ACTION_MOVE) 
+	   {
+		    // Setting Touched Wall Flag To True. 
+		    b_playerHasTouchedWall  = true;
+		    		
+			// SCARYYY FIGURE APPEARS
+			Intent intent = new Intent(this, ScaryFigureActivity.class);
 			
 			// Starting The Activity.
 			startActivity(intent);

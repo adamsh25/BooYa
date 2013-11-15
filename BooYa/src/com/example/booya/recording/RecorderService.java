@@ -3,6 +3,9 @@ package com.example.booya.recording;
 import java.io.IOException;
 import java.util.List;
 
+import com.example.booya.GenericGameActivity;
+import com.example.booya.TesterActivity;
+
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
@@ -31,12 +34,21 @@ public class RecorderService extends Service {
 	@Override
 	public void onCreate() {
 		mRecordingStatus = false;
-		mServiceCamera = CameraRecorder.mCamera;
-		mSurfaceView = CameraRecorder.mSurfaceView;
-		mSurfaceHolder = CameraRecorder.mSurfaceHolder;
 		
-		
-		
+		if(TesterActivity.getIsDebugMode())
+		{
+			mServiceCamera = CameraRecorder.mCamera;
+			mSurfaceView = CameraRecorder.mSurfaceView;
+			mSurfaceHolder = CameraRecorder.mSurfaceHolder;	
+		}
+		else
+		{
+		// Try to record actual game
+		mServiceCamera = GenericGameActivity.mCamera;
+		mSurfaceView = GenericGameActivity.mSurfaceView;
+		mSurfaceHolder = GenericGameActivity.mSurfaceHolder;
+		}
+			
 		super.onCreate();
 	}
 
@@ -68,7 +80,19 @@ public class RecorderService extends Service {
 			
 			//Toast.makeText(getBaseContext(), "Recording Started", Toast.LENGTH_SHORT).show();
 			
+			
 			mServiceCamera = Camera.open(findFrontFacingCamera());
+			
+//			CameraInfo cameraInfo = new CameraInfo();
+//			Camera.getCameraInfo(findFrontFacingCamera(), cameraInfo);
+//			
+//			Boolean bCanDisable = cameraInfo.canDisableShutterSound;
+//			
+//			// Try disable shutter sound
+//			if(bCanDisable == Boolean.TRUE)
+//			{
+//			mServiceCamera.enableShutterSound(false);
+//			}
 			
 			mMediaRecorder = new MediaRecorder();
 			

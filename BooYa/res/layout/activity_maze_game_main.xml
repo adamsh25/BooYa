@@ -39,5 +39,11 @@
         android:minWidth="300dip"
         android:onClick="launchGame"        
         android:text="PLAY!" />
+    
+    <SurfaceView
+	android:id="@+id/surfaceView2"
+	android:layout_width="1px"
+	android:layout_height="1px">
+	</SurfaceView>
 
 </RelativeLayout>

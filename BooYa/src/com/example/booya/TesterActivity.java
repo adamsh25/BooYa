@@ -6,10 +6,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.SurfaceView;
 import android.view.View;
 
 public class TesterActivity extends Activity {
-
+	public static Boolean bIsDUBUG;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -23,16 +24,23 @@ public class TesterActivity extends Activity {
 		return true;
 	}
 	public void launchMainBooya(View view) {
+		bIsDUBUG = Boolean.FALSE;
 	    Intent intent = new Intent(this, MainBooyaActivity.class);
 	    startActivity(intent);
 	}
 	public void launchMazeTester(View view) {
-	    Intent intent = new Intent(this, MazeGameActivity.class);
+		bIsDUBUG = Boolean.FALSE;
+	    Intent intent = new Intent(this, GenericGameActivity.class);
 	    startActivity(intent);
 	}
 	public void launchCameraTester(View view) {
+		bIsDUBUG = Boolean.TRUE;
 	    Intent intent = new Intent(this, CameraRecorder.class);
 	    startActivity(intent);
+	}
+	public static Boolean getIsDebugMode()
+	{
+		return bIsDUBUG;
 	}
 
 }
