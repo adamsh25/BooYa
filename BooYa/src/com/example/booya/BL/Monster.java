@@ -8,7 +8,7 @@ public class Monster extends MovableObject
 	//region finals
 	
 
-	public static final float MONSTER_SIZE = (float)((0.85f) * GameLevel.MAZE_OBSTACLE_SIZE);
+	public static final float MONSTER_SIZE = (float)((0.70f) * GameLevel.MAZE_OBSTACLE_SIZE);
 	
 	
 	//endregion

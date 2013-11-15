@@ -2,9 +2,12 @@ package com.example.booya;
 
 
 
+import java.util.List;
+
 import com.example.booya.R;
 import com.example.booya.BL.GameLevel;
 import com.example.booya.BL.GameLevel1;
+import com.example.booya.BL.GameLevel2;
 import com.example.booya.BL.MazeObstacles;
 import com.example.booya.BL.Monster;
 import com.example.booya.UI.Views.GameLevelView;
@@ -28,7 +31,9 @@ public class MazeGameActivity extends Activity
 	 * Initialise members
 	 */
 	private MazeView m_mazeView;
-	private Monster m_monster;
+	private GameLevel[] levels;
+
+    private Monster m_monster;
 	private GameLevel m_currentLevel;
 	GameLevelView gameLevelView;
 	MonsterView monsterView;
@@ -40,6 +45,9 @@ public class MazeGameActivity extends Activity
 	
 	// flag - true  if the player can move
 	public static boolean b_canMove = false;
+	
+	//
+	public static int n_gameLevel = 0;
 	
 	//endregion
 	
@@ -71,8 +79,9 @@ public class MazeGameActivity extends Activity
 		screenWidth = display.getWidth();
 		
 		b_playerHasTouchedWall = false;
+		n_gameLevel = 0;
 		b_canMove = false;
-		
+		initLevels();
 		m_currentLevel = new GameLevel1();
 	    gameLevelView = new GameLevelView(this);
 		gameLevelView.setGameLevel(m_currentLevel);
@@ -149,6 +158,7 @@ public class MazeGameActivity extends Activity
 				onTouchWall(event);
 				break;
 			case FIN:  
+				onFinishLevel();
 				break;
 			case BOOYA:
 				break;
@@ -231,6 +241,20 @@ public class MazeGameActivity extends Activity
 		setContentView(m_mazeView);
 	}
 	
+	private void onFinishLevel()
+	{
+		n_gameLevel = 1;
+		m_currentLevel = levels[n_gameLevel];
+	    gameLevelView = new GameLevelView(this);
+		gameLevelView.setGameLevel(m_currentLevel);
+	}
+	
+	private void initLevels()
+	{
+		levels = new GameLevel[5];
+		levels[0] = new GameLevel1();
+		levels[1] = new GameLevel2();
+	}
 	
 	//endregion
 }
