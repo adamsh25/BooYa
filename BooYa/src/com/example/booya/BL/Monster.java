@@ -14,7 +14,7 @@ public class Monster extends MovableObject
 	//region finals
 	
 
-	public static final float MONSTER_SIZE = (float)((0.30f) * GameLevel.MazeObstacleSize);
+	public static final float MONSTER_SIZE = (float)((0.85f) * GameLevel.MazeObstacleSize);
 	
 	
 	//endregion
@@ -68,70 +68,12 @@ public class Monster extends MovableObject
 		// TODO Auto-generated method stub
 		return y;
 	}
-	
 
-    public boolean canMoveLeft()
-    {
-    	if(getLeft() > GameLevel.LEFT_PADDING)
-    	{
-			return true;
-    	}
-    	else
-    	{
-    		//game over - the user touches the Wall
-    		return false;
-    	}
-    }
-       
-    public boolean canMoveRight()
-    {
-    	if(getRight() < ((GameLevel.MaxCols * GameLevel.MazeObstacleSize) - GameLevel.LEFT_PADDING + GameLevel.MazeObstacleSize))
-    	{
-			return true;
-    	}
-    	else
-    	{
-    		//game over - the user touches the Wall
-    		return false;
-    	}
-    	
-    }
-    
-    public boolean canMoveUp()
-    {
-    	if(getTop() > GameLevel.TOP_PADDING)
-    	{
-			return true;
-    	}
-    	else
-    	{
-    		//game over - the user touches the Wall
-    		return false;
-    	}
-    }
-    
-    public boolean canMoveDown()
-    {
-    	if(getBottom() <  ((GameLevel.MazeObstacleSize * GameLevel.MaxRows)  + GameLevel.TOP_PADDING))
-    	{
-			return true;
-    	}
-    	else
-    	{
-    		//game over - the user touches the Wall
-    		return false;
-    	}
-    }
-    public boolean checkMove()
-    {
-    	return(canMoveDown() && canMoveUp() && canMoveLeft() && canMoveRight());
-    }
 	@Override
-	public synchronized boolean move(float xPos, float yPos) 
+	public synchronized void move(float xPos, float yPos) 
 	{
 		this.x = xPos;
 		this.y = yPos;
-		return checkMove();
 	}
 
 	//endregion

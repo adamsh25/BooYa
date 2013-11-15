@@ -14,6 +14,7 @@ import com.example.booya.UI.Views.MonsterView;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -34,12 +35,18 @@ public class MazeGameActivity extends Activity {
 	GameLevelView gameLevelView;
 	MonsterView monsterView;
 	public static int screenWidth, screenHeight;
-	public static boolean b_canMove = false;
+	
 	private static long time = 0;
+	
+	// flag - true if the player has touched a wall.
+	public static boolean b_playerHasTouchedWall = false;
+	
+	// flag - true  if the player can move
+	public static boolean b_canMove = false;
+	
 	//endregion
 	
-	//region Methods
-	
+
 	//region Events
 	
 	/* (non-Javadoc)
@@ -66,6 +73,8 @@ public class MazeGameActivity extends Activity {
 		screenHeight = display.getHeight();
 		screenWidth = display.getWidth();
 		
+		b_playerHasTouchedWall = false;
+		b_canMove = false;
 		
 		m_currentLevel = new GameLevel1();
 	    gameLevelView = new GameLevelView(this);
@@ -76,6 +85,7 @@ public class MazeGameActivity extends Activity {
 		
 		m_mazeView = new MazeView(this);
 		m_mazeView.setViews(gameLevelView, monsterView);
+		
 		
 		//endregion
 		setContentView(m_mazeView);
@@ -92,67 +102,76 @@ public class MazeGameActivity extends Activity {
 	public boolean onTouchEvent(MotionEvent event) 
 	{
 
-
-		boolean isLegalMove = m_monster.move(event.getX(), event.getY());
-
-		MazeObstacles touchedMazeObstacle = m_currentLevel.TouchedMazeObstacle(m_monster);
-		//		setContentView(m_mazeView);
-		if(!b_canMove)
+		if(b_playerHasTouchedWall)
 		{
+			return super.onTouchEvent(event);
+		}
+       
+	   final int action = event.getAction();
+	   
+	   switch(action)
+	   {
+	   case MotionEvent.ACTION_UP:
+		   onPlayerStopTouchingMonster();
+		   return super.onTouchEvent(event);
+	   case MotionEvent.ACTION_MOVE :
+		   break;
+	   }
+	   
 
-			if(touchedMazeObstacle != MazeObstacles.START)
+
+	    // Moves The Monster On Screen
+		m_monster.move(event.getX(), event.getY());
+
+		
+		// Gets The Maze Obstacle The Monster Has Touched.
+		MazeObstacles touchedMazeObstacle = m_currentLevel.TouchedMazeObstacle(m_monster);
+		
+		if(!b_canMove)// If The Monster Has Left The Monster - Stopped Touching Him.
+		{
+			
+			if(touchedMazeObstacle != MazeObstacles.START) // If The Player Didn't Touched The Monster Placed On Start Position.
 			{
-				return (true);				
+				// Check Next Player Touch (Move).
+				return (super.onTouchEvent(event));			
 			}
 			else
 			{
-
+				// The Monster Can Now Move - The Game Start Again. (Still Same Intent - Same Activity)
 				b_canMove = true;
 			}
 		}
 		
+		// Do Different Actions For Each Touched Obstacle
 		switch(touchedMazeObstacle)
 		{
-		case START:
-			break;
-		case WALL: 
-			b_canMove = false;
-			m_monster.move(m_currentLevel.GetStartPosition().x, m_currentLevel.GetStartPosition().y);
-			Toast t = Toast.makeText(getApplicationContext(), "Wall",Toast.LENGTH_SHORT);
-			t.show();
-			m_mazeView.setViews(gameLevelView, monsterView);
-			setContentView(m_mazeView);
-
-			break;
-		case FIN:  
-			m_monster.move(m_currentLevel.GetStartPosition().x, m_currentLevel.GetStartPosition().y);
-			Toast t2 = Toast.makeText(getApplicationContext(), "FIN",Toast.LENGTH_SHORT);
-			t2.show();
-			break;
-		case BOOYA:
-			break;
-		case SAFE:
-			break;
-		case BOUNTY:
-			break;
-		default:
+			case START:
 				break;
+			case WALL: 
+				// Game Over - Start New Intent.
+				onTouchWall(event);
+				break;
+			case FIN:  
+				break;
+			case BOOYA:
+				break;
+			case SAFE:
+				break;
+			case BOUNDARIES:// If The Monster Move Is Outside Of Boundaries,
+						    //   Act Like The Player Has Stopped Touching The Monster, Start Again (Same Intent).
+				   onPlayerStopTouchingMonster();
+				   return super.onTouchEvent(event);
+			default:
+					break;
 		}
 
-		if(!isLegalMove)
-		{
-			b_canMove = false;
-			m_monster.move(m_currentLevel.GetStartPosition().x, m_currentLevel.GetStartPosition().y);
-			Toast t = Toast.makeText(getApplicationContext(), "Out Of Boundaries",Toast.LENGTH_SHORT);
-			t.show();
-			m_mazeView.setViews(gameLevelView, monsterView);
-			setContentView(m_mazeView);
-		
-		}
-		
+
+		// Paint The Game With The New Monster Position.
 		m_mazeView.setViews(gameLevelView, monsterView);
 		setContentView(m_mazeView);
-		return true;
+		
+		return (super.onTouchEvent(event));
+
 	}
 	
 	/* (non-Javadoc)
@@ -167,6 +186,53 @@ public class MazeGameActivity extends Activity {
 	}
 
 	//endregion
+	
+	
+	//region Methods
+	
+	
+	/**
+	 * Called When The Player Touches A WAll - Game Over.
+	 * @param event
+	 */
+	private void onTouchWall(MotionEvent event)
+	{
+	   // Gets The Motion Action Type.
+	   final int action = event.getAction();
+
+	   // Safe Check - The New Intent Will Be Created Only If The Player Touches
+	   // The Wall While Moving Is Finger - On Slide Only.
+	   if(action == MotionEvent.ACTION_MOVE) 
+	   {
+		    // Setting Touched Wall Flag To True. 
+		    b_playerHasTouchedWall  = true;
+		    
+		    // Making An Intent Of The Maze Game Start Menu Activity.
+			Intent intent = new Intent(this, MazeGameStartMenuActivity.class);
+			
+			// Starting The Activity.
+			startActivity(intent);
+			
+	   }
+
+	}
+	
+	
+	/**
+	 * Called When The Player Stops Touching The Monster.
+	 */
+	private void onPlayerStopTouchingMonster()
+	{
+		// The Player C'ant Move Till He Touches The Monster In Start Position.
+		b_canMove = false;
+		
+		// The Monster Return To Start Position
+		m_monster.move(m_currentLevel.GetStartPosition().x, m_currentLevel.GetStartPosition().y);
+		
+		// Set The Views To Paint The Monster In Start Position
+		m_mazeView.setViews(gameLevelView, monsterView);
+		setContentView(m_mazeView);
+	}
 	
 	
 	//endregion

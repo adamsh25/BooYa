@@ -7,5 +7,6 @@
     <string name="title_activity_maze">Maze</string>
     <string name="title_activity_maze_game">MazeGameActivity</string>
     <string name="title_activity_game">GameActivity</string>
+    <string name="title_activity_maze_game_start_menu">MazeGameStartMenuActivity</string>
 
 </resources>

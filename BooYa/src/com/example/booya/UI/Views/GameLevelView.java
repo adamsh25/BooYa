@@ -60,11 +60,7 @@ public class GameLevelView extends View
 				// gets the maze obstacle type by the current row an column.
 				MazeObstacles curMazeObstacle = this.m_level.MazeObstacleAt(row, col);
 				
-				// draws only START, WALLS AND FIN
-				if(curMazeObstacle == MazeObstacles.FIN 
-				   || curMazeObstacle == MazeObstacles.START
-				   || curMazeObstacle == MazeObstacles.WALL)
-				{
+
 					// Draws A Rectangle By His Left, Top, Right And Bottom Pixel Place.
 					//  Designed By A Paint Member For Each Obstacle Type.
 					canvas.drawRect(this.m_level.GetMazeObstacleLeft(col),
@@ -72,7 +68,7 @@ public class GameLevelView extends View
 							this.m_level.GetMazeObstacleRight(col),
 							this.m_level.GetMazeObstacleBottom(row),
 							this.getObstaclePaint(curMazeObstacle));
-				}
+				
 			}
 			
 		}
@@ -113,24 +109,28 @@ public class GameLevelView extends View
 		switch(obstacle)
 		{
 			case BOOYA:
+				this.m_wallPaint.setColor(Color.CYAN);
 				break;
-			case BOUNTY:
+			case BOUNDARIES:
+				this.m_wallPaint.setColor(Color.BLACK);
 				break;
 			// Set Fin Obstacle Color 	
 			case FIN: 
-				this.m_wallPaint.setColor(Color.BLUE);
+				this.m_wallPaint.setColor(Color.RED);
 				break;
 			case SAFE:
+				this.m_wallPaint.setColor(Color.CYAN);
 				break;
 			// Set Start Obstacle Color
 			case START:
-				this.m_wallPaint.setColor(Color.WHITE);
+				this.m_wallPaint.setColor(Color.BLUE);
 				break;
 			// Set Wall Obstacle Color
 			case WALL: 
-				this.m_wallPaint.setColor(Color.RED);
+				this.m_wallPaint.setColor(Color.BLACK);
 				break;
 			default:
+				this.m_wallPaint.setColor(Color.BLACK);
 				break;
 		}
 	

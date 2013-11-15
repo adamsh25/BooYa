@@ -16,8 +16,8 @@ public abstract class GameLevel
 
     
     // Max number of Walls rows and columns
-    public static final int MaxRows = 12;
-    public static final int MaxCols = 12;
+    public static final int MaxRows = 32;
+    public static final int MaxCols = 32;
     
     // Wall Width and Height - Preferred To Be A Square
     private static final float screenSize = Math.min(MazeGameActivity.screenWidth,MazeGameActivity.screenHeight);
@@ -160,8 +160,11 @@ public abstract class GameLevel
     			if(isMonsterTouchedObstacle(row, col, monster))
     			{
     					x = MazeObstacleAt(row, col);
-    					// if the monster touches the edge of a boundary
-    					return (x);
+    					if(x != MazeObstacles.SAFE)
+    					{
+    						// if the monster touches the edge of a boundary
+    						return (x);
+    					}
     			}
 
     		}
@@ -247,7 +250,7 @@ public abstract class GameLevel
         				//check why not
     	        		monster.getBottom()  <= (this.GetMazeObstacleBottom(row))
     	        		&&
-    	        		monster.getBottom()  >= (this.GetMazeObstacleTop(row) - 0.1)
+    	        		monster.getBottom()  >= (this.GetMazeObstacleTop(row))
     			)
     		  )
     		 {
@@ -282,13 +285,14 @@ public abstract class GameLevel
         		)
         		&&
         		(
-	        		monster.getTop() >= (this.GetMazeObstacleBottom(row)+0.1)
+	        		monster.getTop() >= (this.GetMazeObstacleBottom(row))
 	        		&&
 	        		monster.getTop() <= this.GetMazeObstacleTop(row)
 	        		
     			)
     		  )
     	{
+    		// Doesn't Work
     		return (true);
     	}
     	else
@@ -321,10 +325,11 @@ public abstract class GameLevel
         		&&
         		(
     	           		monster.getLeft()    >=  this.GetMazeObstacleLeft(col)
-    	           		&& monster.getLeft() <=  (this.GetMazeObstacleRight(col)+0.1)
+    	           		&& monster.getLeft() <=  (this.GetMazeObstacleRight(col))
     			)
     		  )
     	{
+    		// Works!
     		return (true);
     	}
     	else
@@ -356,12 +361,13 @@ public abstract class GameLevel
            		)
            		&&
            		(
-           				//check why not
+           				
     	           		monster.getRight()    >=  (this.GetMazeObstacleLeft(col))
     	           		&& monster.getRight() <=  (this.GetMazeObstacleRight(col))
        			)
        		  )
         {
+        	//Doesn't Work
         	return (true);
         }
         else
@@ -370,36 +376,7 @@ public abstract class GameLevel
         }
     }
     
-    
-    /**
-     * Checks If The Monster is Inside The Obstacle.
-     * @param row - the Y place.
-     * @param col - the X place.
-     * @param monster
-     * @return boolean True\False
-     */
-    public boolean isMonsterInsideObstacle(int row, int col, Monster monster)
-    {
-        if
-       		 (
-           		monster.getLeft()    >  this.GetMazeObstacleLeft(col)
-           	    &&
-           		monster.getRight()   <  this.GetMazeObstacleRight(col)
-       			&&
-           		monster.getBottom()  >  this.GetMazeObstacleBottom(row)
-           		&&
-           		monster.getTop()     <  this.GetMazeObstacleTop(row)
-           		
-       		  )
-        {
-        	return (true);
-        	
-        }
-        else
-        {
-        	return (false);
-        }
-    }
+
     public PointF GetStartPosition()
     {
     	float x = (this.GetMazeObstacleLeft(GetStartPosX()) + this.GetMazeObstacleRight(GetStartPosX()))/2;
@@ -412,4 +389,43 @@ public abstract class GameLevel
 
 //endregion
 
+    
+    
+    //region Not In Use  
+    
+    /**
+        * Checks If The Monster is Inside The Obstacle.
+        * @param row - the Y place.
+        * @param col - the X place.
+        * @param monster
+        * @return boolean True\False
+        */
+       public boolean isMonsterInsideObstacle(int row, int col, Monster monster)
+       {
+           if
+          		 (
+              		monster.getLeft()    >  this.GetMazeObstacleLeft(col)
+              	    &&
+              		monster.getRight()   <  this.GetMazeObstacleRight(col)
+          			&&
+              		monster.getBottom()  >  this.GetMazeObstacleBottom(row)
+              		&&
+              		monster.getTop()     <  this.GetMazeObstacleTop(row)
+              		
+          		  )
+           {
+           	return (true);
+           	
+           }
+           else
+           {
+           	return (false);
+           }
+       }
+       
+       //endregion
+    
+    
+    
+    
 }

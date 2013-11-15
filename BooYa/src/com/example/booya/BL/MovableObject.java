@@ -37,11 +37,9 @@ public abstract class MovableObject
 	    public abstract float getBottom();
 	    
 	    //This method should move the object
-	    public abstract boolean move(float xPos, float yPos);
+	    public abstract void move(float xPos, float yPos);
 	   
-	    //This method should check if the move is correct,
-	    //	and doesn't exit the screen boundaries.
-	    public abstract boolean checkMove();
+
 	    
 	   
 

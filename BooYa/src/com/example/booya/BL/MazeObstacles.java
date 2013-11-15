@@ -8,7 +8,7 @@ public enum MazeObstacles
     WALL(2),
     FIN(3),
 	BOOYA(4),
-	BOUNTY(15);
+	BOUNDARIES(5);
 	
 	
 	private int obstacleValue;
@@ -33,7 +33,7 @@ public enum MazeObstacles
 	        case 4:
 	        	return BOOYA;
 	        case 5:
-	        	return BOUNTY;
+	        	return BOUNDARIES;
 	        }
 	        return null;
 	}

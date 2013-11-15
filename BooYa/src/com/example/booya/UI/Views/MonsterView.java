@@ -42,31 +42,7 @@ public class MonsterView extends View {
 	//region Methods
 	
 	
-//	/**
-//	 * @return
-//	 * @throws Exception
-//	 */
-//	private Bitmap getMonsterBitmap() throws Exception
-//	{
-//		Bitmap monsterBitmap = null;
-//		try 
-//		{
-//			BitmapFactory.Options o = new BitmapFactory.Options();
-//			o.outWidth  = m_monsterWidth ;
-//			o.outHeight = m_monsterHeight; 
-//			monsterBitmap = BitmapFactory.decodeResource(getResources(),
-//					R.drawable.monster,o);
-//
-//			monsterBitmap = Bitmap.createScaledBitmap(monsterBitmap,
-//					m_monsterWidth, m_monsterHeight, false);
-//		}
-//		catch (Exception e) 
-//		{
-//			throw e;
-//		}
-//		return monsterBitmap;
-//	}
-	
+
 	/* (non-Javadoc)
 	 * @see android.view.View#onDraw(android.graphics.Canvas)
 	 */
@@ -98,7 +74,7 @@ public class MonsterView extends View {
 		if(m_monsterPaint == null)
 		{
 			m_monsterPaint = new Paint();
-			m_monsterPaint.setColor(Color.BLUE);
+			m_monsterPaint.setColor(Color.BLACK);
 		}
 		
 		return (m_monsterPaint);
