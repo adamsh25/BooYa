@@ -8,5 +8,13 @@
     <string name="title_activity_maze_game">MazeGameActivity</string>
     <string name="title_activity_game">GameActivity</string>
     <string name="title_activity_maze_game_start_menu">MazeGameStartMenuActivity</string>
+    <string name="title_activity_tester">TesterActivity</string>
+    <string name="title_activity_main_booya">MainBooyaActivity</string>
+    <string name="title_activity_game_module_chooser">GameModuleChooser</string>
+    <string name="title_activity_options">OptionsActivity</string>
+    <string name="title_activity_store">StoreActivity</string>
+    <string name="title_activity_morgue">MorgueActivity</string>
+    <string name="title_activity_about">AboutActivity</string>
+    <string name="title_activity_generic_game">GenericGameActivity</string>
 
 </resources>

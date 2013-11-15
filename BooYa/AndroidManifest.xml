@@ -50,6 +50,10 @@
         <activity
             android:name="com.example.booya.MazeGameActivity"
             android:label="@string/title_activity_maze_game" >
+        </activity>
+        <activity
+            android:name="com.example.booya.TesterActivity"
+            android:label="@string/title_activity_tester" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -59,6 +63,34 @@
         <activity
             android:name="com.example.booya.MazeGameStartMenuActivity"
             android:label="@string/title_activity_maze_game_start_menu" >
+        </activity>
+        <activity
+            android:name="com.example.booya.MainBooyaActivity"
+            android:label="@string/title_activity_main_booya" >
+        </activity>
+        <activity
+            android:name="com.example.booya.GameModuleChooserActivity"
+            android:label="@string/title_activity_game_module_chooser" >
+        </activity>
+        <activity
+            android:name="com.example.booya.OptionsActivity"
+            android:label="@string/title_activity_options" >
+        </activity>
+        <activity
+            android:name="com.example.booya.StoreActivity"
+            android:label="@string/title_activity_store" >
+        </activity>
+        <activity
+            android:name="com.example.booya.MorgueActivity"
+            android:label="@string/title_activity_morgue" >
+        </activity>
+        <activity
+            android:name="com.example.booya.AboutActivity"
+            android:label="@string/title_activity_about" >
+        </activity>
+        <activity
+            android:name="com.example.booya.GenericGameActivity"
+            android:label="@string/title_activity_generic_game" >
         </activity>
     </application>
 

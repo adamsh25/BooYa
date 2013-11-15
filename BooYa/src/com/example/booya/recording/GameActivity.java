@@ -21,7 +21,7 @@ public class GameActivity extends Activity {
 		
 		// Here or in Camera Recorder
 		// TODO: Replace with 
-		Button btnStop = (Button) findViewById(R.id.button1);
+		Button btnStop = (Button) findViewById(R.id.btnMainBooya);
 		btnStop.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

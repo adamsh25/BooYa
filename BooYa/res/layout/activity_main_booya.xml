@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainBooyaActivity" >
+
+    <Button
+        android:id="@+id/btnStore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btnOptions"
+        android:layout_alignRight="@+id/btnOptions"
+        android:layout_below="@+id/btnOptions"
+        android:layout_marginTop="16dp"
+        android:onClick="launchStore"
+        android:text="STORE" />
+
+    <Button
+        android:id="@+id/btnMorgue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btnStore"
+        android:layout_alignRight="@+id/btnStore"
+        android:layout_below="@+id/btnStore"
+        android:layout_marginTop="16dp"
+        android:onClick="launchMorgue"
+        android:text="MORGUE" />
+
+    <Button
+        android:id="@+id/btnOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btnStartGame"
+        android:layout_alignRight="@+id/btnStartGame"
+        android:layout_centerVertical="true"
+        android:onClick="launchOptions"
+        android:text="OPTIONS" />
+
+    <Button
+        android:id="@+id/btnStartGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnOptions"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="75dp"
+        android:onClick="launchGameModuleChooser"        
+        android:text="START GAME" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnStartGame"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="28dp"
+        android:text="BooYa !"
+        android:textSize="60sp" />
+
+    <Button
+        android:id="@+id/btnAbout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btnMorgue"
+        android:layout_alignRight="@+id/btnMorgue"
+        android:layout_below="@+id/btnMorgue"
+        android:layout_marginTop="14dp"
+        android:onClick="launchAbout"
+        android:text="ABOUT" />
+
+</RelativeLayout>
