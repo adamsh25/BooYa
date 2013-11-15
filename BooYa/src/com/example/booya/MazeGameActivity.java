@@ -22,7 +22,8 @@ import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
 import android.widget.Toast;
 
-public class MazeGameActivity extends Activity {
+public class MazeGameActivity extends Activity
+{
 
 	//region members
 	

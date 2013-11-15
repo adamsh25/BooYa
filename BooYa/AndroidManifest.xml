@@ -60,10 +60,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.example.booya.MazeGameStartMenuActivity"
-            android:label="@string/title_activity_maze_game_start_menu" >
-        </activity>
+
         <activity
             android:name="com.example.booya.MainBooyaActivity"
             android:label="@string/title_activity_main_booya" >
