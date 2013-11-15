@@ -247,7 +247,6 @@ public abstract class GameLevel
         		)
         		&&
         		(
-        				//check why not
     	        		monster.getBottom()  <= (this.GetMazeObstacleBottom(row))
     	        		&&
     	        		monster.getBottom()  >= (this.GetMazeObstacleTop(row))
@@ -292,7 +291,6 @@ public abstract class GameLevel
     			)
     		  )
     	{
-    		// Doesn't Work
     		return (true);
     	}
     	else
@@ -367,7 +365,6 @@ public abstract class GameLevel
        			)
        		  )
         {
-        	//Doesn't Work
         	return (true);
         }
         else
