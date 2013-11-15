@@ -208,7 +208,7 @@ public class MazeGameActivity extends Activity {
 		    b_playerHasTouchedWall  = true;
 		    
 		    // Making An Intent Of The Maze Game Start Menu Activity.
-			Intent intent = new Intent(this, MazeGameStartMenuActivity.class);
+			Intent intent = new Intent(this, GenericGameActivity.class);
 			
 			// Starting The Activity.
 			startActivity(intent);
