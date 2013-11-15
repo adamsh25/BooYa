@@ -6,14 +6,15 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".GameActivity" >
+    tools:context=".OptionsActivity" >
 
-    <Button
-        android:id="@+id/btnMainBooya"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="42dp"
-        android:layout_marginTop="38dp"
-        android:text="Stop Recording" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="59dp"
+        android:text="OPTIONS"
+        android:textSize="60sp" />
 
 </RelativeLayout>

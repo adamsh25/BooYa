@@ -3,18 +3,20 @@
     package="com.example.booya"
     android:versionCode="1"
     android:versionName="1.0" >
+
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="18" />
-    
+
     <uses-permission android:name="android.permission.RECORD_VIDEO" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera.front" />
-    <uses-feature android:name="android.hardware.microphone"/>
+    <uses-feature android:name="android.hardware.microphone" />
     <uses-feature android:name="android.hardware.camera" />
-    
-        <uses-permission android:name="android.permission.STORAGE" />
+
+    <uses-permission android:name="android.permission.STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
     </uses-permission>
 
@@ -23,28 +25,23 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        
         <activity
             android:name="com.example.booya.recording.CameraRecorder"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                
             </intent-filter>
         </activity>
-        
+
         <service android:name="com.example.booya.recording.RecorderService" />
-        
+
         <activity
             android:name="com.example.booya.recording.GameActivity"
             android:label="@string/title_activity_game" >
         </activity>
-        
         <activity
             android:name="com.example.booya.MainActivity"
             android:label="@string/app_name" >
-
         </activity>
         <activity
             android:name="com.example.booya.MazeActivity"
@@ -53,11 +50,43 @@
         <activity
             android:name="com.example.booya.MazeGameActivity"
             android:label="@string/title_activity_maze_game" >
+        </activity>
+        <activity
+            android:name="com.example.booya.TesterActivity"
+            android:label="@string/title_activity_tester" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.booya.MainBooyaActivity"
+            android:label="@string/title_activity_main_booya" >
+        </activity>
+        <activity
+            android:name="com.example.booya.GameModuleChooserActivity"
+            android:label="@string/title_activity_game_module_chooser" >
+        </activity>
+        <activity
+            android:name="com.example.booya.OptionsActivity"
+            android:label="@string/title_activity_options" >
+        </activity>
+        <activity
+            android:name="com.example.booya.StoreActivity"
+            android:label="@string/title_activity_store" >
+        </activity>
+        <activity
+            android:name="com.example.booya.MorgueActivity"
+            android:label="@string/title_activity_morgue" >
+        </activity>
+        <activity
+            android:name="com.example.booya.AboutActivity"
+            android:label="@string/title_activity_about" >
+        </activity>
+        <activity
+            android:name="com.example.booya.GenericGameActivity"
+            android:label="@string/title_activity_generic_game" >
         </activity>
     </application>
 
