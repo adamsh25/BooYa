@@ -1,6 +1,7 @@
 package com.example.booya;
 
 import com.example.booya.recording.CameraRecorder;
+import com.example.booya.recording.RecorderService;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,13 +9,16 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.CheckBox;
 
 public class TesterActivity extends Activity {
 	public static Boolean bIsDUBUG;
+	public static Boolean bHasFrontCamera;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tester);
+		FrontCameraDetector();
 	}
 
 	@Override
@@ -41,6 +45,26 @@ public class TesterActivity extends Activity {
 	public static Boolean getIsDebugMode()
 	{
 		return bIsDUBUG;
+	}
+	public static void FrontCameraDetector()
+	{
+		bHasFrontCamera = Boolean.FALSE;
+		int nHasCamera=RecorderService.findFrontFacingCamera();
+		if(nHasCamera!=-1)
+		{
+			bHasFrontCamera = Boolean.TRUE;
+		}
+	}
+	public void onCheckboxClicked(View view) 
+	{
+	    // Is the view now checked?
+	    boolean checked = ((CheckBox)(findViewById(R.id.checkBox1))).isChecked();
+	   
+	    if(!checked)
+	    {
+	    	bHasFrontCamera = Boolean.FALSE;
+	    }
+	    
 	}
 
 }

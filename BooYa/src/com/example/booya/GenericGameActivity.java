@@ -24,9 +24,13 @@ public class GenericGameActivity extends Activity {
 		//TODO check what game are we in
 		setContentView(R.layout.activity_maze_game_main);
 		
-		// For Recording Stuff
-		mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView2);
-		mSurfaceHolder = mSurfaceView.getHolder();
+		// Check if have front camera
+		if(TesterActivity.bHasFrontCamera)
+		{
+			// For Recording Stuff
+			mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView2);
+			mSurfaceHolder = mSurfaceView.getHolder();
+		}
 	}
 
 	@Override

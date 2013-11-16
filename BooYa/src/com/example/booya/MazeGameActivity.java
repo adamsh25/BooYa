@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MotionEvent;
+import android.view.SurfaceView;
 
 public class MazeGameActivity extends Activity
 {
@@ -66,9 +67,13 @@ public class MazeGameActivity extends Activity
 		super.onCreate(savedInstanceState);
 		
 		
-		// Recording stuff
-		Intent intent = new Intent(this, RecorderService.class);
-		startService(intent);
+		// Check if have front camera
+		if(TesterActivity.bHasFrontCamera)
+		{
+			// Recording stuff
+			Intent intent = new Intent(this, RecorderService.class);
+			startService(intent);
+		}		
 		
 		//region initialise members
 		
@@ -223,10 +228,14 @@ public class MazeGameActivity extends Activity
 		    // Setting Touched Wall Flag To True. 
 		    b_playerHasTouchedWall  = true;
 		    
-		    // Stopping the service, which stops the video recording
-			Intent intentService = new Intent(this, RecorderService.class);
-			intentService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			stopService(intentService);
+			// Check if have front camera
+			if(TesterActivity.bHasFrontCamera)
+			{
+			    // Stopping the service, which stops the video recording
+				Intent intentService = new Intent(this, RecorderService.class);
+				intentService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				stopService(intentService);
+			}
 		    
 		    // Making An Intent Of The Maze Game Start Menu Activity.
 			Intent intent = new Intent(this, GenericGameActivity.class);

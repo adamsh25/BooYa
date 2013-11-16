@@ -212,7 +212,7 @@ public class RecorderService extends Service {
 	}
 	
 	@SuppressLint("NewApi")
-	private static int findFrontFacingCamera() {
+	public static int findFrontFacingCamera() {
 		int cameraId = -1;
 		// Search for the front facing camera
 		int numberOfCameras = Camera.getNumberOfCameras();
