@@ -27,6 +27,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.example.booya.recording.CameraRecorder"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,22 +38,27 @@
 
         <activity
             android:name="com.example.booya.recording.GameActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/title_activity_game" >
         </activity>
         <activity
             android:name="com.example.booya.MainActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.example.booya.MazeActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/title_activity_maze" >
         </activity>
         <activity
             android:name="com.example.booya.MazeGameActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/title_activity_maze_game" >
         </activity>
         <activity
             android:name="com.example.booya.TesterActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/title_activity_tester" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,34 +68,42 @@
         </activity>
         <activity
             android:name="com.example.booya.MainBooyaActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/title_activity_main_booya" >
         </activity>
         <activity
             android:name="com.example.booya.GameModuleChooserActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/title_activity_game_module_chooser" >
         </activity>
         <activity
             android:name="com.example.booya.OptionsActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/title_activity_options" >
         </activity>
         <activity
             android:name="com.example.booya.StoreActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/title_activity_store" >
         </activity>
         <activity
             android:name="com.example.booya.MorgueActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/title_activity_morgue" >
         </activity>
         <activity
             android:name="com.example.booya.AboutActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/title_activity_about" >
         </activity>
         <activity
             android:name="com.example.booya.GenericGameActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/title_activity_generic_game" >
         </activity>
         <activity
             android:name="com.example.booya.ScaryFigureActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/title_activity_scary_figure" >
         </activity>
     </application>

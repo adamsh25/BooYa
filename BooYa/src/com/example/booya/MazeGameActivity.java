@@ -139,7 +139,7 @@ public class MazeGameActivity extends Activity
 
 
 	    // Moves The Monster On Screen
-		m_monster.move(event.getX(), event.getY());
+		m_monster.move(event.getX(), event.getY()-Monster.MONSTER_SIZE*15);
 
 		
 		// Gets The Maze Obstacle The Monster Has Touched.
