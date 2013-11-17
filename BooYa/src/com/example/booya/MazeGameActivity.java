@@ -39,6 +39,8 @@ public class MazeGameActivity extends Activity
 	private GameLevel m_currentLevel;
 	GameLevelView gameLevelView;
 	MonsterView monsterView;
+	private CameraHelper cameraHelper;
+	private SurfaceView mSurfaceView;
 	public static int screenWidth, screenHeight;
 	
 	
@@ -69,9 +71,12 @@ public class MazeGameActivity extends Activity
 		// Check if have front camera
 		if(TesterActivity.bHasFrontCamera)
 		{
-			// Recording stuff
-			Intent intent = new Intent(this, RecorderService.class);
-			startService(intent);
+			mSurfaceView = (SurfaceView) findViewById(R.id.dummySurface);
+			cameraHelper = new CameraHelper(mSurfaceView);
+			cameraHelper.StartRecording();
+//			// Recording stuff
+//			Intent intent = new Intent(this, RecorderService.class);
+//			startService(intent);
 		}		
 		
 		//region initialise members
@@ -230,10 +235,11 @@ public class MazeGameActivity extends Activity
 			// Check if have front camera
 			if(TesterActivity.bHasFrontCamera)
 			{
-			    // Stopping the service, which stops the video recording
-				Intent intentService = new Intent(this, RecorderService.class);
-				intentService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				stopService(intentService);
+//			    // Stopping the service, which stops the video recording
+//				Intent intentService = new Intent(this, RecorderService.class);
+//				intentService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//				stopService(intentService);
+				cameraHelper.StopRecording();
 			}
 		    
 		    // Making An Intent Of The Maze Game Start Menu Activity.
@@ -260,6 +266,7 @@ public class MazeGameActivity extends Activity
 		    		
 			// SCARYYY FIGURE APPEARS
 			Intent intent = new Intent(this, ScaryFigureActivity.class);
+			//intent.putExtra("CameraHelper", cameraHelper);
 			
 			// Starting The Activity.
 			startActivity(intent);
