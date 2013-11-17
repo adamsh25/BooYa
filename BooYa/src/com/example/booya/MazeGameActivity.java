@@ -72,7 +72,7 @@ public class MazeGameActivity extends Activity
 		if(TesterActivity.bHasFrontCamera)
 		{
 			mSurfaceView = (SurfaceView) findViewById(R.id.dummySurface);
-			cameraHelper = new CameraHelper(mSurfaceView);
+			CameraHelper.getInstance().SetSurfaceView(mSurfaceView);
 			cameraHelper.StartRecording();
 //			// Recording stuff
 //			Intent intent = new Intent(this, RecorderService.class);

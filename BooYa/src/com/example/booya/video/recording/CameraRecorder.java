@@ -20,7 +20,6 @@ public class CameraRecorder extends Activity
 	//public static SurfaceHolder mSurfaceHolder;
 	//public static Camera mCamera;
 	//public static boolean mPreviewRunning;
-	private CameraHelper cameraHelper;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -30,7 +29,7 @@ public class CameraRecorder extends Activity
      
 		mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView1);
 		
-		cameraHelper = new CameraHelper(mSurfaceView);
+		CameraHelper.getInstance().SetSurfaceView(mSurfaceView);
 //		mSurfaceHolder = mSurfaceView.getHolder();
 		//mSurfaceHolder.addCallback(this);
 		//mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -44,7 +43,7 @@ public class CameraRecorder extends Activity
 				//Intent intent2 = new Intent(CameraRecorder.this, GameActivity.class);
 				//intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				
-				cameraHelper.StartRecording();
+				CameraHelper.getInstance().StartRecording();
 				
 				// OR HERE
 				//startService(intent);
@@ -60,7 +59,7 @@ public class CameraRecorder extends Activity
 			public void onClick(View v)
 			{
 				//stopService(new Intent(CameraRecorder.this, RecorderService.class));
-				cameraHelper.StopRecording();
+				CameraHelper.getInstance().StopRecording();
 			}
 		});
     }

@@ -13,30 +13,50 @@ import android.view.Surface;
 import android.view.SurfaceView;
 
 public class CameraHelper {
-	private final static String TAG = "CameraHelper";
-	private Surface previewSurface;
+	private static final CameraHelper INSTANCE = new CameraHelper();
+	private final String TAG = "CameraHelper";
+	Surface previewSurface;
 	private Camera camera;
 	private MediaRecorder recorder;
 	private int frontFacingCameraId;
 	public boolean isRecording;
 
-	public CameraHelper(SurfaceView view) {
-		previewSurface = view.getHolder().getSurface();
+	public CameraHelper() {
 		frontFacingCameraId = findFrontFacingCameraId();
 	}
 
+	public static CameraHelper getInstance() {
+		return INSTANCE;
+	}
+
+	/***
+	 * Must be called before StartRecording()!
+	 * Sets the preview surface.
+	 * @param view the preview surface
+	 */
+	public void SetSurfaceView(SurfaceView view) {
+		previewSurface = view.getHolder().getSurface();
+	}
+
+	/**
+	 * SetSurfaceView(view) must be called before!
+	 * Starts recording if hasn't already.
+	 */
 	public void StartRecording() {
+		if (isRecording)
+			return;
+		
 		camera = Camera.open(frontFacingCameraId);
 		camera.unlock();
 		recorder = new MediaRecorder();
-		//camera.lock();
+		// camera.lock();
 		recorder.setCamera(camera);
 		recorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
 		recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-		//recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+		// recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 		recorder.setProfile(CamcorderProfile.get(frontFacingCameraId,
 				CamcorderProfile.QUALITY_HIGH));
-		recorder.setOutputFile("/sdcard/video.mp4"); // TODO: change to 
+		recorder.setOutputFile("/sdcard/video.mp4"); // TODO: change to dir from db
 		recorder.setVideoFrameRate(15);
 		recorder.setPreviewDisplay(previewSurface);
 
@@ -51,23 +71,26 @@ public class CameraHelper {
 				e.printStackTrace();
 			}
 		} else {
-			Log.d(TAG, "orientation set skipped "); //TODO: schedule mp4 rotation with mp4parse/ffmpeg
+			Log.d(TAG, "orientation set skipped "); // TODO: schedule mp4 rotation with mp4parse/ffmpeg
 		}
-		
+
 		try {
-		recorder.prepare();
-		recorder.start(); 
+			recorder.prepare();
+			recorder.start();
 		} catch (IllegalStateException ise) {
-			
+
 		} catch (IOException ioe) {
 			Log.d(TAG, "prepare failed");
 			ioe.printStackTrace();
 		}
-		
+
 		isRecording = true;
 	}
 
 	public void StopRecording() {
+		if (!isRecording)
+			return;
+		
 		recorder.stop();
 		recorder.reset();
 		recorder.release();
@@ -75,11 +98,11 @@ public class CameraHelper {
 		recorder.release();
 		recorder = null;
 		camera.release();
-		
+
 		isRecording = false;
 	}
 
-	public static int findFrontFacingCameraId() {
+	public int findFrontFacingCameraId() {
 		int cameraId = -1;
 
 		// Search for a front facing camera
