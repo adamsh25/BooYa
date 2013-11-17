@@ -14,7 +14,6 @@ public class GenericGameActivity extends Activity {
 	// For Recording Stuff
 	private static final String TAG = "Recorder";
 	public static SurfaceView mSurfaceView;
-	public static SurfaceHolder mSurfaceHolder;
 	public static Camera mCamera;
 	public static boolean mPreviewRunning;
 
@@ -29,7 +28,6 @@ public class GenericGameActivity extends Activity {
 		{
 			// For Recording Stuff
 			mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView2);
-			mSurfaceHolder = mSurfaceView.getHolder();
 		}
 	}
 
