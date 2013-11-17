@@ -17,11 +17,6 @@ public class ScaryFigureActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scary_figure);
 		playScarySound();
-		// Check if have front camera
-		if(TesterActivity.bHasFrontCamera)
-		{
-			stopRecording();
-		}
 	}
 
 	@Override
@@ -48,6 +43,11 @@ public class ScaryFigureActivity extends Activity {
     protected void onPause() {
         super.onPause();
         mediaPlayer.stop();
+        // Check if have front camera
+ 		if(TesterActivity.bHasFrontCamera)
+ 		{
+ 			stopRecording();
+ 		}
     }
 
 }
