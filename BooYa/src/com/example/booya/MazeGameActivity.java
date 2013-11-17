@@ -13,8 +13,7 @@ import com.example.booya.BL.Monster;
 import com.example.booya.UI.Views.GameLevelView;
 import com.example.booya.UI.Views.MazeView;
 import com.example.booya.UI.Views.MonsterView;
-import com.example.booya.recording.GameActivity;
-import com.example.booya.recording.RecorderService;
+import com.example.booya.video.recording.CameraHelper;
 
 
 import android.os.Bundle;

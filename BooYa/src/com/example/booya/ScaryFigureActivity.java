@@ -1,7 +1,5 @@
 package com.example.booya;
 
-import com.example.booya.recording.GameActivity;
-import com.example.booya.recording.RecorderService;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;

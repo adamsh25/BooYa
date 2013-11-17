@@ -1,7 +1,7 @@
 package com.example.booya;
 
-import com.example.booya.recording.CameraRecorder;
-import com.example.booya.recording.RecorderService;
+import com.example.booya.video.recording.CameraHelper;
+import com.example.booya.video.recording.CameraRecorder;
 
 import android.app.Activity;
 import android.content.Intent;
