@@ -13,12 +13,12 @@ import android.widget.CheckBox;
 
 public class TesterActivity extends Activity {
 	public static Boolean bIsDUBUG;
-	public static Boolean bHasFrontCamera;
+	public static boolean bHasFrontCamera;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tester);
-		FrontCameraDetector();
+		DetectFrontFacingCamera();
 	}
 
 	@Override
@@ -46,14 +46,9 @@ public class TesterActivity extends Activity {
 	{
 		return bIsDUBUG;
 	}
-	public static void FrontCameraDetector()
+	public static void DetectFrontFacingCamera()
 	{
-		bHasFrontCamera = Boolean.FALSE;
-		int nHasCamera=RecorderService.findFrontFacingCamera();
-		if(nHasCamera!=-1)
-		{
-			bHasFrontCamera = Boolean.TRUE;
-		}
+		bHasFrontCamera = (CameraHelper.findFrontFacingCameraId() != -1);
 	}
 	public void onCheckboxClicked(View view) 
 	{
