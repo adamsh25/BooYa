@@ -3,6 +3,7 @@ package com.example.booya.UI.Views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.view.SurfaceView;
 import android.view.View;
 
 public class MazeView extends View 
@@ -12,6 +13,7 @@ public class MazeView extends View
 	
 	private MonsterView m_monsterView;
 	private GameLevelView m_levelView;
+	SurfaceView m_dummyView;
 	
 	//endregion
 	
@@ -20,7 +22,6 @@ public class MazeView extends View
 	public MazeView(Context context)
 	{
 		super(context);
-
 	}
 	
 	
