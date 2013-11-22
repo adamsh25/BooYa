@@ -1,0 +1,9 @@
+package com.example.booya.social;
+
+/**
+ * User: Rony
+ * Date: 22/11/13 15:42
+ */
+public class FacebookProxy {
+
+}
