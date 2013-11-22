@@ -50,6 +50,42 @@ public class BooyaDAL {
 		
 		return nNumOfVictims;
 	}
+	
+	  public List<Integer> getAllPurchasedFigures() {
+		    List<Integer> PurchasedFigures = new ArrayList<Integer>();
+
+		    // Purchased figure's inventory type is 1 for now
+		    Cursor cursor = database.query(MySQLiteHelper.TABLE_USER_INVENTORY,
+		    		new String[] {MySQLiteHelper.COLUMN_PRODUCT_ID}, MySQLiteHelper.COLUMN_INVENTORY_TYPE + " = 1", null, null, null, null);
+
+		    cursor.moveToFirst();
+		    while (!cursor.isAfterLast()) {
+		      int product_id = cursor.getInt(2);
+		      PurchasedFigures.add(product_id);
+		      cursor.moveToNext();
+		    }
+		    // make sure to close the cursor
+		    cursor.close();
+		    return PurchasedFigures;
+		  }
+	  
+	  public List<Integer> getAllPurchasedScreams() {
+		    List<Integer> PurchasedFigures = new ArrayList<Integer>();
+
+		    // Purchased screams's inventory type is 2 for now
+		    Cursor cursor = database.query(MySQLiteHelper.TABLE_USER_INVENTORY,
+		    		new String[] {MySQLiteHelper.COLUMN_PRODUCT_ID}, MySQLiteHelper.COLUMN_INVENTORY_TYPE + " = 2", null, null, null, null);
+
+		    cursor.moveToFirst();
+		    while (!cursor.isAfterLast()) {
+		      int product_id = cursor.getInt(2);
+		      PurchasedFigures.add(product_id);
+		      cursor.moveToNext();
+		    }
+		    // make sure to close the cursor
+		    cursor.close();
+		    return PurchasedFigures;
+		  }
   
 } 
 

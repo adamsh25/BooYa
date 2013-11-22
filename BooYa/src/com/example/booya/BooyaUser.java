@@ -31,6 +31,7 @@ public class BooyaUser {
 		
 	    datasource.open();		
 		InitializeParametersFromDB();
+		
 		datasource.close();
 	}
 	
@@ -46,6 +47,8 @@ public class BooyaUser {
 	public void InitializeParametersFromDB()
 	{
 		datasource.GetUserVictimsFromDB();
+		datasource.getAllPurchasedFigures();
+		datasource.getAllPurchasedScreams();
 	}
 	
 	public int GetNumberOfVictims()
