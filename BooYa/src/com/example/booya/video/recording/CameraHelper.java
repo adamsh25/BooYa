@@ -6,8 +6,6 @@ import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceView;
