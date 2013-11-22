@@ -26,19 +26,21 @@ public class BooyaUser {
 	public BooyaUser(Context context)
 	{
 		nAndroidApiVersion = android.os.Build.VERSION.SDK_INT;
-		bHasFrontCamera = (CameraHelper.getInstance().findFrontFacingCameraId() != -1);
-		
+		bHasFrontCamera = (CameraHelper.getInstance().findFrontFacingCameraId() != -1);	
 		datasource = new BooyaDAL(context);
-	    datasource.open();
 		
-		InitializeParametersFromDB();	
+	    datasource.open();		
+		InitializeParametersFromDB();
+		datasource.close();
 	}
 	
 	public void IncreaseNumberOfVictims()
 	{
 		nNumOfVictims++;
 		
+		datasource.open();
 		datasource.IncreaseNumberOfVictimsInDB(nNumOfVictims);
+		datasource.close();
 	}
 	
 	public void InitializeParametersFromDB()
