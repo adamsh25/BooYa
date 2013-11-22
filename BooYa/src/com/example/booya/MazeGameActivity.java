@@ -21,7 +21,8 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 
-public class MazeGameActivity extends Activity {
+public class MazeGameActivity extends Activity
+{
 
 	// region members
 
@@ -263,7 +264,7 @@ public class MazeGameActivity extends Activity {
 		m_mazeView.setViews(gameLevelView, monsterView);
 		setContentView(m_mazeView);
 	}
-
+	
 	private void onFinishLevel() {
 		n_gameLevel = 1;
 		m_currentLevel = levels[n_gameLevel];
