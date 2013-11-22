@@ -1,4 +1,4 @@
-package com.example.booya.social;
+package com.example.booya.social.facebook;
 
 /**
  * User: Rony
