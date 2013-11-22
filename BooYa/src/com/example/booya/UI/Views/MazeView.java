@@ -1,5 +1,7 @@
 package com.example.booya.UI.Views;
 
+import org.apache.http.client.CircularRedirectException;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -13,6 +15,7 @@ public class MazeView extends View
 	
 	private MonsterView m_monsterView;
 	private GameLevelView m_levelView;
+	private StartOffsetCircleView m_circleView;
 	SurfaceView m_dummyView;
 	
 	//endregion
@@ -29,21 +32,25 @@ public class MazeView extends View
 
 	//region Methods
 	
-	public void setViews(GameLevelView levelView, MonsterView monsterView)
+	public void setViews(GameLevelView levelView, MonsterView monsterView,
+					StartOffsetCircleView circleView)
 	{
 		m_levelView = levelView;
 		m_monsterView = monsterView;
+		this.m_circleView = circleView;
 	}
 	
 	@Override
 	protected void onDraw(Canvas canvas) 
 	{
-		// TODO Auto-generated method stub
+		
 		super.onDraw(canvas);
-		//canvas.drawBitmap(this.m_backgroundBitmap, 1, 1, null);
 		canvas.drawColor(Color.BLACK);
 		this.m_levelView.draw(canvas);
 		this.m_monsterView.draw(canvas);
+		this.m_circleView.draw(canvas);
+		this.setDrawingCacheEnabled(true);
+
 	}
 	
 	//endregion

@@ -1,5 +1,7 @@
 package com.example.booya.BL;
 
+import com.example.booya.MazeGameActivity;
+
 public class Monster extends MovableObject
 {
 
@@ -13,13 +15,36 @@ public class Monster extends MovableObject
 	
 	//endregion
 	
-	
-	
+	public static float X_OFFSET = 0;
+	public static float Y_OFFSET = 0;
+	public static final float RADIUS = Math.min(MazeGameActivity.screenHeight, 
+			MazeGameActivity.screenWidth) * 0.15f;
+										
 	
 	//endregion
 	
 	//region Properties
 	
+/*	public float getXOffset()
+	{
+		return(this.f_XOffset);
+	}
+	
+	public void setXOffset(float xOffset)
+	{
+		this.f_XOffset = xOffset;
+	}
+	
+	public float getYOffset()
+	{
+		return(this.f_YOffset);
+	}
+	
+	
+	public void setYOffset(float yOffset)
+	{
+		this.f_YOffset = yOffset;
+	}*/
 	//endregion
 		
 	//region C'tor
