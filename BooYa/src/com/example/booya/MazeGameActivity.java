@@ -133,9 +133,11 @@ public class MazeGameActivity extends Activity
 	        	
 	        	
 	        	
-	        	Monster.Y_OFFSET = radius - y - circleCenter.y;
+	        	Monster.Y_OFFSET =  -(y - (circleCenter.y));
+	        	Monster.X_OFFSET =  -(x - (circleCenter.x));
+	    		StartOffsetCircleView.Draw = false;
 	        	//Monster.X_OFFSET = x;
-	        	int lol = 4;
+	        	
 	        }
 	        else
 	        {

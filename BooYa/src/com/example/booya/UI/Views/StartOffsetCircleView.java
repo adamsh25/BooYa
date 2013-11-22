@@ -37,8 +37,8 @@ public class StartOffsetCircleView  extends View
 	public StartOffsetCircleView(Context context, PointF pntf_StartPos)
 	{
 		super(context);
-		this.pntf_StartPos = new PointF(this.pntf_StartPos.x + (Monster.MONSTER_SIZE/2),
-				this.pntf_StartPos.y - (Monster.MONSTER_SIZE/2));
+		this.pntf_StartPos = new PointF(pntf_StartPos.x + (Monster.MONSTER_SIZE/2),
+				pntf_StartPos.y - (Monster.MONSTER_SIZE/2));
 		CircleCenter = this.pntf_StartPos;
 	}
 	
