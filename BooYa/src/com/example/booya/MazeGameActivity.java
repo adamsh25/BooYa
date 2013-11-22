@@ -35,12 +35,14 @@ public class MazeGameActivity extends Activity
 	 */
 	private MazeView m_mazeView;
 	private GameLevel[] levels;
+	
 
     private Monster m_monster;
 	private GameLevel m_currentLevel;
 	GameLevelView gameLevelView;
 	MonsterView monsterView;
 	public static int screenWidth, screenHeight;
+	public static Boolean bBeenBooyad;
 	
 	
 	// flag - true if the player has touched a wall.
@@ -66,7 +68,7 @@ public class MazeGameActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		
-		
+		bBeenBooyad = Boolean.FALSE;
 		// Check if have front camera
 		if(TesterActivity.bHasFrontCamera)
 		{
@@ -249,6 +251,7 @@ public class MazeGameActivity extends Activity
 	
 	private void onTouchBooya(MotionEvent event)
 	{
+		bBeenBooyad = Boolean.TRUE;
 	   // Gets The Motion Action Type.
 	   final int action = event.getAction();
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.example.booya.GenericGameActivity;
+import com.example.booya.MazeGameActivity;
 import com.example.booya.TesterActivity;
 
 import android.annotation.SuppressLint;
@@ -236,6 +237,19 @@ public class RecorderService extends Service {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+		
+//		if(MazeGameActivity.bBeenBooyad)
+//		{
+//			try 
+//			{
+//				Thread.sleep(5000);
+//			} 
+//			catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+		
 		mMediaRecorder.stop();
 		mMediaRecorder.reset();
 		
