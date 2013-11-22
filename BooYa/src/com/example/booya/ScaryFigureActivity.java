@@ -16,6 +16,7 @@ public class ScaryFigureActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scary_figure);
+		
 		playScarySound();
 	}
 
