@@ -14,7 +14,10 @@ import com.example.booya.UI.Views.StartOffsetCircleView;
 import com.example.booya.video.recording.CameraHelper;
 
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -41,6 +44,7 @@ public class MazeGameActivity extends Activity
 	private MonsterView monsterView;
 	private StartOffsetCircleView circleView;
 	private CameraHelper cameraHelper;
+	private Vibrator gameVibrator;
 	public static int screenWidth, screenHeight;
 
 	// flag - true if the player has touched a wall.
@@ -78,6 +82,9 @@ public class MazeGameActivity extends Activity
 
 		screenHeight = display.getHeight();
 		screenWidth = display.getWidth();
+		
+		// Get instance of Vibrator from current Context
+		gameVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
 		b_playerHasTouchedWall = false;
 		n_gameLevel = 0;
@@ -254,6 +261,7 @@ public class MazeGameActivity extends Activity
 	 * 
 	 * @param event
 	 */
+	@SuppressLint("NewApi")
 	private void onTouchWall(MotionEvent event) {
 		// Gets The Motion Action Type.
 		final int action = event.getAction();
@@ -264,6 +272,14 @@ public class MazeGameActivity extends Activity
 		if (action == MotionEvent.ACTION_MOVE) {
 			// Setting Touched Wall Flag To True.
 			b_playerHasTouchedWall = true;
+			
+			// Vibrate
+
+			// Output yes if can vibrate, no otherwise
+			if (gameVibrator.hasVibrator()) 
+			{
+				gameVibrator.vibrate(400);
+			}
 
 			// Check if have front camera
 			if (TesterActivity.bHasFrontCamera) {

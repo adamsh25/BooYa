@@ -8,6 +8,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Vibrator;
 
 import com.example.booya.video.recording.CameraHelper;
 
@@ -21,6 +22,7 @@ public class BooyaUser {
 	private List<Integer> purchasedScreamList;
 	private List<String> videosPathList;
 	private int nAndroidApiVersion;
+	private boolean bCanVibrate;
 	
 	
 	public BooyaUser(Context context)
@@ -34,7 +36,7 @@ public class BooyaUser {
 		
 		datasource.close();
 	}
-	
+		
 	public void IncreaseNumberOfVictims()
 	{
 		nNumOfVictims++;
