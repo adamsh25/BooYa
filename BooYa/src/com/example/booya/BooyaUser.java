@@ -17,8 +17,8 @@ public class BooyaUser {
 	private boolean bHasFrontCamera;
 	private int nNumOfVictims;
 	private List<String> facebookFriendsList;
-	private List<String> purchasedFiguresList;
-	private List<String> purchasedScreamList;
+	private List<Integer> purchasedFiguresList;
+	private List<Integer> purchasedScreamList;
 	private List<String> videosPathList;
 	private int nAndroidApiVersion;
 	
@@ -47,8 +47,8 @@ public class BooyaUser {
 	public void InitializeParametersFromDB()
 	{
 		datasource.GetUserVictimsFromDB();
-		datasource.getAllPurchasedFigures();
-		datasource.getAllPurchasedScreams();
+		purchasedFiguresList = datasource.getAllPurchasedFigures();
+		purchasedScreamList = datasource.getAllPurchasedScreams();
 	}
 	
 	public int GetNumberOfVictims()
