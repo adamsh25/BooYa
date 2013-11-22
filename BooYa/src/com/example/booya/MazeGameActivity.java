@@ -1,6 +1,5 @@
 package com.example.booya;
 
-import java.util.List;
 
 import com.example.booya.R;
 import com.example.booya.BL.GameLevel;
@@ -11,15 +10,19 @@ import com.example.booya.BL.Monster;
 import com.example.booya.UI.Views.GameLevelView;
 import com.example.booya.UI.Views.MazeView;
 import com.example.booya.UI.Views.MonsterView;
+import com.example.booya.UI.Views.StartOffsetCircleView;
 import com.example.booya.video.recording.CameraHelper;
 
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PointF;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MotionEvent;
-import android.view.SurfaceView;
+import android.view.View;
 
 public class MazeGameActivity extends Activity
 {
@@ -34,8 +37,9 @@ public class MazeGameActivity extends Activity
 
 	private Monster m_monster;
 	private GameLevel m_currentLevel;
-	GameLevelView gameLevelView;
-	MonsterView monsterView;
+	private GameLevelView gameLevelView;
+	private MonsterView monsterView;
+	private StartOffsetCircleView circleView;
 	private CameraHelper cameraHelper;
 	public static int screenWidth, screenHeight;
 
@@ -59,7 +63,8 @@ public class MazeGameActivity extends Activity
 	 */
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) 
+	{
 		super.onCreate(savedInstanceState);
 
 		// region initialise members
@@ -81,13 +86,14 @@ public class MazeGameActivity extends Activity
 		m_currentLevel = new GameLevel1();
 		gameLevelView = new GameLevelView(this);
 		gameLevelView.setGameLevel(m_currentLevel);
-
+		
 		m_monster = new Monster(m_currentLevel.getStartPosition().x,
 				m_currentLevel.getStartPosition().y);
 		monsterView = new MonsterView(this, m_monster);
-
+		StartOffsetCircleView.Draw = true;
+		circleView = new StartOffsetCircleView(this,m_currentLevel.getStartPosition());
 		m_mazeView = new MazeView(this);
-		m_mazeView.setViews(gameLevelView, monsterView);
+		m_mazeView.setViews(gameLevelView, monsterView, circleView);
 
 		// endregion
 		setContentView(m_mazeView);
@@ -98,10 +104,61 @@ public class MazeGameActivity extends Activity
 	 * 
 	 * @see android.app.Activity#onTouchEvent(android.view.MotionEvent)
 	 */
+	@SuppressWarnings("unused")
 	@Override
-	public boolean onTouchEvent(MotionEvent event) {
+	public boolean onTouchEvent(MotionEvent event) 
+	{
+		if(StartOffsetCircleView.Draw == true)
+		{
+			
+			final Bitmap bitmap = m_mazeView.getDrawingCache(true);
+			
+	        int x = (int)event.getX();
+	        int y = (int)event.getY();
+	        int pixel = 0;
+	        try
+	        {
+	        	try
+	        	{
+	        		pixel = bitmap.getPixel(x,y);
+	        	}
+	        	catch(Exception ex)
+	        	{
+	        		return false;
+	        	}
+	        if(pixel == Color.WHITE)
+	        {
+	        	PointF circleCenter = StartOffsetCircleView.CircleCenter;
+	        	float radius = Monster.RADIUS;
+	        	
+	        	
+	        	
+	        	Monster.Y_OFFSET =  -(y - (circleCenter.y));
+	        	Monster.X_OFFSET =  -(x - (circleCenter.x));
+	    		StartOffsetCircleView.Draw = false;
+	        	//Monster.X_OFFSET = x;
+	        	
+	        }
+	        else
+	        {
 
-		if (b_playerHasTouchedWall) {
+	        	return super.onTouchEvent(event);
+	        }
+	        
+	        
+	        }
+	        catch(Exception ex)
+	        {
+	        	
+	        }
+	        
+
+			
+		}
+		StartOffsetCircleView.Draw = false;
+		
+		if (b_playerHasTouchedWall) 
+		{
 			return super.onTouchEvent(event);
 		}
 
@@ -115,8 +172,9 @@ public class MazeGameActivity extends Activity
 			break;
 		}
 
+		
 		// Moves The Monster On Screen
-		m_monster.move(event.getX(), event.getY() - Monster.MONSTER_SIZE * 15);
+		m_monster.move(event.getX() + Monster.X_OFFSET, event.getY() + Monster.Y_OFFSET);
 
 		// Gets The Maze Obstacle The Monster Has Touched.
 		MazeObstacles touchedMazeObstacle = m_currentLevel
@@ -168,7 +226,7 @@ public class MazeGameActivity extends Activity
 		}
 
 		// Paint The Game With The New Monster Position.
-		m_mazeView.setViews(gameLevelView, monsterView);
+		m_mazeView.setViews(gameLevelView, monsterView, circleView);
 		setContentView(m_mazeView);
 
 		return (super.onTouchEvent(event));
@@ -214,7 +272,7 @@ public class MazeGameActivity extends Activity
 				// RecorderService.class);
 				// intentService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				// stopService(intentService);
-				cameraHelper.StopRecording();
+				   cameraHelper.StopRecording();
 			}
 
 			// Making An Intent Of The Maze Game Start Menu Activity.
@@ -227,7 +285,8 @@ public class MazeGameActivity extends Activity
 
 	}
 
-	private void onTouchBooya(MotionEvent event) {
+	private void onTouchBooya(MotionEvent event) 
+	{
 		// Gets The Motion Action Type.
 		final int action = event.getAction();
 
@@ -252,16 +311,17 @@ public class MazeGameActivity extends Activity
 	/**
 	 * Called When The Player Stops Touching The Monster.
 	 */
-	private void onPlayerStopTouchingMonster() {
+	private void onPlayerStopTouchingMonster() 
+	{
 		// The Player C'ant Move Till He Touches The Monster In Start Position.
 		b_canMove = false;
-
+		StartOffsetCircleView.Draw = true;
 		// The Monster Return To Start Position
-		m_monster.move(m_currentLevel.getStartPosition().x,
-				m_currentLevel.getStartPosition().y);
-
+		m_monster.move(levels[n_gameLevel].getStartPosition().x,
+				levels[n_gameLevel].getStartPosition().y);
+		circleView = new StartOffsetCircleView(this,levels[n_gameLevel].getStartPosition());
 		// Set The Views To Paint The Monster In Start Position
-		m_mazeView.setViews(gameLevelView, monsterView);
+		m_mazeView.setViews(gameLevelView, monsterView, circleView);
 		setContentView(m_mazeView);
 	}
 	
