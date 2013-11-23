@@ -13,5 +13,15 @@
             facebook:confirm_logout="false"
             facebook:fetch_user_info="true"
             />
+    <Button
+            android:id="@+id/publishButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="30dp"
+            android:visibility="invisible"
+            android:text="@string/facebook.publish.button"
+            />
 
 </LinearLayout>
