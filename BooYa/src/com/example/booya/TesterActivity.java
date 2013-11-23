@@ -1,5 +1,6 @@
 package com.example.booya;
 
+import com.example.booya.social.facebook.FacebookPublishActivity;
 import com.example.booya.video.recording.CameraHelper;
 import com.example.booya.video.recording.CameraRecorder;
 
@@ -32,6 +33,12 @@ public class TesterActivity extends Activity {
 	    Intent intent = new Intent(this, MainBooyaActivity.class);
 	    startActivity(intent);
 	}
+
+    public void launchFacebookTester(View view) {
+        Intent intent = new Intent(this, FacebookPublishActivity.class);
+        startActivity(intent);
+    }
+
 	public void launchMazeTester(View view) {
 		bIsDUBUG = Boolean.FALSE;
 	    Intent intent = new Intent(this, GenericGameActivity.class);
