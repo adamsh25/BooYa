@@ -34,13 +34,6 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.example.booya.video.recording.RecorderService" />
-
-        <activity
-            android:name="com.example.booya.recording.GameActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:label="@string/title_activity_game" >
-        </activity>
         <activity
             android:name="com.example.booya.MainActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
