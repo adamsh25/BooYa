@@ -14,30 +14,36 @@ import com.example.booya.video.recording.CameraHelper;
 
 public class BooyaUser {
 	
-	private BooyaDAL datasource;
-	private boolean bHasFrontCamera;
-	private int nNumOfVictims;
+	private static BooyaDAL datasource;
+	private static boolean bHasFrontCamera;
+	private static int nNumOfVictims;
 	private List<String> facebookFriendsList;
-	private List<Integer> purchasedFiguresList;
-	private List<Integer> purchasedScreamList;
+	private static List<Integer> purchasedFiguresList;
+	private static List<Integer> purchasedScreamList;
 	private List<String> videosPathList;
-	private int nAndroidApiVersion;
+	private static int nAndroidApiVersion;
 	private boolean bCanVibrate;
 	
 	
-	public BooyaUser(Context context)
+	private BooyaUser()
+	{
+
+	}
+	
+	public static void loadInfo(Context context)
 	{
 		nAndroidApiVersion = android.os.Build.VERSION.SDK_INT;
 		bHasFrontCamera = (CameraHelper.getInstance().findFrontFacingCameraId() != -1);	
-		datasource = new BooyaDAL(context);
 		
-	    datasource.open();		
+		datasource = new BooyaDAL(context);	
+	    datasource.open();
 		InitializeParametersFromDB();
 		
 		datasource.close();
 	}
+	
 		
-	public void IncreaseNumberOfVictims()
+	public static void IncreaseNumberOfVictims()
 	{
 		nNumOfVictims++;
 		
@@ -46,27 +52,22 @@ public class BooyaUser {
 		datasource.close();
 	}
 	
-	public void InitializeParametersFromDB()
+	private static void InitializeParametersFromDB()
 	{
-		datasource.GetUserVictimsFromDB();
+		nNumOfVictims = datasource.GetUserVictimsFromDB();
 		purchasedFiguresList = datasource.getAllPurchasedFigures();
 		purchasedScreamList = datasource.getAllPurchasedScreams();
 	}
 	
-	public int GetNumberOfVictims()
+	public static int GetNumberOfVictims()
 	{
 		return nNumOfVictims;
 	}
 	
-	public boolean HasFrontCamera()
+	public static boolean HasFrontCamera()
 	{
 		return bHasFrontCamera;
 	}
-	
-
-	
-	
-	
 	
 
 }

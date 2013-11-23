@@ -31,7 +31,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
   private static final String DATABASE_CREATE_USER_INVENTORY = "create table "
 	      + TABLE_USER_INVENTORY + "(" + COLUMN_ID
 	      + " integer primary key autoincrement, " + COLUMN_INVENTORY_TYPE
-	      + " integer not null, " +COLUMN_PRODUCT_ID+ "integer not null);";
+	      + " integer not null, " +COLUMN_PRODUCT_ID+ " integer not null);";
 
   public MySQLiteHelper(Context context) 
   {
@@ -43,6 +43,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     database.execSQL(DATABASE_CREATE_USER_DETAILES);
     database.execSQL(DATABASE_CREATE_USER_INVENTORY);
     database.execSQL("INSERT INTO USER_DETAILS(num_of_victims) values(0);");
+    database.execSQL("INSERT INTO user_inventory(inventory_type,product_id) values(1,1111);");
+    database.execSQL("INSERT INTO user_inventory(inventory_type,product_id) values(2,2222);");
+    
   }
 
   @Override

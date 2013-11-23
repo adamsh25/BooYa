@@ -2,6 +2,7 @@ package com.example.booya;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -45,7 +46,8 @@ public class BooyaDAL {
 		Cursor cursor = database.query(MySQLiteHelper.TABLE_USER,
 				new String[] {MySQLiteHelper.COLUMN_NUM_OF_VICTIMS}, null, null, null, null, null);
 		
-		nNumOfVictims = cursor.getInt(1);
+		cursor.moveToFirst();
+		nNumOfVictims = cursor.getInt(cursor.getColumnIndex(MySQLiteHelper.COLUMN_NUM_OF_VICTIMS));
 		cursor.close();
 		
 		return nNumOfVictims;
@@ -60,7 +62,7 @@ public class BooyaDAL {
 
 		    cursor.moveToFirst();
 		    while (!cursor.isAfterLast()) {
-		      int product_id = cursor.getInt(2);
+		      int product_id = cursor.getInt(0);
 		      PurchasedFigures.add(product_id);
 		      cursor.moveToNext();
 		    }
@@ -78,7 +80,7 @@ public class BooyaDAL {
 
 		    cursor.moveToFirst();
 		    while (!cursor.isAfterLast()) {
-		      int product_id = cursor.getInt(2);
+		      int product_id = cursor.getInt(0);
 		      PurchasedFigures.add(product_id);
 		      cursor.moveToNext();
 		    }

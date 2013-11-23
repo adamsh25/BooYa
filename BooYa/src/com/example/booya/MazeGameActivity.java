@@ -312,6 +312,8 @@ public class MazeGameActivity extends Activity
 		if (action == MotionEvent.ACTION_MOVE) {
 			// Setting Touched Wall Flag To True.
 			b_playerHasTouchedWall = true;
+			
+			BooyaUser.IncreaseNumberOfVictims();
 
 			// SCARYYY FIGURE APPEARS
 			Intent intent = new Intent(this, ScaryFigureActivity.class);
