@@ -6,43 +6,148 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.booya.R;
 import com.facebook.*;
-import com.facebook.widget.LoginButton;
-import com.facebook.widget.WebDialog;
+import com.sromku.simple.fb.Permissions;
+import com.sromku.simple.fb.SimpleFacebook;
+import com.sromku.simple.fb.SimpleFacebookConfiguration;
+import com.sromku.simple.fb.entities.Photo;
+
+import java.io.File;
 
 /**
  * User: Rony
  * Date: 23/11/13 15:03
  */
 public class FacebookPublishActivity extends Activity {
-    private static final String PERMISSION = "publish_actions";
-    private static final String TAG = "FacebookPublishActivity";
-    private Button publishButton;
+    private static final String FACEBOOK_APP_ID = "696649103679042";
+    private static final String FACEBOOK_APP_NAMESPACE = "booya-app";
+    private static final SessionDefaultAudience FACEBOOK_DEFAULT_AUDIENCE = SessionDefaultAudience.EVERYONE;
+    private static final String TAG = FacebookPublishActivity.class.getName();
 
-    private Session.StatusCallback callback = new Session.StatusCallback() {
+    private SimpleFacebook mSimpleFacebook;
+
+    private Button mButtonLogin;
+    private Button mButtonLogout;
+    private TextView mTextStatus;
+    private Button mButtonPublish;
+
+    private final Permissions[] neededPermissions = new Permissions[]
+            {
+                    Permissions.PUBLISH_STREAM
+            };
+
+    // Login listener
+    private SimpleFacebook.OnLoginListener mOnLoginListener = new SimpleFacebook.OnLoginListener()
+    {
+
         @Override
-        public void call(Session session, SessionState state, Exception exception) {
-            onSessionStateChange(session, state, exception);
+        public void onFail(String reason)
+        {
+            mTextStatus.setText(reason);
+            Log.w(TAG, "Failed to login");
+        }
+
+        @Override
+        public void onException(Throwable throwable)
+        {
+            mTextStatus.setText("Exception: " + throwable.getMessage());
+            Log.e(TAG, "Bad thing happened", throwable);
+        }
+
+        @Override
+        public void onThinking()
+        {
+            // show progress bar or something to the user while login is happening
+            mTextStatus.setText("Thinking...");
+        }
+
+        @Override
+        public void onLogin()
+        {
+            // change the state of the button or do whatever you want
+            mTextStatus.setText("Logged in");
+            loggedInUIState();
+        }
+
+        @Override
+        public void onNotAcceptingPermissions()
+        {
+            toast("You didn't accept read permissions");
         }
     };
 
-    private UiLifecycleHelper uiHelper;
+    // Logout listener
+    private SimpleFacebook.OnLogoutListener mOnLogoutListener = new SimpleFacebook.OnLogoutListener()
+    {
+
+        @Override
+        public void onFail(String reason)
+        {
+            mTextStatus.setText(reason);
+            Log.w(TAG, "Failed to login");
+        }
+
+        @Override
+        public void onException(Throwable throwable)
+        {
+            mTextStatus.setText("Exception: " + throwable.getMessage());
+            Log.e(TAG, "Bad thing happened", throwable);
+        }
+
+        @Override
+        public void onThinking()
+        {
+            // show progress bar or something to the user while login is happening
+            mTextStatus.setText("Thinking...");
+        }
+
+        @Override
+        public void onLogout()
+        {
+            // change the state of the button or do whatever you want
+            mTextStatus.setText("Logged out");
+            loggedOutUIState();
+            toast("You are logged out");
+        }
+
+    };
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        uiHelper = new UiLifecycleHelper(this, callback);
-        uiHelper.onCreate(savedInstanceState);
+        SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
+                .setAppId(FACEBOOK_APP_ID)
+                .setNamespace(FACEBOOK_APP_NAMESPACE)
+                .setPermissions(neededPermissions)
+                .setDefaultAudience(FACEBOOK_DEFAULT_AUDIENCE)
+                .build();
+        SimpleFacebook.setConfiguration(configuration);
 
         setContentView(R.layout.activity_facebook_publish);
 
-        publishButton = (Button) findViewById(R.id.publishButton);
-        publishButton.setOnClickListener(new View.OnClickListener() {
+        initUI();
+
+        mButtonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                publishFeedDialog();
+                mSimpleFacebook.login(mOnLoginListener);
+            }
+        });
+
+        mButtonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSimpleFacebook.logout(mOnLogoutListener);
+            }
+        });
+
+        mButtonPublish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                publishDummyPhoto();
             }
         });
     }
@@ -50,89 +155,95 @@ public class FacebookPublishActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        uiHelper.onResume();
+        mSimpleFacebook = SimpleFacebook.getInstance(this);
+        setUIState();
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
-        uiHelper.onActivityResult(requestCode, resultCode, data);
+        mSimpleFacebook.onActivityResult(this, requestCode, resultCode, data);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        uiHelper.onPause();
+    private void publishDummyPhoto() {
+        // create publish listener
+        SimpleFacebook.OnPublishListener onPublishListener = new SimpleFacebook.OnPublishListener()
+        {
+
+            @Override
+            public void onFail(String reason)
+            {
+                // insure that you are logged in before publishing
+                Log.w(TAG, reason);
+            }
+
+            @Override
+            public void onException(Throwable throwable)
+            {
+                Log.e(TAG, "Bad thing happened", throwable);
+            }
+
+            @Override
+            public void onThinking()
+            {
+                // show progress bar or something to the user while publishing
+                Log.i(TAG, "In progress");
+            }
+
+            @Override
+            public void onComplete(String id)
+            {
+                Log.i(TAG, "Published successfully. id = " + id);
+            }
+        };
+
+        // create Photo instace and add some properties
+        Photo photoObj = new Photo(new File("/sdcard/dummy.jpg"));
+        photoObj.addDescription("dummy");
+
+        // publish photo to app album
+        mSimpleFacebook.publish(photoObj, onPublishListener);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        uiHelper.onDestroy();
+    private void initUI()
+    {
+        mButtonLogin = (Button)findViewById(R.id.button_login);
+        mButtonLogout = (Button)findViewById(R.id.button_logout);
+        mTextStatus = (TextView)findViewById(R.id.text_status);
+        mButtonPublish = (Button)findViewById(R.id.publishButton);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        uiHelper.onSaveInstanceState(outState);
-    }
-
-    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        if (state.isOpened()) {
-            publishButton.setVisibility(View.VISIBLE);
-            Log.i(TAG, "Logged in...");
-        } else if (state.isClosed()) {
-            publishButton.setVisibility(View.INVISIBLE);
-            Log.i(TAG, "Logged out...");
+    private void setUIState()
+    {
+        if (mSimpleFacebook.isLogin())
+        {
+            loggedInUIState();
+        }
+        else
+        {
+            loggedOutUIState();
         }
     }
 
-    private void publishFeedDialog() {
-        Bundle params = new Bundle();
-        params.putString("name", "Facebook SDK for Android");
-        params.putString("caption", "Build great social apps and get more installs.");
-        params.putString("description", "The Facebook SDK for Android makes it easier and faster to develop Facebook integrated Android apps.");
-        params.putString("link", "https://developers.facebook.com/android");
-        params.putString("picture", "https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png");
+    private void loggedInUIState()
+    {
+        mButtonLogin.setEnabled(false);
+        mButtonLogout.setEnabled(true);
+        mButtonPublish.setEnabled(true);
+        mTextStatus.setText("Logged in");
+    }
 
-        WebDialog feedDialog = (
-                new WebDialog.FeedDialogBuilder(this,
-                        Session.getActiveSession(),
-                        params))
-                .setOnCompleteListener(new WebDialog.OnCompleteListener() {
+    private void loggedOutUIState()
+    {
+        mButtonLogin.setEnabled(true);
+        mButtonLogout.setEnabled(false);
+        mButtonPublish.setEnabled(false);
+        mTextStatus.setText("Logged out");
+    }
 
-                    @Override
-                    public void onComplete(Bundle values,
-                                           FacebookException error) {
-                        if (error == null) {
-                            // When the story is posted, echo the success
-                            // and the post Id.
-                            final String postId = values.getString("post_id");
-                            if (postId != null) {
-                                Toast.makeText(getBaseContext(),
-                                        "Posted story, id: " + postId,
-                                        Toast.LENGTH_SHORT).show();
-                            } else {
-                                // User clicked the Cancel button
-                                Toast.makeText(getBaseContext(),
-                                        "Publish cancelled",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        } else if (error instanceof FacebookOperationCanceledException) {
-                            // User clicked the "x" button
-                            Toast.makeText(getBaseContext(),
-                                    "Publish cancelled",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            // Generic, ex: network error
-                            Toast.makeText(getBaseContext(),
-                                    "Error posting story",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                })
-                .build();
-        feedDialog.show();
+    private void toast(String message)
+    {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
