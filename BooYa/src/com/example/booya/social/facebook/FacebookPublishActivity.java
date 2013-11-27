@@ -14,6 +14,7 @@ import com.sromku.simple.fb.Permissions;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.SimpleFacebookConfiguration;
 import com.sromku.simple.fb.entities.Photo;
+import com.sromku.simple.fb.entities.Video;
 
 import java.io.File;
 
@@ -147,7 +148,7 @@ public class FacebookPublishActivity extends Activity {
         mButtonPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                publishDummyPhoto();
+                publishDummyVideo();
             }
         });
     }
@@ -166,7 +167,7 @@ public class FacebookPublishActivity extends Activity {
         mSimpleFacebook.onActivityResult(this, requestCode, resultCode, data);
     }
 
-    private void publishDummyPhoto() {
+    private void publishDummyVideo() {
         // create publish listener
         SimpleFacebook.OnPublishListener onPublishListener = new SimpleFacebook.OnPublishListener()
         {
@@ -198,12 +199,14 @@ public class FacebookPublishActivity extends Activity {
             }
         };
 
-        // create Photo instace and add some properties
-        Photo photoObj = new Photo(new File("/sdcard/dummy.jpg"));
-        photoObj.addDescription("dummy");
+        // create Video instace and add some properties
+        Video videoObj = new Video(new File("/sdcard/dummy.mp4"));
+        videoObj.addDescription("Dummy Description");
+        videoObj.addTitle("Dummy Title");
 
-        // publish photo to app album
-        mSimpleFacebook.publish(photoObj, onPublishListener);
+
+        // publish video to Videos album
+        mSimpleFacebook.publish(videoObj, onPublishListener);
     }
 
     private void initUI()
