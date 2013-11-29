@@ -9,11 +9,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.booya.R;
-import com.facebook.*;
+import com.facebook.SessionDefaultAudience;
 import com.sromku.simple.fb.Permissions;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.SimpleFacebookConfiguration;
-import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Video;
 
 import java.io.File;
@@ -23,10 +22,10 @@ import java.io.File;
  * Date: 23/11/13 15:03
  */
 public class FacebookPublishActivity extends Activity {
-    private static final String FACEBOOK_APP_ID = "696649103679042";
-    private static final String FACEBOOK_APP_NAMESPACE = "booya-app";
-    private static final SessionDefaultAudience FACEBOOK_DEFAULT_AUDIENCE = SessionDefaultAudience.EVERYONE;
-    private static final String TAG = FacebookPublishActivity.class.getName();
+    private final String FACEBOOK_APP_ID = "696649103679042";
+    private final String FACEBOOK_APP_NAMESPACE = "booya-app";
+    private final SessionDefaultAudience FACEBOOK_DEFAULT_AUDIENCE = SessionDefaultAudience.EVERYONE;
+    private final String TAG = FacebookPublishActivity.class.getName();
 
     private SimpleFacebook mSimpleFacebook;
 
@@ -35,7 +34,7 @@ public class FacebookPublishActivity extends Activity {
     private TextView mTextStatus;
     private Button mButtonPublish;
 
-    private final Permissions[] neededPermissions = new Permissions[]
+    private final Permissions[] NEEDED_PERMISSIONS = new Permissions[]
             {
                     Permissions.PUBLISH_STREAM
             };
@@ -122,7 +121,7 @@ public class FacebookPublishActivity extends Activity {
         SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
                 .setAppId(FACEBOOK_APP_ID)
                 .setNamespace(FACEBOOK_APP_NAMESPACE)
-                .setPermissions(neededPermissions)
+                .setPermissions(NEEDED_PERMISSIONS)
                 .setDefaultAudience(FACEBOOK_DEFAULT_AUDIENCE)
                 .build();
         SimpleFacebook.setConfiguration(configuration);
