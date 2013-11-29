@@ -42,7 +42,6 @@ public class FacebookPublishActivity extends Activity {
     // Login listener
     private SimpleFacebook.OnLoginListener mOnLoginListener = new SimpleFacebook.OnLoginListener()
     {
-
         @Override
         public void onFail(String reason)
         {
@@ -200,9 +199,8 @@ public class FacebookPublishActivity extends Activity {
 
         // create Video instace and add some properties
         Video videoObj = new Video(new File("/sdcard/dummy.mp4"));
-        videoObj.addDescription("Dummy Description");
+        videoObj.addDescription("Dummy Description #hashtag");
         videoObj.addTitle("Dummy Title");
-
 
         // publish video to Videos album
         mSimpleFacebook.publish(videoObj, onPublishListener);
