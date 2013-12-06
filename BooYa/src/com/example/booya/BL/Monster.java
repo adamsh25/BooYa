@@ -18,7 +18,7 @@ public class Monster extends MovableObject
 	public static float X_OFFSET = 0;
 	public static float Y_OFFSET = 0;
 	public static final float RADIUS = Math.min(MazeGameActivity.screenHeight, 
-			MazeGameActivity.screenWidth) * 0.15f;
+			MazeGameActivity.screenWidth) * 0.17f;
 										
 	
 	//endregion
