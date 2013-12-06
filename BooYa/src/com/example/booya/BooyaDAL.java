@@ -71,6 +71,25 @@ public class BooyaDAL {
 		    return PurchasedFigures;
 		  }
 	  
+	  public List<PrankMethod> getAllPrankMethods() {
+		    List<PrankMethod> PrankMethodsList = new ArrayList<PrankMethod>();
+
+		    // Purchased figure's inventory type is 1 for now
+		    Cursor cursor = database.query(MySQLiteHelper.TABLE_USER_PRANK_METHODS,
+		    		new String[] {MySQLiteHelper.COLUMN_PRANK_ID,MySQLiteHelper.COLUMN_IMG_RES_ID,MySQLiteHelper.COLUMN_PURCHASED}, null, null, null, null, null);
+
+		    cursor.moveToFirst();
+		    while (!cursor.isAfterLast()) 
+		    {
+		      PrankMethod currPrankMethod = new PrankMethod(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2));
+		      PrankMethodsList.add(currPrankMethod);
+		      cursor.moveToNext();
+		    }
+		    // make sure to close the cursor
+		    cursor.close();
+		    return PrankMethodsList;
+		  }
+	  
 	  public List<Integer> getAllPurchasedScreams() {
 		    List<Integer> PurchasedFigures = new ArrayList<Integer>();
 

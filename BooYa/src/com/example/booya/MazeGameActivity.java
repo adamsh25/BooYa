@@ -44,7 +44,7 @@ public class MazeGameActivity extends Activity
 	private MonsterView monsterView;
 	private StartOffsetCircleView circleView;
 	private CameraHelper cameraHelper;
-	private Vibrator gameVibrator;
+	private static Vibrator gameVibrator;
 	public static int screenWidth, screenHeight;
 
 	// flag - true if the player has touched a wall.
@@ -85,7 +85,7 @@ public class MazeGameActivity extends Activity
 		
 		// Get instance of Vibrator from current Context
 		gameVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
+		
 		b_playerHasTouchedWall = false;
 		n_gameLevel = 0;
 		b_canMove = false;
@@ -274,9 +274,8 @@ public class MazeGameActivity extends Activity
 			b_playerHasTouchedWall = true;
 			
 			// Vibrate
-
-			// Output yes if can vibrate, no otherwise
-			if (gameVibrator.hasVibrator()) 
+			
+			if (BooyaUser.CanVibrate()) 
 			{
 				gameVibrator.vibrate(400);
 			}
