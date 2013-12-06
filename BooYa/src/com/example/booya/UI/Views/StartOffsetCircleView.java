@@ -17,7 +17,7 @@ import android.view.View;
 @SuppressLint("ViewConstructor")
 public class StartOffsetCircleView  extends View
 {
-
+	
 	//region members
 	private Paint m_circlePaint; // The Wall Design Member
 
@@ -25,7 +25,6 @@ public class StartOffsetCircleView  extends View
 	
 	public static boolean Draw = true;
 	//endregion
-	
 	
 	//region Properties
 	
@@ -81,6 +80,8 @@ public class StartOffsetCircleView  extends View
 			m_circlePaint = new Paint();
 			m_circlePaint.setColor(Color.WHITE);
 			m_circlePaint.setStrokeWidth(5);
+
+			//m_circlePaint.set
 			m_circlePaint.setStyle(Style.STROKE);
 			m_circlePaint.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
 
@@ -90,11 +91,24 @@ public class StartOffsetCircleView  extends View
 		
 	}
 	
+
+	
 	//endregion
 	
 	//region Methods
 	
-	
+	public boolean IsTouchCircle(int x, int y)
+	{
+		double r = Math.sqrt(Math.pow((x-this.pntf_StartPos.x),2) + Math.pow((y-this.pntf_StartPos.y),2));
+		if( r <= (1.2*Monster.RADIUS))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 	//endregion
 	
