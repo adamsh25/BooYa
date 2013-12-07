@@ -2,7 +2,6 @@ package com.example.booya;
 
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.ContentValues;
@@ -21,10 +20,9 @@ public class BooyaUser {
 	private List<String> facebookFriendsList;
 	private static List<Integer> purchasedFiguresList;
 	private static List<Integer> purchasedScreamList;
-	private static List<PrankMethod> prankMethodList;
 	private List<String> videosPathList;
 	private static int nAndroidApiVersion;
-	private static boolean bCanVibrate;
+	private boolean bCanVibrate;
 	
 	
 	private BooyaUser()
@@ -32,42 +30,23 @@ public class BooyaUser {
 
 	}
 	
-
-	@SuppressLint("NewApi")
 	public static void loadInfo(Context context)
 	{
-		// Check android version
 		nAndroidApiVersion = android.os.Build.VERSION.SDK_INT;
-		bCanVibrate = false;
+		bHasFrontCamera = (CameraHelper.getInstance().findFrontFacingCameraId() != -1);	
 		
-		// Check camera
-		bHasFrontCamera = (CameraHelper.getInstance().findFrontFacingCameraId() != -1);
-		
-		if(nAndroidApiVersion>10)
-		{
-		// Check vibration
-		bCanVibrate = ((Vibrator)context.getSystemService(context.VIBRATOR_SERVICE)).hasVibrator();
-		}
-		// Set datasource
-		datasource = new BooyaDAL(context);
-		
-		// Open DB
+		datasource = new BooyaDAL(context);	
 	    datasource.open();
-	    
-	    // Initailize Info
 		InitializeParametersFromDB();
 		
-		// Close DB
 		datasource.close();
 	}
 	
 		
 	public static void IncreaseNumberOfVictims()
 	{
-		// Increase the number in cache
 		nNumOfVictims++;
 		
-		// Open DB in order to make changes in disk || TODO make it asynchronous
 		datasource.open();
 		datasource.IncreaseNumberOfVictimsInDB(nNumOfVictims);
 		datasource.close();
@@ -78,12 +57,6 @@ public class BooyaUser {
 		nNumOfVictims = datasource.GetUserVictimsFromDB();
 		purchasedFiguresList = datasource.getAllPurchasedFigures();
 		purchasedScreamList = datasource.getAllPurchasedScreams();
-		prankMethodList = datasource.getAllPrankMethods();
-	}
-	
-	public static List<PrankMethod> getprankMethodList()
-	{
-		return prankMethodList;
 	}
 	
 	public static int GetNumberOfVictims()
@@ -95,12 +68,6 @@ public class BooyaUser {
 	{
 		return bHasFrontCamera;
 	}
-	
-	public static boolean CanVibrate()
-	{
-		return bCanVibrate;
-	}
-	
 	
 
 }

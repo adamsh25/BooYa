@@ -16,6 +16,7 @@ public class MazeView extends View
 	private MonsterView m_monsterView;
 	private GameLevelView m_levelView;
 	private StartOffsetCircleView m_circleView;
+	private ProgressWheel m_progressWheelView;
 	SurfaceView m_dummyView;
 	
 	//endregion
@@ -33,11 +34,13 @@ public class MazeView extends View
 	//region Methods
 	
 	public void setViews(GameLevelView levelView, MonsterView monsterView,
-					StartOffsetCircleView circleView)
+					StartOffsetCircleView circleView, ProgressWheel progressWheelView)
 	{
 		m_levelView = levelView;
 		m_monsterView = monsterView;
 		this.m_circleView = circleView;
+		m_progressWheelView = progressWheelView;
+		
 	}
 	
 	@Override
@@ -49,6 +52,7 @@ public class MazeView extends View
 		this.m_levelView.draw(canvas);
 		this.m_monsterView.draw(canvas);
 		this.m_circleView.draw(canvas);
+		this.m_progressWheelView.draw(canvas);
 		this.setDrawingCacheEnabled(true);
 
 	}
