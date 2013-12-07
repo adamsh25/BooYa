@@ -1,15 +1,19 @@
 package com.example.booya;
 
 
+import java.util.EventListener;
+
 import com.example.booya.R;
 import com.example.booya.BL.GameLevel;
 import com.example.booya.BL.GameLevel1;
 import com.example.booya.BL.GameLevel2;
+import com.example.booya.BL.GameLevel3;
 import com.example.booya.BL.MazeObstacles;
 import com.example.booya.BL.Monster;
 import com.example.booya.UI.Views.GameLevelView;
 import com.example.booya.UI.Views.MazeView;
 import com.example.booya.UI.Views.MonsterView;
+import com.example.booya.UI.Views.ProgressWheel;
 import com.example.booya.UI.Views.StartOffsetCircleView;
 import com.example.booya.video.recording.CameraHelper;
 
@@ -26,6 +30,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ProgressBar;
 
 public class MazeGameActivity extends Activity
 {
@@ -43,8 +48,9 @@ public class MazeGameActivity extends Activity
 	private GameLevelView gameLevelView;
 	private MonsterView monsterView;
 	private StartOffsetCircleView circleView;
+	private ProgressWheel progressWheelView;
 	private CameraHelper cameraHelper;
-	private static Vibrator gameVibrator;
+	private Vibrator gameVibrator;
 	public static int screenWidth, screenHeight;
 
 	// flag - true if the player has touched a wall.
@@ -85,7 +91,7 @@ public class MazeGameActivity extends Activity
 		
 		// Get instance of Vibrator from current Context
 		gameVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-		
+
 		b_playerHasTouchedWall = false;
 		n_gameLevel = 0;
 		b_canMove = false;
@@ -93,14 +99,17 @@ public class MazeGameActivity extends Activity
 		m_currentLevel = new GameLevel1();
 		gameLevelView = new GameLevelView(this);
 		gameLevelView.setGameLevel(m_currentLevel);
-		
+		progressWheelView = new ProgressWheel(this);
+		progressWheelView.spin();
+		progressWheelView.setText("20");
+		progressWheelView.incrementProgress();
 		m_monster = new Monster(m_currentLevel.getStartPosition().x,
 				m_currentLevel.getStartPosition().y);
 		monsterView = new MonsterView(this, m_monster);
 		StartOffsetCircleView.Draw = true;
 		circleView = new StartOffsetCircleView(this,m_currentLevel.getStartPosition());
 		m_mazeView = new MazeView(this);
-		m_mazeView.setViews(gameLevelView, monsterView, circleView);
+		m_mazeView.setViews(gameLevelView, monsterView, circleView,progressWheelView);
 
 		// endregion
 		setContentView(m_mazeView);
@@ -117,53 +126,13 @@ public class MazeGameActivity extends Activity
 	{
 		if(StartOffsetCircleView.Draw == true)
 		{
-			
-			final Bitmap bitmap = m_mazeView.getDrawingCache(true);
-			
-	        int x = (int)event.getX();
-	        int y = (int)event.getY();
-	        int pixel = 0;
-	        try
-	        {
-	        	try
-	        	{
-	        		pixel = bitmap.getPixel(x,y);
-	        	}
-	        	catch(Exception ex)
-	        	{
-	        		return false;
-	        	}
-	        if(pixel == Color.WHITE)
-	        {
-	        	PointF circleCenter = StartOffsetCircleView.CircleCenter;
-	        	float radius = Monster.RADIUS;
-	        	
-	        	
-	        	
-	        	Monster.Y_OFFSET =  -(y - (circleCenter.y));
-	        	Monster.X_OFFSET =  -(x - (circleCenter.x));
-	    		StartOffsetCircleView.Draw = false;
-	        	//Monster.X_OFFSET = x;
-	        	
-	        }
-	        else
-	        {
-
-	        	return super.onTouchEvent(event);
-	        }
-	        
-	        
-	        }
-	        catch(Exception ex)
-	        {
-	        	
-	        }
-	        
-
+			if(!initOffsetCircle(event))
+			{
+				return super.onTouchEvent(event);
+			}
 			
 		}
 		StartOffsetCircleView.Draw = false;
-		
 		if (b_playerHasTouchedWall) 
 		{
 			return super.onTouchEvent(event);
@@ -233,7 +202,7 @@ public class MazeGameActivity extends Activity
 		}
 
 		// Paint The Game With The New Monster Position.
-		m_mazeView.setViews(gameLevelView, monsterView, circleView);
+		m_mazeView.setViews(gameLevelView, monsterView, circleView,progressWheelView);
 		setContentView(m_mazeView);
 
 		return (super.onTouchEvent(event));
@@ -274,8 +243,9 @@ public class MazeGameActivity extends Activity
 			b_playerHasTouchedWall = true;
 			
 			// Vibrate
-			
-			if (BooyaUser.CanVibrate()) 
+
+			// Output yes if can vibrate, no otherwise
+			if (gameVibrator.hasVibrator()) 
 			{
 				gameVibrator.vibrate(400);
 			}
@@ -304,7 +274,7 @@ public class MazeGameActivity extends Activity
 	{
 		// Gets The Motion Action Type.
 		final int action = event.getAction();
-
+		
 		// Safe Check - The New Intent Will Be Created Only If The Player
 		// Touches
 		// The Wall While Moving Is Finger - On Slide Only.
@@ -312,6 +282,7 @@ public class MazeGameActivity extends Activity
 			// Setting Touched Wall Flag To True.
 			b_playerHasTouchedWall = true;
 			
+			if(!TesterActivity.bIsDUBUG)
 			BooyaUser.IncreaseNumberOfVictims();
 
 			// SCARYYY FIGURE APPEARS
@@ -338,22 +309,76 @@ public class MazeGameActivity extends Activity
 				levels[n_gameLevel].getStartPosition().y);
 		circleView = new StartOffsetCircleView(this,levels[n_gameLevel].getStartPosition());
 		// Set The Views To Paint The Monster In Start Position
-		m_mazeView.setViews(gameLevelView, monsterView, circleView);
+		m_mazeView.setViews(gameLevelView, monsterView, circleView, progressWheelView);
 		setContentView(m_mazeView);
 	}
 	
 	private void onFinishLevel() {
-		n_gameLevel = 1;
-		m_currentLevel = levels[n_gameLevel];
-		gameLevelView = new GameLevelView(this);
-		gameLevelView.setGameLevel(m_currentLevel);
+		
+		if(n_gameLevel < levels.length)
+		{
+			n_gameLevel++;
+			m_currentLevel = levels[n_gameLevel];
+			gameLevelView = new GameLevelView(this);
+			gameLevelView.setGameLevel(m_currentLevel);
+		}
 	}
 
 	private void initLevels() {
-		levels = new GameLevel[5];
+		levels = new GameLevel[3];
 		levels[0] = new GameLevel1();
 		levels[1] = new GameLevel2();
+		levels[2] = new GameLevel3();
+		
 	}
 
+	private boolean initOffsetCircle(MotionEvent event)
+	{
+
+		
+			
+	        int x = (int)event.getX();
+	        int y = (int)event.getY();
+	        
+	        
+	        try
+	        {
+
+			        if(circleView.IsTouchCircle(x,y))
+			        {
+			        	
+						progressWheelView.spin();
+						progressWheelView.setText("11");
+						for(int k=0;k<20;k++)
+						progressWheelView.incrementProgress();
+						m_mazeView.setViews(gameLevelView, monsterView, circleView,progressWheelView);
+			        	
+			        	
+			        	
+			        	PointF circleCenter = StartOffsetCircleView.CircleCenter;
+			        	float radius = Monster.RADIUS;
+			        	
+			        	Monster.Y_OFFSET =  -(y - (circleCenter.y));
+			        	Monster.X_OFFSET =  -(x - (circleCenter.x));
+			    		StartOffsetCircleView.Draw = false;
+			        	return true;
+			        }
+			        else
+			        {
+			        	return false;
+			        }
+			        
+			        }
+			        catch(Exception ex)
+			        {
+			        	
+			        }
+	        return false;
+		}
+		
+		
+		
+	
+	
 	// endregion
 }

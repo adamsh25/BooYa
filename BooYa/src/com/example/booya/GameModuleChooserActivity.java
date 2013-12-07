@@ -16,8 +16,10 @@
 
 package com.example.booya;
 
-import android.app.ActionBar;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -69,7 +71,7 @@ public class GameModuleChooserActivity  extends FragmentActivity {
         public Fragment getItem(int i) {
             Fragment fragment = new DemoObjectFragment();
             Bundle args = new Bundle();
-            args.putInt(DemoObjectFragment.ARG_OBJECT, BooyaUser.getprankMethodList().get(i).getImgResID()); // Our object is just an integer :-P
+            args.putParcelable(DemoObjectFragment.ARG_PRANK_METHOD, BooyaUser.getprankMethodList().get(i));
             fragment.setArguments(args);
             return fragment;
         }
@@ -77,7 +79,6 @@ public class GameModuleChooserActivity  extends FragmentActivity {
 
         @Override
         public int getCount() {
-            // For this contrived example, we have a 100-object collection.
             return BooyaUser.getprankMethodList().size();
         }
 
@@ -88,27 +89,24 @@ public class GameModuleChooserActivity  extends FragmentActivity {
         }
     }
 
-    /**
-     * A dummy fragment representing a section of the app, but that simply displays dummy text.
-     */
-    public static class DemoObjectFragment extends Fragment {
 
-        public static final String ARG_OBJECT = "object";
+	public static class DemoObjectFragment extends Fragment {
+
+        public static final String ARG_PRANK_METHOD = "curr_prank_method";
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                Bundle savedInstanceState) 
+        {
             View rootView = inflater.inflate(R.layout.fragment_prank_object, container, false);
             Bundle args = getArguments();
             
-            //((TextView)(findViewById(R.id.txtVictims))).setText("Victims : " + BooyaUser.GetNumberOfVictims());
-            int img_prank_id = args.getInt(ARG_OBJECT);
-            
-            if(img_prank_id == 1)
+            PrankMethod curPrankMethod= (PrankMethod)args.getParcelable(ARG_PRANK_METHOD);
+            if(curPrankMethod.getImgResID() == 1)
             {
             	((ImageView)(rootView.findViewById(R.id.imageView1))).setImageResource(R.drawable.classicmaze);
             }
-            else if(img_prank_id == 2)
+            else if(curPrankMethod.getImgResID() == 2)
             {
             	((ImageView)(rootView.findViewById(R.id.imageView1))).setImageResource(R.drawable.cupsgame);
             }
