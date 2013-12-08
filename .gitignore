@@ -30,3 +30,6 @@ proguard/
 
 # Rony added to stop conflicting project properties
 project.properties
+
+# Rony added to ignore backup files of merge tools
+*.orig
