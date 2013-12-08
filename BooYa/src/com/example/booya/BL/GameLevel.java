@@ -20,7 +20,7 @@ public abstract class GameLevel
     public static final int MAX_COLS = 32;
     
     // Wall Width and Height - Preferred To Be A Square
-    private static  final float SCREEN_SIZE = Math.min(MazeGameActivity.screenWidth,MazeGameActivity.screenHeight);
+    public static  final float SCREEN_SIZE = Math.min(MazeGameActivity.screenWidth,MazeGameActivity.screenHeight);
     private static  final float MIN_COL_ROW = Math.min(MAX_ROWS, MAX_COLS);
     public  static  final float MAZE_OBSTACLE_SIZE = //((0.4f) * 
     		(Math.min((SCREEN_SIZE /  MIN_COL_ROW), (SCREEN_SIZE / MIN_COL_ROW)));

@@ -72,4 +72,14 @@
         android:onClick="launchAbout"
         android:text="ABOUT" />
 
+    <TextView
+        android:id="@+id/txtVictims"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnOptions"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="28dp"
+        android:text="Victims:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
 </RelativeLayout>

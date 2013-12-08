@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.CheckBox;
 
 public class TesterActivity extends Activity {
-	public static Boolean bIsDUBUG;
+	public static Boolean bIsDUBUG = Boolean.FALSE;
 	public static boolean bHasFrontCamera;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class TesterActivity extends Activity {
 		return true;
 	}
 	public void launchMainBooya(View view) {
-		bIsDUBUG = Boolean.FALSE;
+		//bIsDUBUG = Boolean.FALSE;
 	    Intent intent = new Intent(this, MainBooyaActivity.class);
 	    startActivity(intent);
 	}
@@ -40,12 +40,12 @@ public class TesterActivity extends Activity {
     }
 
 	public void launchMazeTester(View view) {
-		bIsDUBUG = Boolean.FALSE;
+		//bIsDUBUG = Boolean.FALSE;
 	    Intent intent = new Intent(this, GenericGameActivity.class);
 	    startActivity(intent);
 	}
 	public void launchCameraTester(View view) {
-		bIsDUBUG = Boolean.TRUE;
+		//bIsDUBUG = Boolean.FALSE;
 	    Intent intent = new Intent(this, CameraRecorder.class);
 	    startActivity(intent);
 	}
@@ -65,6 +65,7 @@ public class TesterActivity extends Activity {
 	    if(!checked)
 	    {
 	    	bHasFrontCamera = Boolean.FALSE;
+	    	bIsDUBUG = Boolean.TRUE;
 	    }
 	    
 	}
