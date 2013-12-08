@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <TextView
+            android:id="@+id/textSocialSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            android:text="Social Settings"
+            android:textSize="30sp"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Facebook"
+            android:id="@+id/textFacebookSocialSettings"
+            android:textSize="30dp"
+            android:layout_marginTop="60px"
+            android:layout_marginLeft="45px"
+            android:layout_below="@id/textSocialSettings"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:id="@+id/btnFacebookLoginLogout"
+            android:layout_alignTop="@+id/textFacebookSocialSettings" android:layout_alignParentRight="true"
+            android:layout_marginRight="59dp"/>
+
+
+</RelativeLayout>
