@@ -282,7 +282,6 @@ public class MazeGameActivity extends Activity
 			// Setting Touched Wall Flag To True.
 			b_playerHasTouchedWall = true;
 			
-			if(!TesterActivity.bIsDUBUG)
 			BooyaUser.IncreaseNumberOfVictims();
 
 			// SCARYYY FIGURE APPEARS
