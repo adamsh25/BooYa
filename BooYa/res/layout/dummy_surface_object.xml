@@ -1,0 +1,6 @@
+<SurfaceView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/surfaceView2"
+	android:layout_width="1px"
+	android:layout_height="1px">
+	</SurfaceView>
+

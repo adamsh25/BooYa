@@ -40,10 +40,10 @@
         android:onClick="launchGame"        
         android:text="PLAY!" />
     
-    <SurfaceView
+    <!-- <SurfaceView
 	android:id="@+id/surfaceView2"
 	android:layout_width="1px"
 	android:layout_height="1px">
-	</SurfaceView>
+	</SurfaceView> -->
 
 </RelativeLayout>

@@ -19,6 +19,7 @@ import com.example.booya.video.recording.CameraHelper;
 
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -27,9 +28,14 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
+import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 public class MazeGameActivity extends Activity
@@ -52,6 +58,8 @@ public class MazeGameActivity extends Activity
 	private CameraHelper cameraHelper;
 	private Vibrator gameVibrator;
 	public static int screenWidth, screenHeight;
+	private SurfaceView camSurface;
+	private View dynamicView;
 
 	// flag - true if the player has touched a wall.
 	public static boolean b_playerHasTouchedWall = false;
@@ -71,6 +79,7 @@ public class MazeGameActivity extends Activity
 	 * 
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
+	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -86,7 +95,7 @@ public class MazeGameActivity extends Activity
 		 * = size.x; screenHeight = size.y;
 		 */
 
-		screenHeight = display.getHeight();
+		screenHeight = display.getHeight() - 1;
 		screenWidth = display.getWidth();
 		
 		// Get instance of Vibrator from current Context
@@ -111,8 +120,20 @@ public class MazeGameActivity extends Activity
 		m_mazeView = new MazeView(this);
 		m_mazeView.setViews(gameLevelView, monsterView, circleView,progressWheelView);
 
+		
+		
 		// endregion
-		setContentView(m_mazeView);
+		
+		LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		dynamicView = vi.inflate(R.layout.activity_maze_game, null);
+		
+		LinearLayout ll = (LinearLayout) dynamicView.findViewById(R.id.testing);
+		// insert into main view
+		ll.addView(m_mazeView);
+		setContentView(dynamicView);
+		camSurface = (SurfaceView) findViewById(R.id.dummySurface);
+		//addContentView(camSurface, new LayoutParams(LayoutParams.WRAP_CONTENT));
+		
 	}
 
 	/*
@@ -203,7 +224,7 @@ public class MazeGameActivity extends Activity
 
 		// Paint The Game With The New Monster Position.
 		m_mazeView.setViews(gameLevelView, monsterView, circleView,progressWheelView);
-		setContentView(m_mazeView);
+		setContentView(dynamicView);
 
 		return (super.onTouchEvent(event));
 
@@ -251,7 +272,7 @@ public class MazeGameActivity extends Activity
 			}
 
 			// Check if have front camera
-			if (TesterActivity.bHasFrontCamera) {
+			if (CameraHelper.getInstance().isRecording) {
 				// // Stopping the service, which stops the video recording
 				// Intent intentService = new Intent(this,
 				// RecorderService.class);
@@ -312,6 +333,7 @@ public class MazeGameActivity extends Activity
 		setContentView(m_mazeView);
 	}
 	
+	@SuppressLint("NewApi")
 	private void onFinishLevel() {
 		
 		if(n_gameLevel < levels.length)
@@ -321,6 +343,16 @@ public class MazeGameActivity extends Activity
 			gameLevelView = new GameLevelView(this);
 			gameLevelView.setGameLevel(m_currentLevel);
 		}
+		
+		if(n_gameLevel == 1)
+		{
+			CameraHelper c = CameraHelper.getInstance();
+			c.SetSurfaceView(camSurface);
+			c.StartRecording();
+			
+		}
+		if (n_gameLevel == 2)
+			CameraHelper.getInstance().StopRecording();
 	}
 
 	private void initLevels() {
