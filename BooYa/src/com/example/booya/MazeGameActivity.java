@@ -52,7 +52,7 @@ public class MazeGameActivity extends Activity
 					progressWheelView.incrementProgress();
 					m_mazeView.setViews(gameLevelView, monsterView, circleView, progressWheelView);
 					setContentView(m_mazeView);
-					if(progressWheelView.getProgress()>=400)
+					if(progressWheelView.getProgress()>=360)
 					{
 						onTimeEnd();
 					}
@@ -127,8 +127,6 @@ public class MazeGameActivity extends Activity
 		gameLevelView.setGameLevel(m_currentLevel);
 		progressWheelView = new ProgressWheel(this);
 		progressWheelView.spin();
-		progressWheelView.setText("20");
-		progressWheelView.incrementProgress();
 		m_monster = new Monster(m_currentLevel.getStartPosition().x,
 				m_currentLevel.getStartPosition().y);
 		monsterView = new MonsterView(this, m_monster);
@@ -260,7 +258,7 @@ public class MazeGameActivity extends Activity
 	private void onTouchWall(MotionEvent event) {
 		// Gets The Motion Action Type.
 		final int action = event.getAction();
-
+		t.cancel();
 		// Safe Check - The New Intent Will Be Created Only If The Player
 		// Touches
 		// The Wall While Moving Is Finger - On Slide Only.
@@ -300,7 +298,7 @@ public class MazeGameActivity extends Activity
 	{
 		// Gets The Motion Action Type.
 		final int action = event.getAction();
-		
+		t.cancel();
 		// Safe Check - The New Intent Will Be Created Only If The Player
 		// Touches
 		// The Wall While Moving Is Finger - On Slide Only.
@@ -372,12 +370,6 @@ public class MazeGameActivity extends Activity
 
 			        if(circleView.IsTouchCircle(x,y))
 			        {
-			        	
-						progressWheelView.spin();
-						progressWheelView.setText("11");
-			        	
-			        	
-			        	
 			        	PointF circleCenter = StartOffsetCircleView.CircleCenter;
 			        	float radius = Monster.RADIUS;
 			        	
