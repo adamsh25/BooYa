@@ -37,6 +37,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import com.example.booya.video.recording.RecordingService;
 
 public class MazeGameActivity extends Activity
 {
@@ -133,7 +134,6 @@ public class MazeGameActivity extends Activity
 		setContentView(dynamicView);
 		camSurface = (SurfaceView) findViewById(R.id.dummySurface);
 		//addContentView(camSurface, new LayoutParams(LayoutParams.WRAP_CONTENT));
-		
 	}
 
 	/*
@@ -348,11 +348,14 @@ public class MazeGameActivity extends Activity
 		{
 			CameraHelper c = CameraHelper.getInstance();
 			c.SetSurfaceView(camSurface);
-			c.StartRecording();
-			
+			Intent i = new Intent(this, RecordingService.class);
+			startService(i);
 		}
 		if (n_gameLevel == 2)
-			CameraHelper.getInstance().StopRecording();
+		{
+			Intent i = new Intent(this, RecordingService.class);
+			stopService(i);
+		}
 	}
 
 	private void initLevels() {
