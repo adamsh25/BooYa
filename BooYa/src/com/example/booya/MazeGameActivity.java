@@ -2,6 +2,8 @@ package com.example.booya;
 
 
 import java.util.EventListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.example.booya.R;
 import com.example.booya.BL.GameLevel;
@@ -32,9 +34,32 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 
+
+
+
 public class MazeGameActivity extends Activity
 {
 
+	class timerTask extends TimerTask
+	{
+		public void run() 
+		{
+			MazeGameActivity.this.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run()
+				{
+					progressWheelView.incrementProgress();
+					m_mazeView.setViews(gameLevelView, monsterView, circleView, progressWheelView);
+					setContentView(m_mazeView);
+					if(progressWheelView.getProgress()>=400)
+					{
+						onTimeEnd();
+					}
+				}
+			});
+	    }
+	}
 	// region members
 
 	/**
@@ -52,7 +77,7 @@ public class MazeGameActivity extends Activity
 	private CameraHelper cameraHelper;
 	private Vibrator gameVibrator;
 	public static int screenWidth, screenHeight;
-
+	Timer t = new Timer();
 	// flag - true if the player has touched a wall.
 	public static boolean b_playerHasTouchedWall = false;
 
@@ -76,11 +101,12 @@ public class MazeGameActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
-
+		
 		// region initialise members
 
 		Display display = getWindowManager().getDefaultDisplay();
-
+		t = new Timer();
+		t.schedule(new timerTask(),5,5);
 		/*
 		 * api 13+ Point size = new Point(); display.getSize(size); screenWidth
 		 * = size.x; screenHeight = size.y;
@@ -245,7 +271,7 @@ public class MazeGameActivity extends Activity
 			// Vibrate
 
 			// Output yes if can vibrate, no otherwise
-			if (gameVibrator.hasVibrator()) 
+			//if (gameVibrator.hasVibrator()) 
 			{
 				gameVibrator.vibrate(400);
 			}
@@ -349,9 +375,6 @@ public class MazeGameActivity extends Activity
 			        	
 						progressWheelView.spin();
 						progressWheelView.setText("11");
-						for(int k=0;k<20;k++)
-						progressWheelView.incrementProgress();
-						m_mazeView.setViews(gameLevelView, monsterView, circleView,progressWheelView);
 			        	
 			        	
 			        	
@@ -377,7 +400,15 @@ public class MazeGameActivity extends Activity
 		}
 		
 		
-		
+		public void onTimeEnd()
+		{
+			// Making An Intent Of The Maze Game Start Menu Activity.
+			Intent intent = new Intent(this, GenericGameActivity.class);
+			t.cancel();
+			// Starting The Activity.
+			startActivity(intent);
+			
+		}
 	
 	
 	// endregion
