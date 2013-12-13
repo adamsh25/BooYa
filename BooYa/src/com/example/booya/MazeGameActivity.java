@@ -245,7 +245,7 @@ public class MazeGameActivity extends Activity
 			// Vibrate
 
 			// Output yes if can vibrate, no otherwise
-			if (gameVibrator.hasVibrator()) 
+			//if (gameVibrator.hasVibrator()) 
 			{
 				gameVibrator.vibrate(400);
 			}
@@ -282,7 +282,7 @@ public class MazeGameActivity extends Activity
 			// Setting Touched Wall Flag To True.
 			b_playerHasTouchedWall = true;
 			
-			if(!TesterActivity.bIsDUBUG)
+			//if(!TesterActivity.bIsDUBUG)
 			BooyaUser.IncreaseNumberOfVictims();
 
 			// SCARYYY FIGURE APPEARS
