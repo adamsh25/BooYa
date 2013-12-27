@@ -76,7 +76,7 @@ public class MazeGameActivity extends Activity
 	// Timer members
 	private TimerWheel progressWheelView;
 	private Timer timerWheelThread = new Timer();
-	private final float timerGameOverInSeconds = 25;
+	private final float timerGameOverInSeconds = 30;
 	private final float timerGameOverMinutes = ((float)timerGameOverInSeconds/60); 
 	private final long  timerGameOverInMilliseconds = ((long)(1000 * timerGameOverMinutes));
 	
