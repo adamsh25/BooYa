@@ -16,7 +16,7 @@ public class MazeView extends View
 	private MonsterView m_monsterView;
 	private GameLevelView m_levelView;
 	private StartOffsetCircleView m_circleView;
-	private ProgressWheel m_progressWheelView;
+	private TimerWheel m_progressWheelView;
 	SurfaceView m_dummyView;
 	
 	//endregion
@@ -34,7 +34,7 @@ public class MazeView extends View
 	//region Methods
 	
 	public void setViews(GameLevelView levelView, MonsterView monsterView,
-					StartOffsetCircleView circleView, ProgressWheel progressWheelView)
+					StartOffsetCircleView circleView, TimerWheel progressWheelView)
 	{
 		m_levelView = levelView;
 		m_monsterView = monsterView;

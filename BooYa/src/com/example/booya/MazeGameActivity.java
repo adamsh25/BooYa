@@ -1,7 +1,5 @@
 package com.example.booya;
 
-
-import java.util.EventListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -15,7 +13,7 @@ import com.example.booya.BL.Monster;
 import com.example.booya.UI.Views.GameLevelView;
 import com.example.booya.UI.Views.MazeView;
 import com.example.booya.UI.Views.MonsterView;
-import com.example.booya.UI.Views.ProgressWheel;
+import com.example.booya.UI.Views.TimerWheel;
 import com.example.booya.UI.Views.StartOffsetCircleView;
 import com.example.booya.video.recording.CameraHelper;
 
@@ -25,17 +23,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.PointF;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MotionEvent;
-import android.view.View;
-import android.widget.ProgressBar;
-
-
-
 
 public class MazeGameActivity extends Activity
 {
@@ -44,7 +35,8 @@ public class MazeGameActivity extends Activity
 	{
 		public void run() 
 		{
-			MazeGameActivity.this.runOnUiThread(new Runnable() {
+			MazeGameActivity.this.runOnUiThread(new Runnable() 
+			{
 				
 				@Override
 				public void run()
@@ -60,31 +52,48 @@ public class MazeGameActivity extends Activity
 			});
 	    }
 	}
+	
 	// region members
 
 	/**
 	 * Initialize members
 	 */
+	
 	private MazeView m_mazeView;
-	private GameLevel[] levels;
-
+	
+	// Monster members
 	private Monster m_monster;
+	private MonsterView monsterView;
+	
+	// Game Level members
+	private GameLevel[] levels;
 	private GameLevel m_currentLevel;
 	private GameLevelView gameLevelView;
-	private MonsterView monsterView;
+	
+	// Offset Circle members 
 	private StartOffsetCircleView circleView;
-	private ProgressWheel progressWheelView;
+	
+	// Timer members
+	private TimerWheel progressWheelView;
+	private Timer timerWheelThread = new Timer();
+	private final float timerGameOverInSeconds = 25;
+	private final float timerGameOverMinutes = ((float)timerGameOverInSeconds/60); 
+	private final long  timerGameOverInMilliseconds = ((long)(1000 * timerGameOverMinutes));
+	
+	// Camera members
 	private CameraHelper cameraHelper;
 	private Vibrator gameVibrator;
+	
+	// Design members 
 	public static int screenWidth, screenHeight;
-	Timer t = new Timer();
+	
 	// flag - true if the player has touched a wall.
 	public static boolean b_playerHasTouchedWall = false;
 
 	// flag - true if the player can move
 	public static boolean b_canMove = false;
 
-	//
+	// current level
 	public static int n_gameLevel = 0;
 
 	// endregion
@@ -105,33 +114,34 @@ public class MazeGameActivity extends Activity
 		// region initialise members
 
 		Display display = getWindowManager().getDefaultDisplay();
-		t = new Timer();
-		t.schedule(new timerTask(),5,5);
-		/*
-		 * api 13+ Point size = new Point(); display.getSize(size); screenWidth
-		 * = size.x; screenHeight = size.y;
-		 */
-
 		screenHeight = display.getHeight();
 		screenWidth = display.getWidth();
+		
+		timerWheelThread = new Timer();
+		timerWheelThread.schedule(new timerTask(),0,timerGameOverInMilliseconds);
 		
 		// Get instance of Vibrator from current Context
 		gameVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
 		b_playerHasTouchedWall = false;
-		n_gameLevel = 0;
+		
 		b_canMove = false;
+
 		initLevels();
+		n_gameLevel = 0;
 		m_currentLevel = new GameLevel1();
 		gameLevelView = new GameLevelView(this);
 		gameLevelView.setGameLevel(m_currentLevel);
-		progressWheelView = new ProgressWheel(this);
-		progressWheelView.spin();
+		
+		progressWheelView = new TimerWheel(this);
+		
 		m_monster = new Monster(m_currentLevel.getStartPosition().x,
 				m_currentLevel.getStartPosition().y);
 		monsterView = new MonsterView(this, m_monster);
+		
 		StartOffsetCircleView.Draw = true;
 		circleView = new StartOffsetCircleView(this,m_currentLevel.getStartPosition());
+		
 		m_mazeView = new MazeView(this);
 		m_mazeView.setViews(gameLevelView, monsterView, circleView,progressWheelView);
 
@@ -144,7 +154,6 @@ public class MazeGameActivity extends Activity
 	 * 
 	 * @see android.app.Activity#onTouchEvent(android.view.MotionEvent)
 	 */
-	@SuppressWarnings("unused")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) 
 	{
@@ -157,6 +166,7 @@ public class MazeGameActivity extends Activity
 			
 		}
 		StartOffsetCircleView.Draw = false;
+		
 		if (b_playerHasTouchedWall) 
 		{
 			return super.onTouchEvent(event);
@@ -255,10 +265,14 @@ public class MazeGameActivity extends Activity
 	 * @param event
 	 */
 	@SuppressLint("NewApi")
-	private void onTouchWall(MotionEvent event) {
+	private void onTouchWall(MotionEvent event) 
+	{
 		// Gets The Motion Action Type.
 		final int action = event.getAction();
-		t.cancel();
+		
+		// Stops the timer wheel thread
+		timerWheelThread.cancel();
+		
 		// Safe Check - The New Intent Will Be Created Only If The Player
 		// Touches
 		// The Wall While Moving Is Finger - On Slide Only.
@@ -298,7 +312,10 @@ public class MazeGameActivity extends Activity
 	{
 		// Gets The Motion Action Type.
 		final int action = event.getAction();
-		t.cancel();
+		
+		// Stops the timer wheel thread
+		timerWheelThread.cancel();
+		
 		// Safe Check - The New Intent Will Be Created Only If The Player
 		// Touches
 		// The Wall While Moving Is Finger - On Slide Only.
@@ -337,7 +354,8 @@ public class MazeGameActivity extends Activity
 		setContentView(m_mazeView);
 	}
 	
-	private void onFinishLevel() {
+	private void onFinishLevel()
+	{
 		
 		if(n_gameLevel < levels.length)
 		{
@@ -348,7 +366,8 @@ public class MazeGameActivity extends Activity
 		}
 	}
 
-	private void initLevels() {
+	private void initLevels()
+	{
 		levels = new GameLevel[3];
 		levels[0] = new GameLevel1();
 		levels[1] = new GameLevel2();
@@ -359,8 +378,6 @@ public class MazeGameActivity extends Activity
 	private boolean initOffsetCircle(MotionEvent event)
 	{
 
-		
-			
 	        int x = (int)event.getX();
 	        int y = (int)event.getY();
 	        
@@ -371,8 +388,6 @@ public class MazeGameActivity extends Activity
 			        if(circleView.IsTouchCircle(x,y))
 			        {
 			        	PointF circleCenter = StartOffsetCircleView.CircleCenter;
-			        	float radius = Monster.RADIUS;
-			        	
 			        	Monster.Y_OFFSET =  -(y - (circleCenter.y));
 			        	Monster.X_OFFSET =  -(x - (circleCenter.x));
 			    		StartOffsetCircleView.Draw = false;
@@ -392,16 +407,16 @@ public class MazeGameActivity extends Activity
 		}
 		
 		
-		public void onTimeEnd()
-		{
-			// Making An Intent Of The Maze Game Start Menu Activity.
-			Intent intent = new Intent(this, GenericGameActivity.class);
-			t.cancel();
-			// Starting The Activity.
-			startActivity(intent);
-			
-		}
-	
+	public void onTimeEnd()
+	{
+		// Making An Intent Of The Maze Game Start Menu Activity.
+		Intent intent = new Intent(this, GenericGameActivity.class);
+		timerWheelThread.cancel();
+		// Starting The Activity.
+		startActivity(intent);
+		
+	}
+
 	
 	// endregion
 }

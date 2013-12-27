@@ -27,7 +27,7 @@ public abstract class GameLevel
 		
     
     // Space from the top screen from which the Walls will be drawn 
-    public static final float TOP_PADDING = ((0.25f) * 
+    public static final float TOP_PADDING = ((0.5f) * 
     		Math.max((MazeGameActivity.screenHeight - MazeGameActivity.screenWidth), 0));
  
     // Space from the top screen from which the Walls will be drawn 
