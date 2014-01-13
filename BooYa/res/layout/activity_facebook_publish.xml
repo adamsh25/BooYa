@@ -6,44 +6,20 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <!-- Login to facebook -->
-
-    <Button
-            android:id="@+id/button_login"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="10dp"
-            android:text="Login" />
-
-    <!-- Logout to facebook -->
-
-    <Button
-            android:id="@+id/button_logout"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="10dp"
-            android:text="Logout" />
-
-    <!-- Status of login/logout -->
-
     <TextView
             android:id="@+id/text_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/button_login"
             android:layout_centerHorizontal="true"
             android:text="" />
+    
     <Button
             android:id="@+id/publishButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:gravity="center"
-            android:layout_below="@id/button_login"
+            android:layout_below="@id/text_status"
             android:text="@string/facebook.publish.button"
             />
 

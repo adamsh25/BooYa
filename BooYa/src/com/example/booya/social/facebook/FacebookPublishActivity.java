@@ -18,13 +18,10 @@ import com.sromku.simple.fb.entities.Video;
 import java.io.File;
 
 /**
- * User: Rony
+ * User: ronlut
  * Date: 23/11/13 15:03
  */
 public class FacebookPublishActivity extends Activity {
-    private final String FACEBOOK_APP_ID = "696649103679042";
-    private final String FACEBOOK_APP_NAMESPACE = "booya-app";
-    private final SessionDefaultAudience FACEBOOK_DEFAULT_AUDIENCE = SessionDefaultAudience.EVERYONE;
     private final String TAG = FacebookPublishActivity.class.getName();
 
     private SimpleFacebook mSimpleFacebook;
@@ -33,11 +30,6 @@ public class FacebookPublishActivity extends Activity {
     private Button mButtonLogout;
     private TextView mTextStatus;
     private Button mButtonPublish;
-
-    private final Permissions[] NEEDED_PERMISSIONS = new Permissions[]
-            {
-                    Permissions.PUBLISH_STREAM
-            };
 
     // Login listener
     private SimpleFacebook.OnLoginListener mOnLoginListener = new SimpleFacebook.OnLoginListener()
@@ -116,32 +108,10 @@ public class FacebookPublishActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
-                .setAppId(FACEBOOK_APP_ID)
-                .setNamespace(FACEBOOK_APP_NAMESPACE)
-                .setPermissions(NEEDED_PERMISSIONS)
-                .setDefaultAudience(FACEBOOK_DEFAULT_AUDIENCE)
-                .build();
-        SimpleFacebook.setConfiguration(configuration);
-
+        
         setContentView(R.layout.activity_facebook_publish);
 
         initUI();
-
-        mButtonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSimpleFacebook.login(mOnLoginListener);
-            }
-        });
-
-        mButtonLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSimpleFacebook.logout(mOnLogoutListener);
-            }
-        });
 
         mButtonPublish.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,8 +178,6 @@ public class FacebookPublishActivity extends Activity {
 
     private void initUI()
     {
-        mButtonLogin = (Button)findViewById(R.id.button_login);
-        mButtonLogout = (Button)findViewById(R.id.button_logout);
         mTextStatus = (TextView)findViewById(R.id.text_status);
         mButtonPublish = (Button)findViewById(R.id.publishButton);
     }
@@ -228,16 +196,16 @@ public class FacebookPublishActivity extends Activity {
 
     private void loggedInUIState()
     {
-        mButtonLogin.setEnabled(false);
-        mButtonLogout.setEnabled(true);
+        //mButtonLogin.setEnabled(false);
+        //mButtonLogout.setEnabled(true);
         mButtonPublish.setEnabled(true);
         mTextStatus.setText("Logged in");
     }
 
     private void loggedOutUIState()
     {
-        mButtonLogin.setEnabled(true);
-        mButtonLogout.setEnabled(false);
+        //mButtonLogin.setEnabled(true);
+        //mButtonLogout.setEnabled(false);
         mButtonPublish.setEnabled(false);
         mTextStatus.setText("Logged out");
     }
