@@ -9,11 +9,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.booya.R;
-import com.facebook.SessionDefaultAudience;
-import com.sromku.simple.fb.Permissions;
+import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SimpleFacebook;
-import com.sromku.simple.fb.SimpleFacebookConfiguration;
 import com.sromku.simple.fb.entities.Video;
+import com.sromku.simple.fb.listeners.OnLoginListener;
+import com.sromku.simple.fb.listeners.OnLogoutListener;
+import com.sromku.simple.fb.listeners.OnPublishListener;
 
 import java.io.File;
 
@@ -32,7 +33,7 @@ public class FacebookPublishActivity extends Activity {
     private Button mButtonPublish;
 
     // Login listener
-    private SimpleFacebook.OnLoginListener mOnLoginListener = new SimpleFacebook.OnLoginListener()
+    private OnLoginListener mOnLoginListener = new OnLoginListener()
     {
         @Override
         public void onFail(String reason)
@@ -64,14 +65,13 @@ public class FacebookPublishActivity extends Activity {
         }
 
         @Override
-        public void onNotAcceptingPermissions()
-        {
+        public void onNotAcceptingPermissions(Permission.Type type) {
             toast("You didn't accept read permissions");
         }
     };
 
     // Logout listener
-    private SimpleFacebook.OnLogoutListener mOnLogoutListener = new SimpleFacebook.OnLogoutListener()
+    private OnLogoutListener mOnLogoutListener = new OnLogoutListener()
     {
 
         @Override
@@ -137,7 +137,7 @@ public class FacebookPublishActivity extends Activity {
 
     private void publishDummyVideo() {
         // create publish listener
-        SimpleFacebook.OnPublishListener onPublishListener = new SimpleFacebook.OnPublishListener()
+        OnPublishListener onPublishListener = new OnPublishListener()
         {
 
             @Override
@@ -168,9 +168,11 @@ public class FacebookPublishActivity extends Activity {
         };
 
         // create Video instace and add some properties
-        Video videoObj = new Video(new File("/sdcard/dummy.mp4"));
-        videoObj.addDescription("Dummy Description #hashtag");
-        videoObj.addTitle("Dummy Title");
+        Video videoObj = new Video.Builder()
+        .setVideo(new File("/sdcard/dummy.mp4"))
+        .setDescription("Dummy Description #hashtag")
+        .setName("Dummy Title")
+        .build();
 
         // publish video to Videos album
         mSimpleFacebook.publish(videoObj, onPublishListener);
