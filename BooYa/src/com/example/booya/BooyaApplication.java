@@ -6,8 +6,6 @@ import com.sromku.simple.fb.SimpleFacebookConfiguration;
 
 import android.app.Application;
 
-//TODO: move to publish activity?
-
 public class BooyaApplication extends Application {
 	private static BooyaApplication singleton;
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 import com.example.booya.R;
 import com.sromku.simple.fb.Permission;
@@ -65,7 +66,6 @@ public class FacebookPublishActivity extends Activity {
     // Logout listener
     private OnLogoutListener mOnLogoutListener = new OnLogoutListener()
     {
-
         @Override
         public void onFail(String reason)
         {
@@ -94,12 +94,10 @@ public class FacebookPublishActivity extends Activity {
             toast("Logged out");
             toast("You are logged out");
         }
-
     };
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
         setContentView(R.layout.activity_facebook_publish);
     }
 
@@ -116,7 +114,10 @@ public class FacebookPublishActivity extends Activity {
         mSimpleFacebook.onActivityResult(this, requestCode, resultCode, data);
     }
 
-    private void publishDummyVideo() {
+    public void publishDummyVideo(View view) {
+
+        if (!mSimpleFacebook.isLogin())
+            mSimpleFacebook.login(mOnLoginListener);
 
         // create publish listener
         OnPublishListener onPublishListener = new OnPublishListener()
@@ -155,7 +156,7 @@ public class FacebookPublishActivity extends Activity {
         .setVideo(new File("/sdcard/dummy.mp4"))
         .setDescription("Dummy Description #hashtag")
         .setName("Dummy Title") //title
-        .setPrivacy(privacy)
+        .setPrivacy(privacy) //TODO: remove
         .build();
 
         // publish video to Videos album
