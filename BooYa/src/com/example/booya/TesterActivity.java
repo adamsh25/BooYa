@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -49,6 +48,11 @@ public class TesterActivity extends Activity {
 	    Intent intent = new Intent(this, CameraRecorder.class);
 	    startActivity(intent);
 	}
+
+    public void launchSocialSettings(View view) {
+        Intent intent = new Intent(this, SocialSettingsActivity.class);
+        startActivity(intent);
+    }
 	public static Boolean getIsDebugMode()
 	{
 		return bIsDUBUG;

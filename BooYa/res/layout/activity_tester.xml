@@ -55,6 +55,15 @@
             android:onClick="launchFacebookTester"
             android:text="Facebook Tester" />
 
+    <Button
+            android:id="@+id/btnSocialSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btnFacebookTester"
+            android:layout_centerHorizontal="true"
+            android:onClick="launchSocialSettings"
+            android:text="Social Settings" />
+
     <CheckBox
         android:id="@+id/checkBox1"
         android:layout_width="wrap_content"
@@ -65,7 +74,7 @@
         android:layout_marginLeft="28dp"
         android:layout_marginTop="64dp"
         android:checked="true"
-        android:text="Involve Camera Stuff" 
+        android:text="Involve Camera Stuff"
         android:onClick="onCheckboxClicked"/>
 
 </RelativeLayout>
