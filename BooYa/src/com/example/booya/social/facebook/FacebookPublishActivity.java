@@ -12,7 +12,6 @@ import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.entities.Privacy;
 import com.sromku.simple.fb.entities.Video;
 import com.sromku.simple.fb.listeners.OnLoginListener;
-import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnPublishListener;
 
 import java.io.File;
@@ -33,7 +32,8 @@ public class FacebookPublishActivity extends Activity {
         public void onFail(String reason)
         {
             toast(reason);
-            Log.w(TAG, "Failed to login");
+            Log.w(TAG, "Failed to login: " + reason);
+            finish();
         }
 
         @Override
@@ -41,58 +41,27 @@ public class FacebookPublishActivity extends Activity {
         {
             toast("Exception: " + throwable.getMessage());
             Log.e(TAG, "Bad thing happened", throwable);
+            finish();
         }
 
         @Override
         public void onThinking()
         {
             // show progress bar or something to the user while login is happening
-            toast("Thinking...");
+//            toast("Thinking...");
         }
 
         @Override
         public void onLogin()
         {
             // change the state of the button or do whatever you want
-            toast("Logged in");
+//            toast("Succesfully logged in");
         }
 
         @Override
         public void onNotAcceptingPermissions(Permission.Type type) {
             toast(String.format("You didn't accept %s permissions", type.name()));
-        }
-    };
-
-    // Logout listener
-    private OnLogoutListener mOnLogoutListener = new OnLogoutListener()
-    {
-        @Override
-        public void onFail(String reason)
-        {
-            toast(reason);
-            Log.w(TAG, "Failed to login");
-        }
-
-        @Override
-        public void onException(Throwable throwable)
-        {
-            toast("Exception: " + throwable.getMessage());
-            Log.e(TAG, "Bad thing happened", throwable);
-        }
-
-        @Override
-        public void onThinking()
-        {
-            // show progress bar or something to the user while login is happening
-            toast("Thinking...");
-        }
-
-        @Override
-        public void onLogout()
-        {
-            // change the state of the button or do whatever you want
-            toast("Logged out");
-            toast("You are logged out");
+            finish();
         }
     };
 
@@ -115,7 +84,6 @@ public class FacebookPublishActivity extends Activity {
     }
 
     public void publishDummyVideo(View view) {
-
         if (!mSimpleFacebook.isLogin())
             mSimpleFacebook.login(mOnLoginListener);
 
@@ -127,25 +95,30 @@ public class FacebookPublishActivity extends Activity {
             {
                 // insure that you are logged in before publishing
                 Log.w(TAG, reason);
+                toast(String.format("Failed to publish, reason: %s", reason));
+                finish();
             }
 
             @Override
             public void onException(Throwable throwable)
             {
                 Log.e(TAG, "Bad thing happened", throwable);
+                finish();
             }
 
             @Override
             public void onThinking()
             {
                 // show progress bar or something to the user while publishing
-                Log.i(TAG, "In progress");
+//                Log.i(TAG, "In progress");
             }
 
             @Override
             public void onComplete(String id)
             {
                 Log.i(TAG, "Published successfully. id = " + id);
+                toast("Successfully published!");
+                finish();
             }
         };
 
@@ -153,11 +126,12 @@ public class FacebookPublishActivity extends Activity {
 
         // create Video instace and add some properties
         Video videoObj = new Video.Builder()
-        .setVideo(new File("/sdcard/dummy.mp4"))
-        .setDescription("Dummy Description #hashtag")
-        .setName("Dummy Title") //title
-        .setPrivacy(privacy) //TODO: remove
-        .build();
+                .setVideo(new File("/sdcard/dummy.mp4"))
+                .setDescription("Download #BooYa now: https://play.google.com/store/apps/details?id=com.example.booya") //TODO: change to real url!
+//                .setName("I scared the hell out of *friend's name*!") //title
+                .setName("New grave in my BooYa graveyard!") //title
+                .setPrivacy(privacy) //TODO: remove
+                .build();
 
         // publish video to Videos album
         mSimpleFacebook.publish(videoObj, onPublishListener);
@@ -165,6 +139,6 @@ public class FacebookPublishActivity extends Activity {
 
     private void toast(String message)
     {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 }

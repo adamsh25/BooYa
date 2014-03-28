@@ -8,25 +8,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="60dp"
             android:text="Social Settings"
-            android:textSize="30sp"/>
+            android:textSize="45sp"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Facebook"
             android:id="@+id/textFacebookSocialSettings"
-            android:textSize="30dp"
-            android:layout_marginTop="60px"
-            android:layout_marginLeft="45px"
+            android:textSize="30sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
             android:layout_below="@id/textSocialSettings"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign In"
             android:id="@+id/btnFacebookLoginLogout"
-            android:layout_alignTop="@+id/textFacebookSocialSettings" android:layout_alignParentRight="true"
-            android:layout_marginRight="59dp"
+            android:layout_alignTop="@+id/textFacebookSocialSettings"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="40dp"
             android:onClick="onFacebookBtnClick"/>
 
 
