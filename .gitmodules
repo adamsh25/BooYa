@@ -1,0 +1,6 @@
+[submodule "external/facebook-android-sdk"]
+	path = external/facebook-android-sdk
+	url = https://github.com/ronlut/facebook-android-sdk.git
+[submodule "external/android-simple-facebook"]
+	path = external/android-simple-facebook
+	url = https://github.com/sromku/android-simple-facebook.git
