@@ -63,4 +63,8 @@ public class TesterActivity extends Activity {
 	    
 	}
 
+    public void launchFFMPEG(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
 }

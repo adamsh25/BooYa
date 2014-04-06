@@ -46,6 +46,15 @@
         android:onClick="launchMazeTester"
         android:text="Maze Game" />
 
+    <Button
+            android:id="@+id/btmFFMPEG"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btmMazeTester"
+            android:layout_centerHorizontal="true"
+            android:onClick="launchFFMPEG"
+            android:text="FFMPEG" />
+
     <CheckBox
         android:id="@+id/checkBox1"
         android:layout_width="wrap_content"
