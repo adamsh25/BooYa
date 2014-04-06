@@ -21,6 +21,7 @@ public class RecordingService extends Service
 				{
 					CameraHelper.getInstance().StartRecording();
 				}
+
 			});
 	Thread stopThread = new Thread(
 			new Runnable()
