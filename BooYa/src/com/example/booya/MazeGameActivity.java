@@ -3,6 +3,10 @@ package com.example.booya;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import java.util.EventListener;
+
+import android.graphics.*;
+import android.view.*;
 import com.example.booya.R;
 import com.example.booya.BL.GameLevel;
 import com.example.booya.BL.GameLevel1;
@@ -19,6 +23,7 @@ import com.example.booya.video.recording.CameraHelper;
 
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -27,6 +32,12 @@ import android.graphics.PointF;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MotionEvent;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+
+import com.example.booya.video.recording.RecordingService;
 
 public class MazeGameActivity extends Activity
 {
@@ -86,6 +97,12 @@ public class MazeGameActivity extends Activity
 	
 	// Design members 
 	public static int screenWidth, screenHeight;
+	private SurfaceView camSurface;
+	private View dynamicView;
+	private boolean n_Start_Rec =false;
+	public static boolean n_Surface_Gone =false;
+
+
 	
 	// flag - true if the player has touched a wall.
 	public static boolean b_playerHasTouchedWall = false;
@@ -105,6 +122,7 @@ public class MazeGameActivity extends Activity
 	 * 
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
+	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -114,7 +132,13 @@ public class MazeGameActivity extends Activity
 		// region initialise members
 
 		Display display = getWindowManager().getDefaultDisplay();
-		screenHeight = display.getHeight();
+
+		/*
+		 * api 13+ Point size = new Point(); display.getSize(size); screenWidth
+		 * = size.x; screenHeight = size.y;
+		 */
+
+		screenHeight = display.getHeight() - 1;
 		screenWidth = display.getWidth();
 		
 		timerWheelThread = new Timer();
@@ -145,8 +169,21 @@ public class MazeGameActivity extends Activity
 		m_mazeView = new MazeView(this);
 		m_mazeView.setViews(gameLevelView, monsterView, circleView,progressWheelView);
 
+		
+		
 		// endregion
-		setContentView(m_mazeView);
+		
+		LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		dynamicView = vi.inflate(R.layout.activity_maze_game, null);
+		
+		LinearLayout ll = (LinearLayout) dynamicView.findViewById(R.id.testing);
+		// insert into main view
+		ll.addView(m_mazeView);
+		setContentView(dynamicView);
+		camSurface = (SurfaceView) findViewById(R.id.dummySurface);
+
+        camSurface.setVisibility(SurfaceView.GONE);
+		//addContentView(camSurface, new LayoutParams(LayoutParams.WRAP_CONTENT));
 	}
 
 	/*
@@ -157,6 +194,21 @@ public class MazeGameActivity extends Activity
 	@Override
 	public boolean onTouchEvent(MotionEvent event) 
 	{
+		if (n_Start_Rec) 
+		{
+            CameraHelper c = CameraHelper.getInstance();
+            c.SetSurfaceView(camSurface);
+            Intent i = new Intent(this, RecordingService.class);
+            startService(i);
+            n_Start_Rec = false;
+	    }
+
+        if (!n_Surface_Gone && CameraHelper.getInstance().isRecording) {
+            //camSurface.setVisibility(SurfaceView.GONE);
+            ((RelativeLayout)findViewById(R.id.relative)).removeView(camSurface);
+            n_Surface_Gone = true;
+        }
+	
 		if(StartOffsetCircleView.Draw == true)
 		{
 			if(!initOffsetCircle(event))
@@ -237,7 +289,26 @@ public class MazeGameActivity extends Activity
 
 		// Paint The Game With The New Monster Position.
 		m_mazeView.setViews(gameLevelView, monsterView, circleView,progressWheelView);
-		setContentView(m_mazeView);
+        //camSurface.draw(canvas);
+		setContentView(dynamicView);
+		
+//		if(!n_Surface_Gone)
+//		{
+//		setContentView(dynamicView);
+//		}
+//		else
+//		{
+//			LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//			RelativeLayout root = (RelativeLayout) inflater.inflate(R.layout.activity_maze_game, null);
+//			
+//			LinearLayout ll = (LinearLayout) root.findViewById(R.id.testing);
+//			
+//			((ViewGroup)m_mazeView.getParent()).removeView(m_mazeView);
+//			((ViewGroup)ll.getParent()).removeView(ll);
+//
+//
+//			setContentView(m_mazeView);
+//		}
 
 		return (super.onTouchEvent(event));
 
@@ -283,19 +354,21 @@ public class MazeGameActivity extends Activity
 			// Vibrate
 
 			// Output yes if can vibrate, no otherwise
-			//if (gameVibrator.hasVibrator()) 
-			{
-				gameVibrator.vibrate(400);
-			}
-
+//			if (gameVibrator.hasVibrator()) 
+//			{
+//				gameVibrator.vibrate(400);
+//			}
+ 
 			// Check if have front camera
-			if (TesterActivity.bHasFrontCamera) {
+			if (CameraHelper.getInstance().isRecording) {
 				// // Stopping the service, which stops the video recording
 				// Intent intentService = new Intent(this,
 				// RecorderService.class);
 				// intentService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				// stopService(intentService);
-				   cameraHelper.StopRecording();
+				//  cameraHelper.StopRecording();
+				Intent i = new Intent(this, RecordingService.class);
+				stopService(i);
 			}
 
 			// Making An Intent Of The Maze Game Start Menu Activity.
@@ -351,11 +424,11 @@ public class MazeGameActivity extends Activity
 		circleView = new StartOffsetCircleView(this,levels[n_gameLevel].getStartPosition());
 		// Set The Views To Paint The Monster In Start Position
 		m_mazeView.setViews(gameLevelView, monsterView, circleView, progressWheelView);
-		setContentView(m_mazeView);
+		setContentView(dynamicView);
 	}
 	
-	private void onFinishLevel()
-	{
+	@SuppressLint("NewApi")
+	private void onFinishLevel() {
 		
 		if(n_gameLevel < levels.length)
 		{
@@ -364,6 +437,27 @@ public class MazeGameActivity extends Activity
 			gameLevelView = new GameLevelView(this);
 			gameLevelView.setGameLevel(m_currentLevel);
 		}
+		
+		if(n_gameLevel ==2)
+		{
+			camSurface.setVisibility(SurfaceView.VISIBLE);
+//            ((RelativeLayout)findViewById(R.id.relative)).removeView(camSurface);
+//            setContentView(dynamicView);
+			n_Start_Rec = true;
+		}
+		
+//		if(n_gameLevel == 1)
+//		{
+//			CameraHelper c = CameraHelper.getInstance();
+//			c.SetSurfaceView(camSurface);
+//			Intent i = new Intent(this, RecordingService.class);
+//			startService(i);
+//		}
+//		if (n_gameLevel == 2)
+//		{
+//			Intent i = new Intent(this, RecordingService.class);
+//			stopService(i);
+//		}
 	}
 
 	private void initLevels()
