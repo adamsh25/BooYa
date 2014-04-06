@@ -2,6 +2,7 @@ package com.example.booya;
 
 
 import com.example.booya.video.recording.CameraHelper;
+import com.example.booya.video.recording.RecordingService;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -38,7 +39,9 @@ public class ScaryFigureActivity extends Activity {
 //		Intent intent = new Intent(this, RecorderService.class);
 //		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //		stopService(intent);
-		CameraHelper.getInstance().StopRecording();
+//		CameraHelper.getInstance().StopRecording();
+		Intent i = new Intent(this, RecordingService.class);
+		stopService(i);
 	}
 	
     protected void onPause() {
