@@ -1,6 +1,8 @@
 package com.example.booya;
 
 
+import android.os.Handler;
+import android.widget.Toast;
 import com.example.booya.video.recording.CameraHelper;
 import com.example.booya.video.recording.RecordingService;
 
@@ -10,15 +12,39 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 
+import java.sql.Time;
+import java.util.TimerTask;
+
 public class ScaryFigureActivity extends Activity {
-	private MediaPlayer mediaPlayer;
+    final Runnable runnable  = new Runnable() {
+        public void run() {
+            Intent i = new Intent(getBaseContext(), TesterActivity.class);
+            startActivity(i);
+        }
+    };
+
+    Thread soundThread = new Thread(
+            new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    playScarySound();
+                    Handler handler = new Handler();
+                    handler.postDelayed(runnable, 3000);
+                }
+
+            });
+
+    private MediaPlayer mediaPlayer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scary_figure);
-		
-		playScarySound();
+
+        soundThread.run();
+		//playScarySound();
 	}
 
 	@Override
