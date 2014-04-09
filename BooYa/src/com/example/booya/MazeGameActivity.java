@@ -19,6 +19,7 @@ import com.example.booya.UI.Views.MazeView;
 import com.example.booya.UI.Views.MonsterView;
 import com.example.booya.UI.Views.TimerWheel;
 import com.example.booya.UI.Views.StartOffsetCircleView;
+import com.example.booya.video.processing.BooyaFFMPEG;
 import com.example.booya.video.recording.CameraHelper;
 
 import android.os.Bundle;
@@ -409,6 +410,8 @@ public class MazeGameActivity extends Activity
 
 			// Starting The Activity.
 			startActivity(intent);
+
+
 
 		}
 

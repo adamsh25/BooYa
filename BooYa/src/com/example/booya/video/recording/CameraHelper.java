@@ -2,8 +2,10 @@ package com.example.booya.video.recording;
 
 import java.io.IOException;
 
+import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
+import android.media.AudioManager;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Parcel;
@@ -19,7 +21,7 @@ public class CameraHelper {
 	private Camera camera;
 	private MediaRecorder recorder;
 	private int frontFacingCameraId;
-	public boolean isRecording;
+	public boolean isRecording = false;
 
 	public CameraHelper() {
 		frontFacingCameraId = findFrontFacingCameraId();
@@ -43,8 +45,10 @@ public class CameraHelper {
 	 * Starts recording if hasn't already.
 	 */
 	public void StartRecording() {
-		if (isRecording)
-			return;
+		if (isRecording) {
+            Log.d(TAG, "Asked to start, but already recording");
+            return;
+        }
 		
 		camera = Camera.open(frontFacingCameraId);
 		camera.unlock();
@@ -77,20 +81,22 @@ public class CameraHelper {
 		try {
 			recorder.prepare();
 			recorder.start();
+            Log.i(TAG, "Started recording");
+            isRecording = true;
 		} catch (IllegalStateException ise) {
 
 		} catch (IOException ioe) {
 			Log.d(TAG, "prepare failed");
 			ioe.printStackTrace();
 		}
-
-		isRecording = true;
 	}
 
 	public void StopRecording() {
-		if (!isRecording)
-			return;
-		
+		if (!isRecording) {
+            Log.d(TAG, "Asked to stop, but already stopped");
+            return;
+        }
+
 		recorder.stop();
 		recorder.reset();
 		recorder.release();
@@ -99,6 +105,7 @@ public class CameraHelper {
 		recorder = null;
 		camera.release();
 
+        Log.i(TAG, "Stopped recording");
 		isRecording = false;
 	}
 

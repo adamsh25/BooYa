@@ -18,14 +18,15 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
         BooyaFFMPEG a = new BooyaFFMPEG(getBaseContext());
+        a.execute("a");
 
-        try {
-            a.CreateBooyaVideo("/sdcard/videokit/video.mp4", "/sdcard/videokit/outFull.mp4");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            a.CreateBooyaVideo("/sdcard/videokit/video.mp4", "/sdcard/videokit/outFull.mp4");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 /*	     Intent i = new Intent();     
 	       startActivity(i);*/
 	}

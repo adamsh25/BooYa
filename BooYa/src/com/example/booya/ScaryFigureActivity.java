@@ -1,8 +1,12 @@
 package com.example.booya;
 
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
+import com.example.booya.video.processing.BooyaFFMPEG;
 import com.example.booya.video.recording.CameraHelper;
 import com.example.booya.video.recording.RecordingService;
 
@@ -18,10 +22,26 @@ import java.util.TimerTask;
 public class ScaryFigureActivity extends Activity {
     final Runnable runnable  = new Runnable() {
         public void run() {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+            }
+            AudioManager mgr = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true);
+            stopRecording2(); //TODO: not good
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false);
+            while(CameraHelper.getInstance().isRecording) { //TODO: consider asynctask or thread
+                Log.d("3 sec thread", "waiting for camera to stop..");
+            }
+            BooyaFFMPEG a = new BooyaFFMPEG(getBaseContext());
+            a.execute("a");
             Intent i = new Intent(getBaseContext(), TesterActivity.class);
             startActivity(i);
         }
     };
+
+    private void stopRecording2() {
+        CameraHelper.getInstance().StopRecording();
+    }
 
     Thread soundThread = new Thread(
             new Runnable()
@@ -73,11 +93,7 @@ public class ScaryFigureActivity extends Activity {
     protected void onPause() {
         super.onPause();
         mediaPlayer.stop();
-        // Check if have front camera
- 		if(TesterActivity.bHasFrontCamera)
- 		{
- 			stopRecording();
- 		}
+        stopRecording();
     }
 
 }
