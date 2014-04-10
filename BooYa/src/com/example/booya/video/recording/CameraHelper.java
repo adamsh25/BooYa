@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceView;
 
+//documentation: http://developer.android.com/guide/topics/media/camera.html
+
 public class CameraHelper {
 	private static final CameraHelper INSTANCE = new CameraHelper();
 	private final String TAG = "CameraHelper";
