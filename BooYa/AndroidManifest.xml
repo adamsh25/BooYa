@@ -35,7 +35,8 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.example.booya.video.recording.RecordingService"/>
+        <service android:name=".video.recording.RecordingIntentService"
+                 android:exported="false"/>
 
         <activity
             android:name="com.example.booya.recording.GameActivity"

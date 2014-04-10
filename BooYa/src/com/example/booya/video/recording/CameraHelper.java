@@ -1,6 +1,7 @@
 package com.example.booya.video.recording;
 
 import java.io.IOException;
+import java.util.concurrent.Semaphore;
 
 import android.content.Context;
 import android.hardware.Camera;
@@ -22,6 +23,8 @@ public class CameraHelper {
 	private MediaRecorder recorder;
 	private int frontFacingCameraId;
 	public boolean isRecording = false;
+    public boolean shouldRecord = false;
+    private final Semaphore lock = new Semaphore(1);
 
 	public CameraHelper() {
 		frontFacingCameraId = findFrontFacingCameraId();
@@ -91,22 +94,156 @@ public class CameraHelper {
 		}
 	}
 
+    public void OpenCamera() {
+        lock.acquireUninterruptibly();
+
+        if (camera == null) {
+            camera = Camera.open(frontFacingCameraId);
+            Log.d(TAG, "Camera opened");
+        }
+
+        lock.release();
+    }
+
+    public void ReleaseCamera() {
+        lock.acquireUninterruptibly();
+
+        if (camera != null) {
+            camera.release();        // release the camera for other applications
+            Log.d(TAG, "Camera released");
+            camera = null;
+        }
+
+        lock.release();
+    }
+
+    private boolean PrepareVideoRecorder() {
+        recorder = new MediaRecorder();
+
+        // Step 1: Unlock and set camera to MediaRecorder
+        camera.unlock();
+        recorder.setCamera(camera);
+
+        // Step 2: Set sources
+        recorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
+        recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+        // recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+
+        // Step 3: Set a CamcorderProfile (requires API Level 8 or higher)
+        recorder.setProfile(CamcorderProfile.get(frontFacingCameraId,
+                CamcorderProfile.QUALITY_HIGH));
+
+        // Step 4: Set output file
+        recorder.setOutputFile("/sdcard/video.mp4"); // TODO: change to dir from db
+
+        //TODO: NEEDED?
+        recorder.setVideoFrameRate(15);
+
+        // Step 5: Set the preview output
+        recorder.setPreviewDisplay(previewSurface);
+
+        if (android.os.Build.VERSION.SDK_INT >= 9) {
+            // attempt to rotate the video 90 degrees.
+            try {
+                recorder.setOrientationHint(270);
+                Log.d(TAG, "orientation rotated 270");
+            } catch (IllegalArgumentException e) {
+                // TODO: couldn't set angle
+                Log.d(TAG, "error trying setOrientationHint" + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            Log.d(TAG, "orientation set skipped "); // TODO: schedule mp4 rotation with mp4parse/ffmpeg
+        }
+
+        // Step 6: Prepare configured MediaRecorder
+        try {
+            recorder.prepare();
+        } catch (IllegalStateException e) {
+            Log.d(TAG, "IllegalStateException preparing MediaRecorder: " + e.getMessage());
+            ReleaseMediaRecorder();
+            return false;
+        } catch (IOException e) {
+            Log.d(TAG, "IOException preparing MediaRecorder: " + e.getMessage());
+            ReleaseMediaRecorder();
+            return false;
+        }
+
+        return true;
+    }
+
+    private void ReleaseMediaRecorder() {
+        if (recorder != null) {
+            recorder.reset();   // clear recorder configuration
+            recorder.release(); // release the recorder object
+            Log.d(TAG, "MediaRecorder released");
+            recorder = null;
+            camera.lock();          // lock camera for later use
+        }
+    }
+
+    public void StartRecording2() {
+        lock.acquireUninterruptibly();
+
+        if (isRecording) {
+            lock.release();
+            Log.d(TAG, "Asked to start recording, but already recording");
+            return;
+        }
+
+        // initialize video camera
+        if (PrepareVideoRecorder()) {
+            // Camera is available and unlocked, MediaRecorder is prepared,
+            // now you can start recording
+            recorder.start();
+            isRecording = true;
+            shouldRecord = true;
+            Log.i(TAG, "Started recording");
+        } else {
+            // prepare didn't work, release the recorder
+            ReleaseMediaRecorder();
+        }
+
+        lock.release();
+    }
+
+    public void StopRecording2() {
+        lock.acquireUninterruptibly();
+
+        if (!isRecording) {
+            lock.release();
+            Log.d(TAG, "Asked to stop, but already stopped");
+            return;
+        }
+
+        recorder.stop();
+        ReleaseMediaRecorder();
+        Log.i(TAG, "Stopped recording");
+        isRecording = false;
+
+        lock.release();
+    }
+
+    public void ShouldNotRecord() {
+        shouldRecord = false;
+    }
+
 	public void StopRecording() {
 		if (!isRecording) {
             Log.d(TAG, "Asked to stop, but already stopped");
             return;
         }
 
-		recorder.stop();
-		recorder.reset();
-		recorder.release();
-		camera.stopPreview();
-		recorder.release();
-		recorder = null;
-		camera.release();
+        recorder.stop();
+        recorder.reset();
+        recorder.release();
+        camera.stopPreview();
+        recorder.release();
+        recorder = null;
+        camera.release();
 
         Log.i(TAG, "Stopped recording");
-		isRecording = false;
+        isRecording = false;
 	}
 
 	public int findFrontFacingCameraId() {

@@ -2,18 +2,13 @@ package com.example.booya.video.recording;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.PixelFormat;
-import android.hardware.Camera;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.SurfaceHolder;
+import android.os.*;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Button;
 
 import com.example.booya.R;
 
-public class CameraRecorder extends Activity 
+public class CameraRecorder extends Activity
 {
 	private final String TAG = "Recorder";
 	public SurfaceView mSurfaceView;
@@ -30,37 +25,34 @@ public class CameraRecorder extends Activity
 		mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView1);
 		
 		CameraHelper.getInstance().SetSurfaceView(mSurfaceView);
-//		mSurfaceHolder = mSurfaceView.getHolder();
-		//mSurfaceHolder.addCallback(this);
-		//mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-		
-		Button btnStart = (Button) findViewById(R.id.StartService);
-		btnStart.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				//Intent intent = new Intent(CameraRecorder.this, RecorderService.class);
-				//Intent intent2 = new Intent(CameraRecorder.this, GameActivity.class);
-				//intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				
-				CameraHelper.getInstance().StartRecording();
-				
-				// OR HERE
-				//startService(intent);
-			
-				//startActivity(intent2);
-				//finish();
-			}
-		});
+    }
 
-		Button btnStop = (Button) findViewById(R.id.StopService);
-		btnStop.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				//stopService(new Intent(CameraRecorder.this, RecorderService.class));
-				CameraHelper.getInstance().StopRecording();
-			}
-		});
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CameraHelper.getInstance().OpenCamera();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //TODO: handle phone orientation change. we should disable it in the maze game.
+        CameraHelper.getInstance().ShouldNotRecord();
+        Intent i = new Intent(this, RecordingIntentService.class);
+        i.setAction(RecordingIntentService.STOP_RELEASE_ACTION);
+        startService(i);
+    }
+
+    public void StartRec(View view) {
+        Intent i = new Intent(this, RecordingIntentService.class);
+        i.setAction(RecordingIntentService.START_ACTION);
+        startService(i);
+    }
+
+    public void StopRec(View view) {
+        CameraHelper.getInstance().ShouldNotRecord();
+        Intent i = new Intent(this, RecordingIntentService.class);
+        i.setAction(RecordingIntentService.STOP_ACTION);
+        startService(i);
     }
 }

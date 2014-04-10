@@ -5,19 +5,15 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 import com.example.booya.video.processing.BooyaFFMPEG;
 import com.example.booya.video.recording.CameraHelper;
-import com.example.booya.video.recording.RecordingService;
+import com.example.booya.video.recording.RecordingIntentService;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
-
-import java.sql.Time;
-import java.util.TimerTask;
 
 public class ScaryFigureActivity extends Activity {
     final Runnable runnable  = new Runnable() {
@@ -26,9 +22,9 @@ public class ScaryFigureActivity extends Activity {
                 mediaPlayer.stop();
             }
             AudioManager mgr = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true); //TODO: make it work
-            stopRecording2(); //TODO: not good
-            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false); //TODO: make it work
+            //mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true); //TODO: make it work
+            stopRecording(); //TODO: not good
+            //mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false); //TODO: make it work
             while(CameraHelper.getInstance().isRecording) { //TODO: consider asynctask or thread
                 Log.d("3 sec thread", "waiting for camera to stop..");
             }
@@ -86,8 +82,9 @@ public class ScaryFigureActivity extends Activity {
 //		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //		stopService(intent);
 //		CameraHelper.getInstance().StopRecording();
-		Intent i = new Intent(this, RecordingService.class);
-		stopService(i);
+		Intent i = new Intent(this, RecordingIntentService.class);
+        i.setAction(RecordingIntentService.STOP_ACTION);
+		startService(i);
 	}
 	
     protected void onPause() {
