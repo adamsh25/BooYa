@@ -3,6 +3,7 @@ package com.example.booya.video.recording;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.*;
+import android.os.Process;
 import android.view.SurfaceView;
 import android.view.View;
 
@@ -30,29 +31,34 @@ public class CameraRecorder extends Activity
     @Override
     protected void onResume() {
         super.onResume();
-        CameraHelper.getInstance().OpenCamera();
+        Intent i = new Intent(this, RecordingIntentService.class);
+        i.setAction(RecordingIntentService.OPEN_ACTION);
+        startService(i);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         //TODO: handle phone orientation change. we should disable it in the maze game.
-        CameraHelper.getInstance().ShouldNotRecord();
+        RecordingIntentService.setShouldRecord(false);
         Intent i = new Intent(this, RecordingIntentService.class);
         i.setAction(RecordingIntentService.STOP_RELEASE_ACTION);
+        //i.putExtra(RecordingIntentService.DELAY_SECONDS, 3);
         startService(i);
     }
 
     public void StartRec(View view) {
         Intent i = new Intent(this, RecordingIntentService.class);
         i.setAction(RecordingIntentService.START_ACTION);
+        i.putExtra(RecordingIntentService.THREAD_PRIORITY, Process.THREAD_PRIORITY_BACKGROUND);
         startService(i);
     }
 
     public void StopRec(View view) {
-        CameraHelper.getInstance().ShouldNotRecord();
+        RecordingIntentService.setShouldRecord(false);
         Intent i = new Intent(this, RecordingIntentService.class);
         i.setAction(RecordingIntentService.STOP_ACTION);
+        //i.putExtra(RecordingIntentService.THREAD_PRIORITY, Process.THREAD_PRIORITY_BACKGROUND);
         startService(i);
     }
 }

@@ -25,7 +25,6 @@ public class CameraHelper {
 	private MediaRecorder recorder;
 	private int frontFacingCameraId;
 	public boolean isRecording = false;
-    public boolean shouldRecord = false;
     private final Semaphore lock = new Semaphore(1);
 
 	public CameraHelper() {
@@ -199,7 +198,6 @@ public class CameraHelper {
             // now you can start recording
             recorder.start();
             isRecording = true;
-            shouldRecord = true;
             Log.i(TAG, "Started recording");
         } else {
             // prepare didn't work, release the recorder
@@ -224,10 +222,6 @@ public class CameraHelper {
         isRecording = false;
 
         lock.release();
-    }
-
-    public void ShouldNotRecord() {
-        shouldRecord = false;
     }
 
 	public void StopRecording() {
