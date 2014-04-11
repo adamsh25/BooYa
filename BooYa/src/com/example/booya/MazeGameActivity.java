@@ -3,6 +3,8 @@ package com.example.booya;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.os.*;
+import android.os.Process;
 import android.view.*;
 import com.example.booya.BL.GameLevel;
 import com.example.booya.BL.GameLevel1;
@@ -17,8 +19,6 @@ import com.example.booya.UI.Views.TimerWheel;
 import com.example.booya.UI.Views.StartOffsetCircleView;
 import com.example.booya.video.recording.CameraHelper;
 
-import android.os.Bundle;
-import android.os.Vibrator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -183,20 +183,45 @@ public class MazeGameActivity extends Activity
 		//addContentView(camSurface, new LayoutParams(LayoutParams.WRAP_CONTENT));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onTouchEvent(android.view.MotionEvent)
-	 */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Intent i = new Intent(this, RecordingIntentService.class);
+        i.setAction(RecordingIntentService.OPEN_ACTION);
+        startService(i);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        RecordingIntentService.setShouldRecord(false);
+        Intent i = new Intent(this, RecordingIntentService.class);
+        i.setAction(RecordingIntentService.STOP_RELEASE_ACTION);
+
+        if (!b_playerHasTouchedWall) {
+            i.putExtra(RecordingIntentService.DELAY_SECONDS, 3);
+            i.putExtra(RecordingIntentService.THREAD_PRIORITY, android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        }
+
+        startService(i);
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see android.app.Activity#onTouchEvent(android.view.MotionEvent)
+     */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) 
 	{
 		if (n_Start_Rec) 
 		{
-            CameraHelper c = CameraHelper.getInstance();
-            c.SetSurfaceView(camSurface);
+            CameraHelper.getInstance().SetSurfaceView(camSurface);
             Intent i = new Intent(this, RecordingIntentService.class);
             i.setAction(RecordingIntentService.START_ACTION);
+            i.putExtra(RecordingIntentService.THREAD_PRIORITY, Process.THREAD_PRIORITY_BACKGROUND);
             startService(i);
             n_Start_Rec = false;
 	    }
@@ -356,7 +381,9 @@ public class MazeGameActivity extends Activity
 //			{
 //				gameVibrator.vibrate(400);
 //			}
- 
+
+
+
 			// Check if have front camera
 			if (CameraHelper.getInstance().isRecording) {
 				// // Stopping the service, which stops the video recording
@@ -365,18 +392,20 @@ public class MazeGameActivity extends Activity
 				// intentService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				// stopService(intentService);
 				//  cameraHelper.StopRecording();
-				Intent i = new Intent(this, RecordingIntentService.class);
+                RecordingIntentService.setShouldRecord(false);
+                Intent i = new Intent(this, RecordingIntentService.class);
                 i.setAction(RecordingIntentService.STOP_ACTION);
-				startService(i);
+                //i.putExtra(RecordingIntentService.THREAD_PRIORITY, Process.THREAD_PRIORITY_BACKGROUND);
+                startService(i);
 			}
 
-//			// Making An Intent Of The Maze Game Start Menu Activity.
-//			Intent intent = new Intent(this, GenericGameActivity.class);
-//
-//			// Starting The Activity.
-//			startActivity(intent);
+			// Making An Intent Of The Maze Game Start Menu Activity.
+			Intent intent = new Intent(this, GenericGameActivity.class);
 
-            returnToFirstLevel(); //TODO: is it ok? I changed it to stop reloading the activity every time
+			// Starting The Activity.
+			startActivity(intent);
+
+            //returnToFirstLevel(); //TODO: is it ok? I changed it to stop reloading the activity every time
 		}
 
 	}
