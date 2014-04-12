@@ -1,9 +1,8 @@
-                                <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/imageView1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="65dp"
-                    android:layout_marginTop="146dp"
-                    android:onClick="launchClassicMazeGame"
-                    android:src="@drawable/ic_launcher" />
+            <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/imageView1"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_marginLeft="65dp"
+android:layout_marginTop="146dp"
+android:src="@drawable/ic_launcher" />
 

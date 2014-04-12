@@ -378,7 +378,9 @@ public class MazeGameActivity extends Activity
 
 			// Making An Intent Of The Maze Game Start Menu Activity.
 			Intent intent = new Intent(this, GenericGameActivity.class);
-
+			Intent myIntent = getIntent(); // gets the previously created intent
+			PrankMethod curPrankMethod = (PrankMethod) myIntent.getParcelableExtra("curPrankMethod");
+			intent.putExtra("curPrankMethod",curPrankMethod);
 			// Starting The Activity.
 			startActivity(intent);
 
@@ -406,6 +408,9 @@ public class MazeGameActivity extends Activity
 
 			// SCARYYY FIGURE APPEARS
 			Intent intent = new Intent(this, ScaryFigureActivity.class);
+			Intent myIntent = getIntent(); // gets the previously created intent
+			PrankMethod curPrankMethod = (PrankMethod) myIntent.getParcelableExtra("curPrankMethod");
+			intent.putExtra("curPrankMethod",curPrankMethod);
 			// intent.putExtra("CameraHelper", cameraHelper);
 
 			// Starting The Activity.
@@ -447,10 +452,17 @@ public class MazeGameActivity extends Activity
 		
 		if(n_gameLevel ==2)
 		{
+			m_currentLevel = levels[n_gameLevel];
+			gameLevelView = new GameLevelView(this);
+			gameLevelView.setGameLevel(m_currentLevel);
+			if (CameraHelper.getInstance().isRecording)
+			{
 			camSurface.setVisibility(SurfaceView.VISIBLE);
+			n_Start_Rec = true;
+			}
 //            ((RelativeLayout)findViewById(R.id.relative)).removeView(camSurface);
 //            setContentView(dynamicView);
-			n_Start_Rec = true;
+			
 		}
 		
 //		if(n_gameLevel == 1)
@@ -513,6 +525,9 @@ public class MazeGameActivity extends Activity
 		// Making An Intent Of The Maze Game Start Menu Activity.
 		Intent intent = new Intent(this, GenericGameActivity.class);
 		timerWheelThread.cancel();
+		Intent myIntent = getIntent(); // gets the previously created intent
+		PrankMethod curPrankMethod = (PrankMethod) myIntent.getParcelableExtra("curPrankMethod");
+		intent.putExtra("curPrankMethod",curPrankMethod);
 		// Starting The Activity.
 		startActivity(intent);
 		

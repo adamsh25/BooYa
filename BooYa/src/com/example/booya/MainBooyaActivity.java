@@ -53,5 +53,6 @@ public class MainBooyaActivity extends Activity {
 	    Intent intent = new Intent(this,AboutActivity.class);
 	    startActivity(intent);
 	}
+	
 
 }

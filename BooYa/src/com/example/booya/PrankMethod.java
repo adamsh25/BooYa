@@ -13,14 +13,14 @@ public class PrankMethod implements Parcelable
 	
 	public PrankMethod(int prank_id,int img_res_id,int purchased)
 	{
-		n_prank_id = prank_id;
+		setN_prank_id(prank_id);
 		n_img_res_id = img_res_id;
 		b_purchased = (purchased == 1);
 	}
 	
 	public int getPrankID()
 	{
-		return this.n_prank_id;
+		return this.getN_prank_id();
 	}
 	
 	public int getImgResID()
@@ -38,7 +38,7 @@ public class PrankMethod implements Parcelable
 	{
 		int[] data = new int[3];
 		in.readIntArray(data);
-		n_prank_id =data[0];
+		setN_prank_id(data[0]);
 		n_img_res_id = data[1];
 		b_purchased = (data[2] == 1);
 	}
@@ -52,13 +52,21 @@ public class PrankMethod implements Parcelable
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		  dest.writeIntArray(new int[] {this.n_prank_id,
+		  dest.writeIntArray(new int[] {this.getN_prank_id(),
                   this.n_img_res_id,
                   (this.b_purchased? 1 : 0)});	
 		  
 			}
 
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() 
+    public int getN_prank_id() {
+		return n_prank_id;
+	}
+
+	public void setN_prank_id(int n_prank_id) {
+		this.n_prank_id = n_prank_id;
+	}
+
+	public static final Parcelable.Creator CREATOR = new Parcelable.Creator() 
     {
         public PrankMethod createFromParcel(Parcel in) 
         {

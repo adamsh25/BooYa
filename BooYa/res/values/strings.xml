@@ -19,5 +19,6 @@
     <string name="title_activity_scary_figure">ScaryFigureActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_cups_game">CupsGameActivity</string>
 
 </resources>

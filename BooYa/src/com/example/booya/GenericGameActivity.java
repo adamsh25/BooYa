@@ -12,17 +12,26 @@ import android.view.View;
 public class GenericGameActivity extends Activity {
 	
 	// For Recording Stuff
+	public static final String ARG_PRANK_METHOD = "curr_prank_method";
 	private static final String TAG = "Recorder";
 	public static SurfaceView mSurfaceView;
 	public static Camera mCamera;
 	public static boolean mPreviewRunning;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		//TODO check what game are we in
-		setContentView(R.layout.activity_maze_game_main);
-		
+		Intent myIntent = getIntent(); // gets the previously created intent
+		PrankMethod curPrankMethod = (PrankMethod) myIntent.getParcelableExtra("curPrankMethod");
+		switch(curPrankMethod.getN_prank_id())
+		{
+		case 1:setContentView(R.layout.activity_maze_game_main);
+		break;
+		case 2:setContentView(R.layout.activity_cups_game_main);
+		break;
+		}
 		// Check if have front camera
 		if(TesterActivity.bHasFrontCamera)
 		{
@@ -38,10 +47,26 @@ public class GenericGameActivity extends Activity {
 		return true;
 	}
 	
-	public void launchGame(View view) {
+	public void launchGame(View view) 
+	{
 		//TODO check what game are we in
+		Intent intent = null;
 		
-	    Intent intent = new Intent(this,MazeGameActivity.class);
+	    intent = new Intent(this,MazeGameActivity.class);
+		Intent myIntent = getIntent(); // gets the previously created intent
+		PrankMethod curPrankMethod = (PrankMethod) myIntent.getParcelableExtra("curPrankMethod");
+		intent.putExtra("curPrankMethod",curPrankMethod);
+	    startActivity(intent);
+	}
+	
+	public void launchCupsGame(View view) 
+	{
+		//TODO check what game are we in
+		Intent intent = null;
+		Intent myIntent = getIntent(); // gets the previously created intent
+		PrankMethod curPrankMethod = (PrankMethod) myIntent.getParcelableExtra("curPrankMethod");
+	    intent = new Intent(this,CupsGameActivity.class);
+	    intent.putExtra("curPrankMethod",curPrankMethod);
 	    startActivity(intent);
 	}
 

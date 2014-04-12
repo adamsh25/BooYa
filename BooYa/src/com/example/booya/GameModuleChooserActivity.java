@@ -31,6 +31,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,13 +39,12 @@ import android.widget.TextView;
 public class GameModuleChooserActivity  extends FragmentActivity {
 
     DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
-
+    
     ViewPager mViewPager;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_module_chooser);
-
         mDemoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager, attaching the adapter.
@@ -52,11 +52,7 @@ public class GameModuleChooserActivity  extends FragmentActivity {
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
     }
     
-	public void launchClassicMazeGame(View view) {
-	    Intent intent = new Intent(this, GenericGameActivity.class);
-	    startActivity(intent);
-	}
-
+	
     /**
      * A {@link android.support.v4.app.FragmentStatePagerAdapter} that returns a fragment
      * representing an object in the collection.
@@ -98,13 +94,25 @@ public class GameModuleChooserActivity  extends FragmentActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) 
         {
+        	final FragmentActivity c = this.getActivity();
             View rootView = inflater.inflate(R.layout.fragment_prank_object, container, false);
             Bundle args = getArguments();
-            
-            PrankMethod curPrankMethod= (PrankMethod)args.getParcelable(ARG_PRANK_METHOD);
+            final PrankMethod curPrankMethod= (PrankMethod)args.getParcelable(ARG_PRANK_METHOD);
+        	((ImageView)(rootView.findViewById(R.id.imageView1))).setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) 
+				{
+				    Intent intent = new Intent(c, GenericGameActivity.class);
+				    intent.putExtra("curPrankMethod",curPrankMethod);
+				    startActivity(intent);
+					
+				}
+			});
             if(curPrankMethod.getImgResID() == 1)
             {
             	((ImageView)(rootView.findViewById(R.id.imageView1))).setImageResource(R.drawable.classicmaze);
+
             }
             else if(curPrankMethod.getImgResID() == 2)
             {
