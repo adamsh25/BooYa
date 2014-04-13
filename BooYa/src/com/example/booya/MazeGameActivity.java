@@ -449,21 +449,12 @@ public class MazeGameActivity extends Activity
 			gameLevelView = new GameLevelView(this);
 			gameLevelView.setGameLevel(m_currentLevel);
 		}
-		
-		if(n_gameLevel ==2)
-		{
-			m_currentLevel = levels[n_gameLevel];
-			gameLevelView = new GameLevelView(this);
-			gameLevelView.setGameLevel(m_currentLevel);
-			if (CameraHelper.getInstance().isRecording)
-			{
-			camSurface.setVisibility(SurfaceView.VISIBLE);
-			n_Start_Rec = true;
-			}
+        else { //last level
+            camSurface.setVisibility(SurfaceView.VISIBLE);
+            n_Start_Rec = true;
 //            ((RelativeLayout)findViewById(R.id.relative)).removeView(camSurface);
 //            setContentView(dynamicView);
-			
-		}
+        }
 		
 //		if(n_gameLevel == 1)
 //		{
