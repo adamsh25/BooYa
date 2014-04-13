@@ -23,13 +23,16 @@ public class ScaryFigureActivity extends Activity {
             }
             AudioManager mgr = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
             //mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true); //TODO: make it work
-            stopRecording(); //TODO: not good
+            //stopRecording(); //TODO: not good
             //mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false); //TODO: make it work
-            while(CameraHelper.getInstance().isRecording) { //TODO: consider asynctask or thread
-                Log.d("3 sec thread", "waiting for camera to stop..");
-            }
-            BooyaFFMPEG a = new BooyaFFMPEG(getBaseContext());
-            a.execute("a");
+//            while(CameraHelper.getInstance().isRecording) { //TODO: consider asynctask or thread
+//                Log.d("3 sec thread", "waiting for camera to stop..");
+//            }
+//            BooyaFFMPEG a = new BooyaFFMPEG(getBaseContext());
+//            a.execute("a");
+//            Intent booyaFFMPEG = new Intent(getBaseContext(), BooyaFFMPEG.class); //TODO: do somewhere else?
+//            startService(booyaFFMPEG);
+
             Intent i = new Intent(getBaseContext(), TesterActivity.class);
             startActivity(i);
         }
@@ -90,7 +93,7 @@ public class ScaryFigureActivity extends Activity {
     protected void onPause() {
         super.onPause();
         mediaPlayer.stop();
-        stopRecording();
+        //stopRecording();
     }
 
 }

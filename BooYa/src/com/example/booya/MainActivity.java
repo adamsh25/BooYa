@@ -17,8 +17,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-        BooyaFFMPEG a = new BooyaFFMPEG(getBaseContext());
-        a.execute("a");
+//        BooyaFFMPEG a = new BooyaFFMPEG(getBaseContext());
+//        a.execute("a");
 
 //        try {
 //            a.CreateBooyaVideo("/sdcard/videokit/video.mp4", "/sdcard/videokit/outFull.mp4");
