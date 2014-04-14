@@ -130,7 +130,7 @@ public class CameraHelper {
         recorder.setCamera(camera);
 
         // Step 2: Set sources
-        recorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
+        recorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER); // TODO: fix error on LG p999 (http://stackoverflow.com/questions/21014399/mediarecorder-start-failed-2147483648-when-call-recording-in-android)
         recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         // recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 
