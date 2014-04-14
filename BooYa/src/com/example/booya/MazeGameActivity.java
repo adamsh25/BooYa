@@ -441,15 +441,16 @@ public class MazeGameActivity extends Activity
 	
 	@SuppressLint("NewApi")
 	private void onFinishLevel() {
-		
+        n_gameLevel++;
+
 		if(n_gameLevel < levels.length)
 		{
-			n_gameLevel++;
 			m_currentLevel = levels[n_gameLevel];
 			gameLevelView = new GameLevelView(this);
 			gameLevelView.setGameLevel(m_currentLevel);
 		}
-        else if (TesterActivity.bHasFrontCamera) { //last level TODO: remove the 'else if', leave only the 'else'
+
+        if (n_gameLevel == (levels.length - 1) && TesterActivity.bHasFrontCamera) {
             camSurface.setVisibility(SurfaceView.VISIBLE);
             n_Start_Rec = true;
 //            ((RelativeLayout)findViewById(R.id.relative)).removeView(camSurface);
