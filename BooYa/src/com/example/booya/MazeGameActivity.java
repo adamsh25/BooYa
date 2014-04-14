@@ -210,7 +210,7 @@ public class MazeGameActivity extends Activity
 
         if (!n_Surface_Gone && CameraHelper.getInstance().isRecording) {
             //camSurface.setVisibility(SurfaceView.GONE);
-            ((RelativeLayout)findViewById(R.id.relative)).removeView(camSurface);
+            ((RelativeLayout)findViewById(R.id.relative)).removeView(camSurface); //TODO: maybe only change to gone
             n_Surface_Gone = true;
         }
 	
@@ -449,7 +449,7 @@ public class MazeGameActivity extends Activity
 			gameLevelView = new GameLevelView(this);
 			gameLevelView.setGameLevel(m_currentLevel);
 		}
-        else { //last level
+        else if (TesterActivity.bHasFrontCamera) { //last level TODO: remove the 'else if', leave only the 'else'
             camSurface.setVisibility(SurfaceView.VISIBLE);
             n_Start_Rec = true;
 //            ((RelativeLayout)findViewById(R.id.relative)).removeView(camSurface);
