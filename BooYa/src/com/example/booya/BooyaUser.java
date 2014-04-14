@@ -41,7 +41,7 @@ public class BooyaUser {
 		bCanVibrate = false;
 		
 		// Check camera
-		bHasFrontCamera = (CameraHelper.getInstance().findFrontFacingCameraId() != -1);
+		bHasFrontCamera = (CameraHelper.getInstance().hasFrontFacingCamera());
 		
 		if(nAndroidApiVersion>10)
 		{

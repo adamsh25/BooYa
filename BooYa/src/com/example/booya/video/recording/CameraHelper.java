@@ -44,6 +44,10 @@ public class CameraHelper {
 		previewSurface = view.getHolder().getSurface();
 	}
 
+    public boolean hasFrontFacingCamera() {
+        return frontFacingCameraId != -1;
+    }
+
 	/**
 	 * SetSurfaceView(view) must be called before!
 	 * Starts recording if hasn't already.
@@ -242,7 +246,7 @@ public class CameraHelper {
         isRecording = false;
 	}
 
-	public int findFrontFacingCameraId() {
+	private int findFrontFacingCameraId() {
 		int cameraId = -1;
 
 		// Search for a front facing camera

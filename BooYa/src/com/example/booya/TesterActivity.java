@@ -48,7 +48,7 @@ public class TesterActivity extends Activity {
 	}
 	public static void DetectFrontFacingCamera()
 	{
-		bHasFrontCamera = (CameraHelper.getInstance().findFrontFacingCameraId() != -1);
+		bHasFrontCamera = (CameraHelper.getInstance().hasFrontFacingCamera());
 	}
 	public void onCheckboxClicked(View view) 
 	{

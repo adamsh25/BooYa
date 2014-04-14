@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.booya.video.recording.RecordingIntentService;
+import junit.framework.Test;
 
 public class MazeGameActivity extends Activity
 {
@@ -187,25 +188,29 @@ public class MazeGameActivity extends Activity
     protected void onResume() {
         super.onResume();
 
-        Intent i = new Intent(this, RecordingIntentService.class);
-        i.setAction(RecordingIntentService.OPEN_ACTION);
-        startService(i);
+        if (TesterActivity.bHasFrontCamera) {
+            Intent i = new Intent(this, RecordingIntentService.class);
+            i.setAction(RecordingIntentService.OPEN_ACTION);
+            startService(i);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        RecordingIntentService.setShouldRecord(false);
-        Intent i = new Intent(this, RecordingIntentService.class);
-        i.setAction(RecordingIntentService.STOP_RELEASE_ACTION);
+        if (TesterActivity.bHasFrontCamera) {
+            RecordingIntentService.setShouldRecord(false);
+            Intent i = new Intent(this, RecordingIntentService.class);
+            i.setAction(RecordingIntentService.STOP_RELEASE_ACTION);
 
-        if (!b_playerHasTouchedWall) {
-            i.putExtra(RecordingIntentService.DELAY_SECONDS, 3);
-            i.putExtra(RecordingIntentService.THREAD_PRIORITY, android.os.Process.THREAD_PRIORITY_BACKGROUND);
+            if (!b_playerHasTouchedWall) {
+                i.putExtra(RecordingIntentService.DELAY_SECONDS, 3);
+                i.putExtra(RecordingIntentService.THREAD_PRIORITY, android.os.Process.THREAD_PRIORITY_BACKGROUND);
+            }
+
+            startService(i);
         }
-
-        startService(i);
     }
 
     /*
