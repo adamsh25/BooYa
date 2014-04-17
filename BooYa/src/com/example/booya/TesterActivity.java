@@ -1,13 +1,12 @@
 package com.example.booya;
 
 import com.example.booya.video.recording.CameraHelper;
-import com.example.booya.video.recording.CameraRecorder;
+import com.example.booya.video.recording.CameraRecorderActivity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -39,7 +38,7 @@ public class TesterActivity extends Activity {
 	}
 	public void launchCameraTester(View view) {
 		//bIsDUBUG = Boolean.FALSE;
-	    Intent intent = new Intent(this, CameraRecorder.class);
+	    Intent intent = new Intent(this, CameraRecorderActivity.class);
 	    startActivity(intent);
 	}
 	public static Boolean getIsDebugMode()

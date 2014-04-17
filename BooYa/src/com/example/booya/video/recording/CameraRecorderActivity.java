@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.example.booya.R;
 
-public class CameraRecorder extends Activity
+public class CameraRecorderActivity extends Activity
 {
 	private final String TAG = "Recorder";
 	public SurfaceView mSurfaceView;
