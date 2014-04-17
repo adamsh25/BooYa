@@ -70,7 +70,7 @@ public class BooyaFFMPEGIntentService extends IntentService {
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    protected void onHandleIntent(Intent intent) { //TODO: add error parsing by exit code != 0 probably
         String fileName = intent.getStringExtra(EXTRA_FILE_NAME);
 
         if (fileName == null || fileName.isEmpty()) {
