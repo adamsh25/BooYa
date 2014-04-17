@@ -31,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.booya.video.recording.RecordingIntentService;
-import junit.framework.Test;
 
 public class MazeGameActivity extends Activity
 {
@@ -190,7 +189,7 @@ public class MazeGameActivity extends Activity
 
         if (TesterActivity.bHasFrontCamera) {
             Intent i = new Intent(this, RecordingIntentService.class);
-            i.setAction(RecordingIntentService.OPEN_ACTION);
+            i.setAction(RecordingIntentService.ACTION_OPEN_CAMERA);
             startService(i);
         }
     }
@@ -202,11 +201,14 @@ public class MazeGameActivity extends Activity
         if (TesterActivity.bHasFrontCamera) {
             RecordingIntentService.setShouldRecord(false);
             Intent i = new Intent(this, RecordingIntentService.class);
-            i.setAction(RecordingIntentService.STOP_RELEASE_ACTION);
+            i.setAction(RecordingIntentService.ACTION_STOP_RECORDING);
+            i.putExtra(RecordingIntentService.ACTION_RELEASE_CAMERA, true);
 
             if (!b_playerHasTouchedWall) {
-                i.putExtra(RecordingIntentService.DELAY_SECONDS, 3);
-                i.putExtra(RecordingIntentService.THREAD_PRIORITY, android.os.Process.THREAD_PRIORITY_BACKGROUND);
+                i.putExtra(RecordingIntentService.EXTRA_DELAY_SECONDS, 3);
+                //i.putExtra(RecordingIntentService.THREAD_PRIORITY, android.os.Process.THREAD_PRIORITY_BACKGROUND); TODO: correct?
+                i.putExtra(RecordingIntentService.EXTRA_START_FFMPEG, true);
+                i.putExtra(RecordingIntentService.EXTRA_WRITE_TO_DB, true);
             }
 
             startService(i);
@@ -225,8 +227,8 @@ public class MazeGameActivity extends Activity
 		{
             CameraHelper.getInstance().SetSurfaceView(camSurface);
             Intent i = new Intent(this, RecordingIntentService.class);
-            i.setAction(RecordingIntentService.START_ACTION);
-            i.putExtra(RecordingIntentService.THREAD_PRIORITY, Process.THREAD_PRIORITY_BACKGROUND);
+            i.setAction(RecordingIntentService.ACTION_START_RECORDING);
+            i.putExtra(RecordingIntentService.EXTRA_THREAD_PRIORITY, Process.THREAD_PRIORITY_BACKGROUND);
             startService(i);
             n_Start_Rec = false;
 	    }
@@ -390,7 +392,7 @@ public class MazeGameActivity extends Activity
 
 
 			// Check if have front camera
-			if (CameraHelper.getInstance().isRecording) {
+			if (TesterActivity.bHasFrontCamera && CameraHelper.getInstance().isRecording) {
 				// // Stopping the service, which stops the video recording
 				// Intent intentService = new Intent(this,
 				// RecorderService.class);
@@ -399,7 +401,7 @@ public class MazeGameActivity extends Activity
 				//  cameraHelper.StopRecording();
                 RecordingIntentService.setShouldRecord(false);
                 Intent i = new Intent(this, RecordingIntentService.class);
-                i.setAction(RecordingIntentService.STOP_ACTION);
+                i.setAction(RecordingIntentService.ACTION_STOP_RECORDING);
                 //i.putExtra(RecordingIntentService.THREAD_PRIORITY, Process.THREAD_PRIORITY_BACKGROUND);
                 startService(i);
 			}
@@ -561,7 +563,7 @@ public class MazeGameActivity extends Activity
 		timerWheelThread.cancel();
 		Intent myIntent = getIntent(); // gets the previously created intent
 		PrankMethod curPrankMethod = (PrankMethod) myIntent.getParcelableExtra("curPrankMethod");
-		intent.putExtra("curPrankMethod",curPrankMethod);
+		intent.putExtra("curPrankMethod", curPrankMethod);
 		// Starting The Activity.
 		startActivity(intent);
 		

@@ -1,12 +1,9 @@
 package com.example.booya.video.recording;
 
 import android.app.IntentService;
-import android.app.Service;
 import android.content.Intent;
-import android.graphics.Camera;
-import android.os.*;
 import android.os.Process;
-import android.util.Log;
+import com.example.booya.video.processing.BooyaFFMPEGIntentService;
 
 import java.util.concurrent.TimeUnit;
 
@@ -16,26 +13,33 @@ import java.util.concurrent.TimeUnit;
  */
 public class RecordingIntentService extends IntentService
 {
-    public static final String STOP_ACTION = "stop";
-    public static final String STOP_RELEASE_ACTION = "stopandrelease";
-    public static final String START_ACTION = "start";
-    public static final String OPEN_ACTION = "open";
-    public static final String THREAD_PRIORITY = "tp";
-    public static final String DELAY_SECONDS = "delay";
+    // Intent actions
+    public static final String ACTION_STOP_RECORDING = "com.example.booya.stop_recording";
+    public static final String ACTION_RELEASE_CAMERA = "com.example.booya.release_camera";
+    public static final String ACTION_START_RECORDING = "com.example.booya.start_recording";
+    public static final String ACTION_OPEN_CAMERA = "com.example.booya.open_camera";
+
+    // Intent Extras
+    public static final String EXTRA_THREAD_PRIORITY = "com.example.booya.thread_priority";
+    public static final String EXTRA_DELAY_SECONDS = "com.example.booya.delay";
+    public static final String EXTRA_START_FFMPEG = "com.example.booya.start_ffmpeg";
+    public static final String EXTRA_WRITE_TO_DB = "com.example.booya.write_to_db";
+
+    // Broadcast results
 
     private static boolean shouldRecord = false;
 
-	private static final String TAG = "RecordingIntentService";
+	private final String TAG = RecordingIntentService.class.getSimpleName();
 
     public RecordingIntentService() {
-        super("RecordingIntentService");
+        super(RecordingIntentService.class.getSimpleName());
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
-        int threadPriority = intent.getIntExtra(THREAD_PRIORITY, Process.THREAD_PRIORITY_DEFAULT);
-        int sleepTime = intent.getIntExtra(DELAY_SECONDS, 0);
+        int threadPriority = intent.getIntExtra(EXTRA_THREAD_PRIORITY, Process.THREAD_PRIORITY_DEFAULT);
+        int sleepTime = intent.getIntExtra(EXTRA_DELAY_SECONDS, 0);
 
         android.os.Process.setThreadPriority(threadPriority);
 
@@ -47,22 +51,38 @@ public class RecordingIntentService extends IntentService
             }
         }
 
-        if (action.equalsIgnoreCase(START_ACTION)) {
-            CameraHelper.getInstance().StartRecording2();
+        if (action.equalsIgnoreCase(ACTION_START_RECORDING)) {
+            CameraHelper.getInstance().StartRecording();
             shouldRecord = true;
 
-            while (shouldRecord) //change to field in this class
+            while (shouldRecord)
             {
             }
         }
-        else if (action.equalsIgnoreCase(STOP_ACTION)) {
-            CameraHelper.getInstance().StopRecording2();
+        else if (action.equalsIgnoreCase(ACTION_STOP_RECORDING)) {
+            //if (CameraHelper.getInstance().isRecording) {
+            String fileName = CameraHelper.getInstance().StopRecording();
+            //}
+
+            if (intent.getBooleanExtra(ACTION_RELEASE_CAMERA, false)) {
+                CameraHelper.getInstance().ReleaseCamera();
+            }
+
+            if (intent.getBooleanExtra(EXTRA_WRITE_TO_DB, false)) {
+                //TODO: write the video file path to db with status "raw" (= 0)
+            }
+
+            if (intent.getBooleanExtra(EXTRA_START_FFMPEG, false)) {
+                //TODO: get the relevant parameters here from the intent
+                Intent ffmpegIntent = new Intent();
+                ffmpegIntent.putExtra(BooyaFFMPEGIntentService.EXTRA_FILE_NAME, fileName);
+                startService(ffmpegIntent);
+            }
         }
-        else if (action.equalsIgnoreCase(STOP_RELEASE_ACTION)) {
-            CameraHelper.getInstance().StopRecording2();
+        else if (action.equalsIgnoreCase(ACTION_RELEASE_CAMERA)) {
             CameraHelper.getInstance().ReleaseCamera();
         }
-        else if (action.equalsIgnoreCase(OPEN_ACTION)) {
+        else if (action.equalsIgnoreCase(ACTION_OPEN_CAMERA)) {
             CameraHelper.getInstance().OpenCamera();
         }
     }

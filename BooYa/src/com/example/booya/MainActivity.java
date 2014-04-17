@@ -1,14 +1,9 @@
 package com.example.booya;
 
 
-import com.example.booya.R;
-
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
-import com.example.booya.video.processing.BooyaFFMPEG;
-
-import java.io.IOException;
 
 public class MainActivity extends Activity {
 

@@ -4,8 +4,6 @@ package com.example.booya;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Handler;
-import android.util.Log;
-import com.example.booya.video.processing.BooyaFFMPEG;
 import com.example.booya.video.recording.CameraHelper;
 import com.example.booya.video.recording.RecordingIntentService;
 
@@ -18,10 +16,10 @@ import android.view.Menu;
 public class ScaryFigureActivity extends Activity {
     final Runnable runnable  = new Runnable() {
         public void run() {
-            if (mediaPlayer.isPlaying()) {
-                mediaPlayer.stop();
-            }
-            AudioManager mgr = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+//            if (mediaPlayer.isPlaying()) {
+//                mediaPlayer.stop();
+//            }
+//            AudioManager mgr = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
             //mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true); //TODO: make it work
             //stopRecording(); //TODO: not good
             //mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false); //TODO: make it work
@@ -38,10 +36,6 @@ public class ScaryFigureActivity extends Activity {
         }
     };
 
-    private void stopRecording2() {
-        CameraHelper.getInstance().StopRecording();
-    }
-
     Thread soundThread = new Thread(
             new Runnable()
             {
@@ -49,8 +43,8 @@ public class ScaryFigureActivity extends Activity {
                 public void run()
                 {
                     playScarySound();
-                    Handler handler = new Handler();
-                    handler.postDelayed(runnable, 3000);
+//                    Handler handler = new Handler();
+//                    handler.postDelayed(runnable, 5000);
                 }
 
             });
@@ -86,13 +80,15 @@ public class ScaryFigureActivity extends Activity {
 //		stopService(intent);
 //		CameraHelper.getInstance().StopRecording();
 		Intent i = new Intent(this, RecordingIntentService.class);
-        i.setAction(RecordingIntentService.STOP_ACTION);
+        i.setAction(RecordingIntentService.ACTION_STOP_RECORDING);
 		startService(i);
 	}
 	
     protected void onPause() {
         super.onPause();
         mediaPlayer.stop();
+        Intent i = new Intent(getBaseContext(), TesterActivity.class);
+        startActivity(i); //TODO: proper back navigation
         //stopRecording();
     }
 

@@ -32,7 +32,7 @@ public class CameraRecorder extends Activity
     protected void onResume() {
         super.onResume();
         Intent i = new Intent(this, RecordingIntentService.class);
-        i.setAction(RecordingIntentService.OPEN_ACTION);
+        i.setAction(RecordingIntentService.ACTION_OPEN_CAMERA);
         startService(i);
     }
 
@@ -42,23 +42,26 @@ public class CameraRecorder extends Activity
         //TODO: handle phone orientation change. we should disable it in the maze game.
         RecordingIntentService.setShouldRecord(false);
         Intent i = new Intent(this, RecordingIntentService.class);
-        i.setAction(RecordingIntentService.STOP_RELEASE_ACTION);
+        i.setAction(RecordingIntentService.ACTION_RELEASE_CAMERA);
         //i.putExtra(RecordingIntentService.DELAY_SECONDS, 3);
         startService(i);
     }
 
     public void StartRec(View view) {
         Intent i = new Intent(this, RecordingIntentService.class);
-        i.setAction(RecordingIntentService.START_ACTION);
-        i.putExtra(RecordingIntentService.THREAD_PRIORITY, Process.THREAD_PRIORITY_BACKGROUND);
+        i.setAction(RecordingIntentService.ACTION_START_RECORDING);
+        i.putExtra(RecordingIntentService.EXTRA_THREAD_PRIORITY, Process.THREAD_PRIORITY_BACKGROUND);
         startService(i);
     }
 
     public void StopRec(View view) {
         RecordingIntentService.setShouldRecord(false);
         Intent i = new Intent(this, RecordingIntentService.class);
-        i.setAction(RecordingIntentService.STOP_ACTION);
-        //i.putExtra(RecordingIntentService.THREAD_PRIORITY, Process.THREAD_PRIORITY_BACKGROUND);
+        i.setAction(RecordingIntentService.ACTION_STOP_RECORDING);
+        i.putExtra(RecordingIntentService.EXTRA_DELAY_SECONDS, 3);
+        //i.putExtra(RecordingIntentService.THREAD_PRIORITY, android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        i.putExtra(RecordingIntentService.EXTRA_START_FFMPEG, true);
+        i.putExtra(RecordingIntentService.EXTRA_WRITE_TO_DB, true);
         startService(i);
     }
 }

@@ -26,6 +26,7 @@ public class CameraHelper {
 	private int frontFacingCameraId;
 	public boolean isRecording = false;
     private final Semaphore lock = new Semaphore(1);
+    private String currentFileName;
 
 	public CameraHelper() {
 		frontFacingCameraId = findFrontFacingCameraId();
@@ -52,7 +53,7 @@ public class CameraHelper {
 	 * SetSurfaceView(view) must be called before!
 	 * Starts recording if hasn't already.
 	 */
-	public void StartRecording() {
+	public void StartRecordingOld() {
 		if (isRecording) {
             Log.d(TAG, "Asked to start, but already recording");
             return;
@@ -105,6 +106,8 @@ public class CameraHelper {
         if (camera == null) {
             camera = Camera.open(frontFacingCameraId);
             Log.d(TAG, "Camera opened");
+        } else {
+            Log.d(TAG, "Won't open camera [camera != null], opened already?");
         }
 
         lock.release();
@@ -117,6 +120,8 @@ public class CameraHelper {
             camera.release();        // release the camera for other applications
             Log.d(TAG, "Camera released");
             camera = null;
+        } else {
+            Log.d(TAG, "Won't release camera [camera == null], already released?");
         }
 
         lock.release();
@@ -139,7 +144,8 @@ public class CameraHelper {
                 CamcorderProfile.QUALITY_HIGH));
 
         // Step 4: Set output file
-        recorder.setOutputFile("/sdcard/video.mp4"); // TODO: change to dir from db
+        currentFileName = "/sdcard/video.mp4"; //TODO: change to dir from db + save with unique name like (date_time_orig)
+        recorder.setOutputFile(currentFileName);
 
         //TODO: NEEDED?
         recorder.setVideoFrameRate(15);
@@ -187,7 +193,11 @@ public class CameraHelper {
         }
     }
 
-    public void StartRecording2() {
+    /**
+     * SetSurfaceView(view) must be called before!
+     * Starts recording if hasn't already.
+     */
+    public void StartRecording() {
         lock.acquireUninterruptibly();
 
         if (isRecording) {
@@ -211,24 +221,36 @@ public class CameraHelper {
         lock.release();
     }
 
-    public void StopRecording2() {
+    public String StopRecording() {
         lock.acquireUninterruptibly();
 
         if (!isRecording) {
             lock.release();
             Log.d(TAG, "Asked to stop, but already stopped");
-            return;
+            currentFileName = null;
+            return null;
         }
 
-        recorder.stop();
+        try {
+            recorder.stop();
+        } catch (RuntimeException re) {
+            Log.d(TAG, "Probably stop was called right after start, exception: " + re.getMessage());
+            currentFileName = null;
+        }
+
+        String fileName = currentFileName;
+        currentFileName = null;
+
         ReleaseMediaRecorder();
         Log.i(TAG, "Stopped recording");
         isRecording = false;
 
         lock.release();
+
+        return fileName;
     }
 
-	public void StopRecording() {
+	public void StopRecordingOld() {
 		if (!isRecording) {
             Log.d(TAG, "Asked to stop, but already stopped");
             return;

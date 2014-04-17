@@ -38,19 +38,12 @@
         <service android:name=".video.recording.RecordingIntentService"
                  android:exported="false"/>
 
-        <activity
-            android:name="com.example.booya.recording.GameActivity"
-            android:label="@string/title_activity_game"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
-        </activity>
+        <service android:name=".video.processing.BooyaFFMPEGIntentService"
+                 android:exported="false"/>
+
         <activity
             android:name="com.example.booya.MainActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
-        </activity>
-        <activity
-            android:name="com.example.booya.MazeActivity"
-            android:label="@string/title_activity_maze"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <activity

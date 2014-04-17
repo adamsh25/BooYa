@@ -25,10 +25,10 @@
 //        String action = intent.getAction();
 //
 //        if (action.equalsIgnoreCase(START_ACTION)) {
-//            CameraHelper.getInstance().StartRecording2();
+//            CameraHelper.getInstance().StartRecording();
 //        }
 //        else if (action.equalsIgnoreCase(STOP_ACTION)) {
-//            CameraHelper.getInstance().StopRecording2();
+//            CameraHelper.getInstance().StopRecording();
 //        }
 //    }
 //
