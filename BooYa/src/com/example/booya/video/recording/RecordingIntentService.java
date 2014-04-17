@@ -3,6 +3,7 @@ package com.example.booya.video.recording;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Process;
+import android.util.Log;
 import com.example.booya.video.processing.BooyaFFMPEGIntentService;
 
 import java.util.concurrent.TimeUnit;
@@ -60,12 +61,17 @@ public class RecordingIntentService extends IntentService
             }
         }
         else if (action.equalsIgnoreCase(ACTION_STOP_RECORDING)) {
-            //if (CameraHelper.getInstance().isRecording) {
+            //if (!CameraHelper.getInstance().isRecording) {
             String fileName = CameraHelper.getInstance().StopRecording();
             //}
 
             if (intent.getBooleanExtra(ACTION_RELEASE_CAMERA, false)) {
                 CameraHelper.getInstance().ReleaseCamera();
+            }
+
+            if (fileName == null) {
+                Log.d(TAG, "Recording probably failed or was too short [fileName == null]. Returning.");
+                return;
             }
 
             if (intent.getBooleanExtra(EXTRA_WRITE_TO_DB, false)) {
@@ -74,7 +80,7 @@ public class RecordingIntentService extends IntentService
 
             if (intent.getBooleanExtra(EXTRA_START_FFMPEG, false)) {
                 //TODO: get the relevant parameters here from the intent
-                Intent ffmpegIntent = new Intent();
+                Intent ffmpegIntent = new Intent(getApplicationContext(), BooyaFFMPEGIntentService.class);
                 ffmpegIntent.putExtra(BooyaFFMPEGIntentService.EXTRA_FILE_NAME, fileName);
                 startService(ffmpegIntent);
             }

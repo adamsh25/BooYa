@@ -13,14 +13,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.Surface;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 //documentation: http://developer.android.com/guide/topics/media/camera.html
 
 public class CameraHelper {
 	private static final CameraHelper INSTANCE = new CameraHelper();
-	private final String TAG = "CameraHelper";
+	private final String TAG = CameraHelper.class.getSimpleName();
 	Surface previewSurface;
+    //SurfaceHolder surfaceHolder;
 	private Camera camera;
 	private MediaRecorder recorder;
 	private int frontFacingCameraId;
@@ -43,6 +45,7 @@ public class CameraHelper {
 	 */
 	public void SetSurfaceView(SurfaceView view) {
 		previewSurface = view.getHolder().getSurface();
+        //surfaceHolder = view.getHolder();
 	}
 
     public boolean hasFrontFacingCamera() {
@@ -128,6 +131,14 @@ public class CameraHelper {
     }
 
     private boolean PrepareVideoRecorder() {
+//        try {
+//            camera.setPreviewDisplay(h); //TODO: maybe move to OpenCamera()
+//        } catch (IOException e) {
+//            Log.e(TAG, "Could not set preview display");
+//            e.printStackTrace();
+//            return false;
+//        }
+
         recorder = new MediaRecorder();
 
         // Step 1: Unlock and set camera to MediaRecorder
@@ -190,6 +201,8 @@ public class CameraHelper {
             Log.d(TAG, "MediaRecorder released");
             recorder = null;
             camera.lock();          // lock camera for later use
+        } else {
+            Log.d(TAG, "Won't release media recorder [recorder == null], already released?");
         }
     }
 
