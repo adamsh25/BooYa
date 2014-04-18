@@ -103,6 +103,8 @@ public class MazeGameActivity extends Activity
 	// flag - true if the player can move
 	public static boolean b_canMove = false;
 
+    public boolean b_gotToBooya = false;
+
 	// current level
 	public static int n_gameLevel = 0;
 
@@ -142,6 +144,7 @@ public class MazeGameActivity extends Activity
 		b_playerHasTouchedWall = false;
 		
 		b_canMove = false;
+        b_gotToBooya = false;
 
 		initLevels();
 		n_gameLevel = 0;
@@ -198,18 +201,11 @@ public class MazeGameActivity extends Activity
     protected void onPause() {
         super.onPause();
 
-        if (TesterActivity.bHasFrontCamera) {
+        if (!b_gotToBooya && TesterActivity.bHasFrontCamera) {
             RecordingIntentService.setShouldRecord(false);
             Intent i = new Intent(this, RecordingIntentService.class);
             i.setAction(RecordingIntentService.ACTION_STOP_RECORDING);
             i.putExtra(RecordingIntentService.ACTION_RELEASE_CAMERA, true);
-
-            if (!b_playerHasTouchedWall) {
-                i.putExtra(RecordingIntentService.EXTRA_DELAY_SECONDS, 3);
-                //i.putExtra(RecordingIntentService.THREAD_PRIORITY, android.os.Process.THREAD_PRIORITY_BACKGROUND); TODO: correct?
-                i.putExtra(RecordingIntentService.EXTRA_START_FFMPEG, true);
-                i.putExtra(RecordingIntentService.EXTRA_WRITE_TO_DB, true);
-            }
 
             startService(i);
         }
@@ -446,9 +442,21 @@ public class MazeGameActivity extends Activity
 		if (action == MotionEvent.ACTION_MOVE) {
 			// Setting Touched Wall Flag To True.
 			b_playerHasTouchedWall = true;
+            b_gotToBooya = true;
 			
 			if(!TesterActivity.bIsDUBUG)
 			BooyaUser.IncreaseNumberOfVictims();
+
+            if (TesterActivity.bHasFrontCamera) {
+                RecordingIntentService.setShouldRecord(false);
+                Intent i = new Intent(this, RecordingIntentService.class);
+                i.setAction(RecordingIntentService.ACTION_STOP_RECORDING);
+                i.putExtra(RecordingIntentService.ACTION_RELEASE_CAMERA, true);
+                i.putExtra(RecordingIntentService.EXTRA_DELAY_SECONDS, 3);
+                //i.putExtra(RecordingIntentService.THREAD_PRIORITY, android.os.Process.THREAD_PRIORITY_BACKGROUND); TODO: correct?
+                i.putExtra(RecordingIntentService.EXTRA_START_FFMPEG, true);
+                i.putExtra(RecordingIntentService.EXTRA_WRITE_TO_DB, true);
+            }
 
 			// SCARYYY FIGURE APPEARS
 			Intent intent = new Intent(this, ScaryFigureActivity.class);
