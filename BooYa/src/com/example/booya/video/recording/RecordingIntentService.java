@@ -90,6 +90,7 @@ public class RecordingIntentService extends IntentService
         }
         else if (action.equalsIgnoreCase(ACTION_OPEN_CAMERA)) {
             CameraHelper.getInstance().OpenCamera();
+            //TODO: implement broadcast to announce on camera open fail so game won't start.
         }
     }
 
