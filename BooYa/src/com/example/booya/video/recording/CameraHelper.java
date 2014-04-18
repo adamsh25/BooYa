@@ -27,7 +27,6 @@ public class CameraHelper {
 	private MediaRecorder recorder;
 	private int frontFacingCameraId;
 	public boolean isRecording = false;
-    private final Semaphore lock = new Semaphore(1);
     private String currentFileName;
 
 	public CameraHelper() {
@@ -103,31 +102,38 @@ public class CameraHelper {
 		}
 	}
 
-    public void OpenCamera() {
-        lock.acquireUninterruptibly();
+    public synchronized void OpenCamera() {
+        if (isRecording) {
+            Log.e(TAG, "OpenCamera() called while recording! returning.");
+            return;
+        }
 
         if (camera == null) {
-            camera = Camera.open(frontFacingCameraId);
-            Log.d(TAG, "Camera opened");
+            try {
+                camera = Camera.open(frontFacingCameraId);
+                Log.d(TAG, "Camera opened");
+            } catch (RuntimeException re) {
+                Log.e(TAG, "Couldn't open camera.");
+                re.printStackTrace();
+            }
         } else {
             Log.d(TAG, "Won't open camera [camera != null], opened already?");
         }
-
-        lock.release();
     }
 
-    public void ReleaseCamera() {
-        lock.acquireUninterruptibly();
+    public synchronized void ReleaseCamera() {
+        if (isRecording) {
+            Log.e(TAG, "ReleaseCamera() called while recording! returning.");
+            return;
+        }
 
         if (camera != null) {
-            camera.release();        // release the camera for other applications
+            camera.release(); // release the camera for other applications
             Log.d(TAG, "Camera released");
             camera = null;
         } else {
             Log.d(TAG, "Won't release camera [camera == null], already released?");
         }
-
-        lock.release();
     }
 
     private boolean PrepareVideoRecorder() {
@@ -148,7 +154,7 @@ public class CameraHelper {
         // Step 2: Set sources
         recorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER); // TODO: fix error on LG p999 (http://stackoverflow.com/questions/21014399/mediarecorder-start-failed-2147483648-when-call-recording-in-android)
         recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-        // recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        //recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 
         // Step 3: Set a CamcorderProfile (requires API Level 8 or higher)
         recorder.setProfile(CamcorderProfile.get(frontFacingCameraId,
@@ -159,7 +165,7 @@ public class CameraHelper {
         recorder.setOutputFile(currentFileName);
 
         //TODO: NEEDED?
-        recorder.setVideoFrameRate(15);
+        //recorder.setVideoFrameRate(15);
 
         // Step 5: Set the preview output
         recorder.setPreviewDisplay(previewSurface);
@@ -200,7 +206,14 @@ public class CameraHelper {
             recorder.release(); // release the recorder object
             Log.d(TAG, "MediaRecorder released");
             recorder = null;
-            camera.lock();          // lock camera for later use
+
+            try {
+                //camera.lock(); // lock camera for later use
+                camera.reconnect();
+            } catch (IOException e) {
+                Log.e(TAG, "Couldn't reconnect to camera after releasing media recorder");
+                e.printStackTrace();
+            }
         } else {
             Log.d(TAG, "Won't release media recorder [recorder == null], already released?");
         }
@@ -210,11 +223,8 @@ public class CameraHelper {
      * SetSurfaceView(view) must be called before!
      * Starts recording if hasn't already.
      */
-    public void StartRecording() {
-        lock.acquireUninterruptibly();
-
+    public synchronized void StartRecording() {
         if (isRecording) {
-            lock.release();
             Log.d(TAG, "Asked to start recording, but already recording");
             return;
         }
@@ -230,17 +240,11 @@ public class CameraHelper {
             // prepare didn't work, release the recorder
             ReleaseMediaRecorder();
         }
-
-        lock.release();
     }
 
     public String StopRecording() {
-        lock.acquireUninterruptibly();
-
         if (!isRecording) {
-            lock.release();
             Log.d(TAG, "Asked to stop, but already stopped");
-            currentFileName = null;
             return null;
         }
 
@@ -257,8 +261,6 @@ public class CameraHelper {
         ReleaseMediaRecorder();
         Log.i(TAG, "Stopped recording");
         isRecording = false;
-
-        lock.release();
 
         return fileName;
     }
