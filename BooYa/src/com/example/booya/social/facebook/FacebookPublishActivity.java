@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import com.example.booya.R;
 import com.sromku.simple.fb.Permission;
@@ -74,6 +75,10 @@ public class FacebookPublishActivity extends Activity {
     public void onResume() {
         super.onResume();
         mSimpleFacebook = SimpleFacebook.getInstance(this);
+        if (mSimpleFacebook.isLogin()) {
+            ((Button) findViewById(R.id.loginButton)).setEnabled(false);
+            ((Button) findViewById(R.id.publishButton)).setEnabled(true);
+        }
     }
 
     @Override
@@ -84,9 +89,6 @@ public class FacebookPublishActivity extends Activity {
     }
 
     public void publishDummyVideo(View view) {
-        if (!mSimpleFacebook.isLogin())
-            mSimpleFacebook.login(mOnLoginListener);
-
         // create publish listener
         OnPublishListener onPublishListener = new OnPublishListener()
         {
@@ -116,7 +118,7 @@ public class FacebookPublishActivity extends Activity {
             @Override
             public void onComplete(String id)
             {
-                Log.i(TAG, "Published successfully. id = " + id);
+                Log.d(TAG, "Published successfully. id = " + id);
                 toast("Successfully published!");
                 finish();
             }
@@ -140,5 +142,9 @@ public class FacebookPublishActivity extends Activity {
     private void toast(String message)
     {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+    }
+
+    public void login(View view) {
+        mSimpleFacebook.login(mOnLoginListener);
     }
 }
