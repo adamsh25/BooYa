@@ -69,7 +69,7 @@ public class RecordingIntentService extends IntentService
                 CameraHelper.getInstance().ReleaseCamera();
             }
 
-            if (fileName == null) {
+            if ((intent.getBooleanExtra(EXTRA_WRITE_TO_DB, false) || intent.getBooleanExtra(EXTRA_START_FFMPEG, false)) && fileName == null) {
                 Log.d(TAG, "Recording probably failed or was too short [fileName == null]. Returning.");
                 return;
             }
