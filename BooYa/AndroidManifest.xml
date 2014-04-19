@@ -98,7 +98,7 @@
             android:label="@string/title_activity_scary_figure" >
         </activity>
 
-        <activity android:name=".social.facebook.FacebookPublishActivity"/>
+        <activity android:name=".social.facebook.FacebookPublishVideoActivity"/>
 
         <!-- For Facebook SDK -->
         <activity

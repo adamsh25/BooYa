@@ -21,10 +21,14 @@ import java.io.File;
  * User: ronlut
  * Date: 23/11/13 15:03
  */
-public class FacebookPublishActivity extends Activity {
-    private final String TAG = FacebookPublishActivity.class.getName();
+public class FacebookPublishVideoActivity extends Activity {
+    private final String TAG = FacebookPublishVideoActivity.class.getName();
 
     private SimpleFacebook mSimpleFacebook;
+    private String mFilePath;
+
+    // Extras
+    public static final String EXTRA_VIDEO_FILE_PATH = "com.example.booya.facebook_publish_video_file_path";
 
     // Login listener
     private OnLoginListener mOnLoginListener = new OnLoginListener()
@@ -68,6 +72,14 @@ public class FacebookPublishActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mFilePath = getIntent().getStringExtra(EXTRA_VIDEO_FILE_PATH);
+
+        if (mFilePath == null || mFilePath.isEmpty()) {
+            Log.e(TAG, "Asked to publish a video, but no file path was supplied to the activity.");
+            return;
+        }
+
         setContentView(R.layout.activity_facebook_publish);
     }
 
@@ -128,7 +140,7 @@ public class FacebookPublishActivity extends Activity {
 
         // create Video instace and add some properties
         Video videoObj = new Video.Builder()
-                .setVideo(new File("/sdcard/dummy.mp4"))
+                .setVideo(new File(mFilePath))
                 .setDescription("Download #BooYa now: https://play.google.com/store/apps/details?id=com.example.booya") //TODO: change to real url!
 //                .setName("I scared the hell out of *friend's name*!") //title
                 .setName("New grave in my BooYa graveyard!") //title
