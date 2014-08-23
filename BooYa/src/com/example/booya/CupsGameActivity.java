@@ -1,8 +1,10 @@
 package com.example.booya;
 
+import gif.decoder.GifRun;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import android.view.SurfaceView;
 
 public class CupsGameActivity extends Activity {
 
@@ -11,7 +13,9 @@ public class CupsGameActivity extends Activity {
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_cups_game);
-		
+		SurfaceView v = (SurfaceView) findViewById(R.id.surfaceView1);
+		GifRun r = new GifRun();
+		r.LoadGiff(v, this, R.drawable.change_to_cups_game_gif);
 	}
 
 	@Override
