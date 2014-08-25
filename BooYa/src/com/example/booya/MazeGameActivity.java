@@ -5,6 +5,7 @@ import java.util.TimerTask;
 
 import android.os.*;
 import android.os.Process;
+import android.util.Log;
 import android.view.*;
 import com.example.booya.BL.GameLevel;
 import com.example.booya.BL.GameLevel1;
@@ -34,6 +35,8 @@ import com.example.booya.video.recording.RecordingIntentService;
 
 public class MazeGameActivity extends Activity
 {
+
+    private String TAG = "MazeGameActivity";
 
 	class timerTask extends TimerTask
 	{
@@ -378,6 +381,8 @@ public class MazeGameActivity extends Activity
 		// Touches
 		// The Wall While Moving Is Finger - On Slide Only.
 		if (action == MotionEvent.ACTION_MOVE) {
+            Log.d(TAG, "Touched wall - GAME OVER");
+
 			// Setting Touched Wall Flag To True.
 			b_playerHasTouchedWall = true;
 			
@@ -434,6 +439,8 @@ public class MazeGameActivity extends Activity
 
     private void onTouchBooya(MotionEvent event)
 	{
+        Log.d(TAG, "Finished game succesfully");
+
 		// Gets The Motion Action Type.
 		final int action = event.getAction();
 		
@@ -486,6 +493,8 @@ public class MazeGameActivity extends Activity
 	@SuppressLint("NewApi")
 	private void onFinishLevel() {
         n_gameLevel++;
+
+        Log.d(TAG, "Finished level " + n_gameLevel);
 
 		if(n_gameLevel < levels.length)
 		{
