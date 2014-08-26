@@ -49,7 +49,8 @@
         <activity
             android:name="com.example.booya.MazeGameActivity"
             android:label="@string/title_activity_maze_game"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:noHistory="true">
         </activity>
         <activity
             android:name="com.example.booya.TesterActivity"
@@ -99,7 +100,8 @@
         <activity
             android:name="com.example.booya.ScaryFigureActivity"
             android:label="@string/title_activity_scary_figure"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:noHistory="true">
         </activity>
         <activity
             android:name="com.example.booya.CupsGameActivity"

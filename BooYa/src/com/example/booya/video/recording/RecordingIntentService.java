@@ -56,7 +56,7 @@ public class RecordingIntentService extends IntentService
             CameraHelper.getInstance().StartRecording();
             shouldRecord = true;
 
-            while (shouldRecord)
+            while (shouldRecord) //TODO: change to mutex?
             {
             }
         }

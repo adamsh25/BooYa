@@ -90,10 +90,15 @@ public class ScaryFigureActivity extends Activity {
     protected void onPause() {
         super.onPause();
         mediaPlayer.stop();
-        Intent i = new Intent(getBaseContext(), TesterActivity.class);
-        startActivity(i); //TODO: proper back navigation
         //stopRecording();
+
+    }
+
+    protected void onStop() {
         Log.d(TAG, "Exiting scary figure");
+        super.onStop();
+        Intent i = new Intent(getBaseContext(), TesterActivity.class);
+        startActivity(i);
     }
 
 }
