@@ -4,6 +4,7 @@ package com.example.booya;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Handler;
+import android.util.Log;
 import com.example.booya.video.recording.CameraHelper;
 import com.example.booya.video.recording.RecordingIntentService;
 
@@ -14,6 +15,7 @@ import android.content.Intent;
 import android.view.Menu;
 
 public class ScaryFigureActivity extends Activity {
+    private String TAG = "ScaryFigureActivity";
     final Runnable runnable  = new Runnable() {
         public void run() {
 //            if (mediaPlayer.isPlaying()) {
@@ -53,6 +55,7 @@ public class ScaryFigureActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "Showing scary figure");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scary_figure);
 
@@ -87,9 +90,15 @@ public class ScaryFigureActivity extends Activity {
     protected void onPause() {
         super.onPause();
         mediaPlayer.stop();
-        Intent i = new Intent(getBaseContext(), TesterActivity.class);
-        startActivity(i); //TODO: proper back navigation
         //stopRecording();
+
+    }
+
+    protected void onStop() {
+        Log.d(TAG, "Exiting scary figure");
+        super.onStop();
+        Intent i = new Intent(getBaseContext(), TesterActivity.class);
+        startActivity(i);
     }
 
 }
