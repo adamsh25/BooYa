@@ -1,6 +1,6 @@
 package com.example.booya.UI.Views;
 
-import com.example.booya.BL.GameLevel;
+import com.example.booya.BL.MazeLevel;
 import com.example.booya.BL.MazeObstacles;
 
 import android.content.Context;
@@ -18,7 +18,7 @@ public class GameLevelView extends View
 	/**
 	 * Declare members
 	 */
-	private GameLevel m_level; // The Game Level Logic
+	private MazeLevel m_level; // The Game Level Logic
 	private Paint m_wallPaint; // The Wall Design Member 
 	
 	//endregion
@@ -52,10 +52,10 @@ public class GameLevelView extends View
 		super.onDraw(canvas);
 		
 		// runs through all the wall matrix rows
-		for (int row = 0; row < GameLevel.MAX_ROWS; row++) 
+		for (int row = 0; row < m_level.getLevelMatrixRowsNum(); row++)
 		{
 			// runs throught all the wall columns
-			for (int col = 0; col < GameLevel.MAX_COLS; col++) 
+			for (int col = 0; col < m_level.getLevelMatrixColsNum(); col++)
 			{
 				// gets the maze obstacle type by the current row an column.
 				MazeObstacles curMazeObstacle = this.m_level.mazeObstacleAt(row, col);
@@ -81,7 +81,7 @@ public class GameLevelView extends View
 	 * Set The Level Of The Game To Draw View By A Specific Level.
 	 * @param level
 	 */
-	public void setGameLevel(GameLevel level)
+	public void setGameLevel(MazeLevel level)
 	{
 	
 		this.m_level = level;

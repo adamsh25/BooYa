@@ -10,8 +10,6 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.PointF;
-import android.view.DragEvent;
-import android.view.MotionEvent;
 import android.view.View;
 
 @SuppressLint("ViewConstructor")
@@ -34,11 +32,11 @@ public class StartOffsetCircleView  extends View
 	
 	//region C'tors
 	
-	public StartOffsetCircleView(Context context, PointF pntf_StartPos)
+	public StartOffsetCircleView(Context context, PointF pntf_StartPos, int monsterSize)
 	{
 		super(context);
-		this.pntf_StartPos = new PointF(pntf_StartPos.x + (Monster.MONSTER_SIZE/2),
-				pntf_StartPos.y - (Monster.MONSTER_SIZE/2));
+		this.pntf_StartPos = new PointF(pntf_StartPos.x + (monsterSize /2),
+				pntf_StartPos.y - (monsterSize /2));
 		CircleCenter = this.pntf_StartPos;
 	}
 	

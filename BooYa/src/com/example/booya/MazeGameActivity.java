@@ -7,12 +7,8 @@ import android.os.*;
 import android.os.Process;
 import android.util.Log;
 import android.view.*;
-import com.example.booya.BL.GameLevel;
-import com.example.booya.BL.GameLevel1;
-import com.example.booya.BL.GameLevel2;
-import com.example.booya.BL.GameLevel3;
-import com.example.booya.BL.MazeObstacles;
-import com.example.booya.BL.Monster;
+import com.example.booya.BL.*;
+import com.example.booya.BL.MazeLevel;
 import com.example.booya.UI.Views.GameLevelView;
 import com.example.booya.UI.Views.MazeView;
 import com.example.booya.UI.Views.MonsterView;
@@ -73,8 +69,8 @@ public class MazeGameActivity extends Activity
 	private MonsterView monsterView;
 	
 	// Game Level members
-	private GameLevel[] levels;
-	private GameLevel m_currentLevel;
+	//private MazeLevel[] levels;
+	private MazeLevel m_currentLevel;
 	private GameLevelView gameLevelView;
 	
 	// Offset Circle members 
@@ -88,7 +84,7 @@ public class MazeGameActivity extends Activity
 	private final long  timerGameOverInMilliseconds = ((long)(1000 * timerGameOverMinutes));
 	
 	// Camera members
-	private CameraHelper cameraHelper;
+//	private CameraHelper cameraHelper;
 	private Vibrator gameVibrator;
 	
 	// Design members 
@@ -139,30 +135,28 @@ public class MazeGameActivity extends Activity
 		screenHeight = display.getHeight() - 1;
 		screenWidth = display.getWidth();
 
-
-		
 		// Get instance of Vibrator from current Context
-		gameVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		gameVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE); //todo: needed?
 
 		b_playerHasTouchedWall = false;
 		
 		b_canMove = false;
         b_gotToBooya = false;
 
-		initLevels();
-		n_gameLevel = 0;
-		m_currentLevel = new GameLevel1();
+		//initLevels();
+		n_gameLevel = getIntent().getIntExtra("levelId", 0);
+		m_currentLevel = MazeLevelFactory.BuildMazeLevel(n_gameLevel);
 		gameLevelView = new GameLevelView(this);
 		gameLevelView.setGameLevel(m_currentLevel);
 		
-		progressWheelView = new TimerWheel(this);
+		progressWheelView = new TimerWheel(this, m_currentLevel.getSCREEN_SIZE());
 		
 		m_monster = new Monster(m_currentLevel.getStartPosition().x,
-				m_currentLevel.getStartPosition().y);
+				m_currentLevel.getStartPosition().y, m_currentLevel.MAZE_OBSTACLE_SIZE);
 		monsterView = new MonsterView(this, m_monster);
 		
 		StartOffsetCircleView.Draw = true;
-		circleView = new StartOffsetCircleView(this,m_currentLevel.getStartPosition());
+		circleView = new StartOffsetCircleView(this,m_currentLevel.getStartPosition(), (int)m_monster.getSIZE());
 		
 		m_mazeView = new MazeView(this);
 		m_mazeView.setViews(gameLevelView, monsterView, circleView,progressWheelView);
@@ -420,18 +414,18 @@ public class MazeGameActivity extends Activity
 
 	}
 
-    private void returnToFirstLevel() {
-        // The Player C'ant Move Till He Touches The Monster In Start Position.
-        b_canMove = false;
-        StartOffsetCircleView.Draw = true;
-        // The Monster Return To Start Position
-        m_monster.move(levels[0].getStartPosition().x,
-                levels[0].getStartPosition().y);
-        circleView = new StartOffsetCircleView(this,levels[n_gameLevel].getStartPosition());
-        // Set The Views To Paint The Monster In Start Position
-        m_mazeView.setViews(gameLevelView, monsterView, circleView, progressWheelView);
-        setContentView(dynamicView);
-    }
+//    private void returnToFirstLevel() {
+//        // The Player C'ant Move Till He Touches The Monster In Start Position.
+//        b_canMove = false;
+//        StartOffsetCircleView.Draw = true;
+//        // The Monster Return To Start Position
+//        m_monster.move(levels[0].getStartPosition().x,
+//                levels[0].getStartPosition().y);
+//        circleView = new StartOffsetCircleView(this,levels[n_gameLevel].getStartPosition(), (int) m_monster.getSIZE());
+//        // Set The Views To Paint The Monster In Start Position
+//        m_mazeView.setViews(gameLevelView, monsterView, circleView, progressWheelView);
+//        setContentView(dynamicView);
+//    }
 
     private void onTouchBooya(MotionEvent event)
 	{
@@ -490,9 +484,9 @@ public class MazeGameActivity extends Activity
 		b_canMove = false;
 		StartOffsetCircleView.Draw = true;
 		// The Monster Return To Start Position
-		m_monster.move(levels[n_gameLevel].getStartPosition().x,
-				levels[n_gameLevel].getStartPosition().y);
-		circleView = new StartOffsetCircleView(this,levels[n_gameLevel].getStartPosition());
+		m_monster.move(m_currentLevel.getStartPosition().x,
+				m_currentLevel.getStartPosition().y);
+		circleView = new StartOffsetCircleView(this,m_currentLevel.getStartPosition(), (int) m_monster.getSIZE());
 		// Set The Views To Paint The Monster In Start Position
 		m_mazeView.setViews(gameLevelView, monsterView, circleView, progressWheelView);
 		setContentView(dynamicView);
@@ -504,14 +498,14 @@ public class MazeGameActivity extends Activity
 
         Log.d(TAG, "Finished level " + n_gameLevel);
 
-		if(n_gameLevel < levels.length)
+		if(n_gameLevel < MazeLevelFactory.NumberOfLevels())
 		{
-			m_currentLevel = levels[n_gameLevel];
+			m_currentLevel = MazeLevelFactory.BuildMazeLevel(n_gameLevel);
 			gameLevelView = new GameLevelView(this);
 			gameLevelView.setGameLevel(m_currentLevel);
 		}
 
-        if (n_gameLevel == (levels.length - 1) && TesterActivity.bHasFrontCamera) {
+        if (n_gameLevel == (MazeLevelFactory.NumberOfLevels() - 1) && TesterActivity.bHasFrontCamera) {
             camSurface.setVisibility(SurfaceView.VISIBLE);
             n_Start_Rec = true;
 //            ((RelativeLayout)findViewById(R.id.relative)).removeView(camSurface);
@@ -532,14 +526,14 @@ public class MazeGameActivity extends Activity
 //		}
 	}
 
-	private void initLevels()
-	{
-		levels = new GameLevel[3];
-		levels[0] = new GameLevel1();
-		levels[1] = new GameLevel2();
-		levels[2] = new GameLevel3();
-		
-	}
+//	private void initLevels() //todo: consider MazeLevelFactory (factory)
+//	{
+//		levels = new MazeLevel[3];
+//		levels[0] = new MazeLevel1();
+//		levels[1] = new MazeLevel2();
+//		levels[2] = new MazeLevel3();
+//
+//	}
 
 	private boolean initOffsetCircle(MotionEvent event)
 	{

@@ -10,7 +10,7 @@ public class Monster extends MovableObject
 	//region finals
 	
 
-	public static final float MONSTER_SIZE = (float)((0.70f) * GameLevel.MAZE_OBSTACLE_SIZE);
+	private float SIZE;
 	
 	
 	//endregion
@@ -49,10 +49,11 @@ public class Monster extends MovableObject
 		
 	//region C'tor
 	
-	public Monster(float startX, float startY)
+	public Monster(float startX, float startY, float obstacleSize)
 	{
 		this.x = startX;
 		this.y = startY;
+        this.SIZE = ((0.70f) * obstacleSize);
 	}
 	
 	//endregion
@@ -68,13 +69,13 @@ public class Monster extends MovableObject
 	@Override
 	public float getRight() {
 		// TODO Auto-generated method stub
-		return x + MONSTER_SIZE;
+		return x + SIZE;
 	}
 
 	@Override
 	public float getTop() {
 		// TODO Auto-generated method stub
-		return y - MONSTER_SIZE;
+		return y - SIZE;
 	}
 
 	@Override
@@ -91,6 +92,10 @@ public class Monster extends MovableObject
 		this.y = yPos;
 	}
 
-	//endregion
+    public float getSIZE() {
+        return SIZE;
+    }
+
+    //endregion
 	
 }

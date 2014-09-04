@@ -1,5 +1,6 @@
 package com.example.booya.BL;
 
+import android.graphics.Point;
 import android.graphics.PointF;
 
 import com.example.booya.MazeGameActivity;
@@ -8,38 +9,37 @@ import com.example.booya.MazeGameActivity;
  * @author adam
  *
  */
-public abstract class GameLevel 
-{
-	
+public class MazeLevel {
 	//region members
-	
+
+    Point _startPos;
+
 
     
-    // Max number of Walls rows and columns
-    public static final int MAX_ROWS = 32;
-    public static final int MAX_COLS = 32;
-    
     // Wall Width and Height - Preferred To Be A Square
-    public static  final float SCREEN_SIZE = Math.min(MazeGameActivity.screenWidth,MazeGameActivity.screenHeight);
-    private static  final float MIN_COL_ROW = Math.min(MAX_ROWS, MAX_COLS);
-    public  static  final float MAZE_OBSTACLE_SIZE = //((0.4f) * 
-    		(Math.min((SCREEN_SIZE /  MIN_COL_ROW), (SCREEN_SIZE / MIN_COL_ROW)));
-		
+    private final float SCREEN_SIZE = Math.min(MazeGameActivity.screenWidth,MazeGameActivity.screenHeight); //todo: what does it mean?
+    private float MIN_COL_ROW;
+    public  float MAZE_OBSTACLE_SIZE;
     
     // Space from the top screen from which the Walls will be drawn 
-    public static final float TOP_PADDING = ((0.5f) * 
+    public final float TOP_PADDING = ((0.5f) *
     		Math.max((MazeGameActivity.screenHeight - MazeGameActivity.screenWidth), 0));
  
     // Space from the top screen from which the Walls will be drawn 
-    public static final float LEFT_PADDING =  
+    public final float LEFT_PADDING =
     		Math.max((MazeGameActivity.screenWidth - MazeGameActivity.screenHeight), 0);
-    
-    protected abstract int GetStartPosX();
-    protected abstract int GetStartPosY();
+
+    public int getLevelMatrixRowsNum() {
+        return _level.length;
+    }
+
+    public int getLevelMatrixColsNum() {
+        return _level[0].length;
+    }
     
 
     // The Maze Obstacles matrix.
-    protected MazeObstacles[][] level;
+    protected MazeObstacles[][] _level;
     
     //endregion
     
@@ -49,9 +49,12 @@ public abstract class GameLevel
      * Empty C'tor
      * Creates An Empty Array Of MazeObstacles
      */
-    public GameLevel()
+    public MazeLevel(MazeObstacles[][] level, Point startingPos)
     {
-        this.level = new MazeObstacles[GameLevel.MAX_ROWS][GameLevel.MAX_COLS];
+        this._level = level;
+        this._startPos = startingPos;
+        MIN_COL_ROW = Math.min(getLevelMatrixRowsNum(), getLevelMatrixColsNum());
+        MAZE_OBSTACLE_SIZE = SCREEN_SIZE / MIN_COL_ROW;
     }
     
     //endregion
@@ -66,7 +69,7 @@ public abstract class GameLevel
      */
     public float GetMazeObstacleTop(int row)
     {
-    	return ((GameLevel.MAZE_OBSTACLE_SIZE * row) + TOP_PADDING);
+    	return ((MAZE_OBSTACLE_SIZE * row) + TOP_PADDING);
     }
     
     /**
@@ -79,7 +82,7 @@ public abstract class GameLevel
 		// To Get The Bottom Place We Need To Add The Obstacle Size
 		//  	And Not To Subtract It, Because We Get From The Screen 
 		//											The Y Pixel Place Reversed. 
-    	return (GetMazeObstacleTop(row) + GameLevel.MAZE_OBSTACLE_SIZE);    	
+    	return (GetMazeObstacleTop(row) + MAZE_OBSTACLE_SIZE);
     }
     
     /**
@@ -89,7 +92,7 @@ public abstract class GameLevel
      */
     public float GetMazeObstacleLeft(int col)
     {
-    	return (GameLevel.MAZE_OBSTACLE_SIZE * col) + LEFT_PADDING;    	
+    	return (MAZE_OBSTACLE_SIZE * col) + LEFT_PADDING;
     }
     
     /**
@@ -99,29 +102,12 @@ public abstract class GameLevel
      */
     public float GetMazeObstacleRight(int col)
     {
-    	return (GetMazeObstacleLeft(col) + GameLevel.MAZE_OBSTACLE_SIZE);
+    	return (GetMazeObstacleLeft(col) + MAZE_OBSTACLE_SIZE);
     }
     
     //endregion
     
     //region Methods
-    
-    // We Give An Array Of Numbers To Draw Each Level Easily
-    // But For Easy Work We Will Use An Enumerable Array Of Maze Obstacles
-    public void updateMazeObstaclesMatrix(int[][] obstacles)
-    {
-    	// runs through matrix rows
-    	for(int row = 0; row < GameLevel.MAX_ROWS; row++)
-    	{
-    		// runs through matrix columns
-    		for(int col = 0; col < GameLevel.MAX_COLS; col++)
-    		{
-    			// Construct Level Obstacle Type Matrix By Level Integer Matrix. 
-    			this.level[row][col] = MazeObstacles.GetMazeObstacleByNumber(obstacles[row][col]);
-    		}
-    	}
-    	
-    }
 
     // 
     /**
@@ -136,9 +122,9 @@ public abstract class GameLevel
     	
     	
     	// Runs Through All The Maze Level Matrix
-    	for(int row = 0; row < GameLevel.MAX_ROWS; row++)
+    	for(int row = 0; row < getLevelMatrixRowsNum(); row++)
     	{
-    		for(int col = 0; col < GameLevel.MAX_COLS; col++)
+    		for(int col = 0; col < getLevelMatrixColsNum(); col++)
     		{
     			// If The Monster Touches The Edge Of A "Dangerous Obstacle".
     			if(isMonsterTouchedObstacle(row, col, monster))
@@ -169,7 +155,7 @@ public abstract class GameLevel
      */
     public MazeObstacles mazeObstacleAt(int row, int col)
     {
-    	return (this.level[row][col]);
+    	return (this._level[row][col]);
     }
     
     
@@ -351,15 +337,17 @@ public abstract class GameLevel
      * 
      * @return
      */
-    public PointF getStartPosition()
+    public PointF getStartPosition() //todo: change to Point?
     {
-    	float x = (this.GetMazeObstacleLeft(GetStartPosX()) + this.GetMazeObstacleRight(GetStartPosX()))/2;
-    	float y = (this.GetMazeObstacleTop(GetStartPosY()) + this.GetMazeObstacleBottom(GetStartPosY()))/2;
+    	float x = (this.GetMazeObstacleLeft(_startPos.x) + this.GetMazeObstacleRight(_startPos.x))/2;
+    	float y = (this.GetMazeObstacleTop(_startPos.y) + this.GetMazeObstacleBottom(_startPos.y))/2;
     	return (new PointF(x,y));
     }
-    
-    
-		
+
+    public float getSCREEN_SIZE() {
+        return SCREEN_SIZE;
+    }
+
 
 //endregion
 

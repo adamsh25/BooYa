@@ -9,75 +9,61 @@ import android.graphics.Paint;
 import android.view.View;
 
 @SuppressLint("ViewConstructor")
-public class MonsterView extends View
-{
+public class MonsterView extends View {
 
-	//region members
-	
-	/**
-	 * 
-	 */
-	private Paint m_monsterPaint; // The Wall Design Member
-	private Monster m_theMonster;
-	
-	//endregion
-	
-	//region C'tor
-	
-	/**
-	 * @param context
-	 * @param monster
-	 */
-	public MonsterView(Context context, Monster monster) 
-	{
-		super(context);
-		this.m_theMonster = monster;
-		
-	}
+    //region members
 
-	//endregion
-	
-	//region Methods
-	
-	
+    /**
+     *
+     */
+    private Paint m_monsterPaint; // The Wall Design Member
+    private Monster m_theMonster;
 
-	/* (non-Javadoc)
-	 * @see android.view.View#onDraw(android.graphics.Canvas)
-	 */
-	@Override
-	protected void onDraw(Canvas canvas)
-	{
+    //endregion
 
-		super.onDraw(canvas);
+    //region C'tor
 
-		try
-		{
-			//canvas.drawBitmap(this.getMonsterBitmap(),
-								//m_theMonster.getX(),
-								//m_theMonster.getY(),
-								//null);
-			canvas.drawRect(m_theMonster.getLeft(), m_theMonster.getTop(),
-							m_theMonster.getRight(), m_theMonster.getBottom(),
-							getMonsterPaint());
-		} 
-		catch (Exception e)
-		{
-			
-			e.printStackTrace();
-		}
-	}
-	
-	protected Paint getMonsterPaint() 
-	{
-		if(m_monsterPaint == null)
-		{
-			m_monsterPaint = new Paint();
-			m_monsterPaint.setColor(Color.BLACK);
-		}
-		
-		return (m_monsterPaint);
-		
-	}
-	
-	//endregion
+    /**
+     * @param context
+     * @param monster
+     */
+    public MonsterView(Context context, Monster monster) {
+        super(context);
+        this.m_theMonster = monster;
+    }
+
+    //endregion
+
+    //region Methods
+
+    /* (non-Javadoc)
+     * @see android.view.View#onDraw(android.graphics.Canvas)
+     */
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        try { //todo: why?
+            //canvas.drawBitmap(this.getMonsterBitmap(),
+            //m_theMonster.getX(),
+            //m_theMonster.getY(),
+            //null);
+            canvas.drawRect(m_theMonster.getLeft(), m_theMonster.getTop(),
+                    m_theMonster.getRight(), m_theMonster.getBottom(),
+                    getMonsterPaint());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected Paint getMonsterPaint() {
+        if (m_monsterPaint == null) {
+            m_monsterPaint = new Paint();
+            m_monsterPaint.setColor(Color.BLACK); //todo: extract to configuration
+        }
+
+        return (m_monsterPaint);
+    }
+
+    //endregion
 }

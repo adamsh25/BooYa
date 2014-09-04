@@ -1,5 +1,5 @@
 package com.example.booya.UI.Views;
-import com.example.booya.BL.GameLevel;
+import com.example.booya.BL.MazeLevel;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,14 +14,15 @@ public class TimerWheel extends View
 	//Sizes (with defaults)
 	private int layout_height = 0;
 	private int layout_width = 0;
-	private int barLength = (int)  (GameLevel.SCREEN_SIZE * 0.0001);
-	private int barWidth =  (int)  (GameLevel.SCREEN_SIZE * 0.08);
+    private int _screenSize;
+	private int barLength;
+	private int barWidth;
 
 	
 	//Padding (with defaults)
-	private int paddingTop = (int)  (GameLevel.SCREEN_SIZE * 0.05);
+	private int paddingTop;
 	private int paddingBottom = 0;
-	private int paddingLeft = (int)  (GameLevel.SCREEN_SIZE * 0.8);
+	private int paddingLeft;
 	private int paddingRight = 0;
 	
 	//Colors (with defaults)
@@ -40,18 +41,21 @@ public class TimerWheel extends View
 	
 
 	float progress = 0;
-	
-	
-	/**
+
+
+    /**
 	 * The constructor for the ProgressWheel
 	 * @param context
 	 * @param attrs
 	 */
-	public TimerWheel(Context context) 
+	public TimerWheel(Context context, float screenSize)
 	{
 		super(context);
-	
-
+        this.barLength = (int) (screenSize * 0.0001);
+        this.barWidth = (int)  (screenSize * 0.08);
+        this.paddingTop = (int)  (screenSize * 0.05);
+        this.paddingLeft = (int)  (screenSize * 0.8);
+        this.layout_height = this.layout_width = (int)screenSize;
 	}
 	
 	private void setupPaints() 
@@ -96,8 +100,6 @@ public class TimerWheel extends View
 	protected void onDraw(Canvas canvas) 
 	{
 		super.onDraw(canvas);
-		
-        layout_width = layout_height = (int)GameLevel.SCREEN_SIZE;
             
 		setupBounds();
 		setupPaints();
