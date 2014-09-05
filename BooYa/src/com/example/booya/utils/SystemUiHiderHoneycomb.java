@@ -12,7 +12,7 @@ import android.view.WindowManager;
  * show and hide the system UI.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class SystemUiHiderHoneycomb extends SystemUiHiderBase {
+public class SystemUiHiderHoneycomb extends SystemUiHiderBase { //todo: delete?
 	/**
 	 * Flags for {@link View#setSystemUiVisibility(int)} to use when showing the
 	 * system UI.
