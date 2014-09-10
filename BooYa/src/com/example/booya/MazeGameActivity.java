@@ -9,11 +9,8 @@ import android.util.Log;
 import android.view.*;
 import com.example.booya.BL.*;
 import com.example.booya.BL.MazeLevel;
-import com.example.booya.UI.Views.GameLevelView;
-import com.example.booya.UI.Views.MazeView;
-import com.example.booya.UI.Views.MonsterView;
-import com.example.booya.UI.Views.TimerWheel;
-import com.example.booya.UI.Views.StartOffsetCircleView;
+import com.example.booya.UI.Views.*;
+import com.example.booya.UI.Views.TimerWheelView;
 import com.example.booya.video.recording.CameraHelper;
 
 import android.annotation.SuppressLint;
@@ -31,36 +28,25 @@ import com.example.booya.video.recording.RecordingIntentService;
 
 public class MazeGameActivity extends Activity
 {
-
     private String TAG = "MazeGameActivity";
 
 	class timerTask extends TimerTask
 	{
 		public void run() 
 		{
-			MazeGameActivity.this.runOnUiThread(new Runnable() 
-			{
-				
-				@Override
-				public void run()
-				{
-					progressWheelView.incrementProgress();
-					m_mazeView.setViews(gameLevelView, monsterView, circleView, progressWheelView);
-					setContentView(dynamicView);
-					if(progressWheelView.getProgress()>=360)
-					{
-						onTimeEnd();
-					}
-				}
-			});
-	    }
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (!progressWheelView.incrementProgress()) {
+                        onTimeEnd();
+                    }
+                }
+            });
+        }
 	}
 	
 	// region members
-
-	/**
-	 * Initialize members
-	 */
 	
 	private MazeView m_mazeView;
 	
@@ -71,13 +57,13 @@ public class MazeGameActivity extends Activity
 	// Game Level members
 	//private MazeLevel[] levels;
 	private MazeLevel m_currentLevel;
-	private GameLevelView gameLevelView;
+	private MazeLevelView mazeLevelView;
 	
 	// Offset Circle members 
 	private StartOffsetCircleView circleView;
 	
 	// Timer members
-	private TimerWheel progressWheelView;
+	private TimerWheelView progressWheelView;
 	private Timer timerWheelThread = new Timer();
 	private final float timerGameOverInSeconds = 30;
 	private final float timerGameOverMinutes = ((float)timerGameOverInSeconds/60); 
@@ -85,7 +71,7 @@ public class MazeGameActivity extends Activity
 	
 	// Camera members
 //	private CameraHelper cameraHelper;
-	private Vibrator gameVibrator;
+	private Vibrator gameVibrator; //todo: use
 	
 	// Design members 
 	public static int screenWidth, screenHeight;
@@ -136,7 +122,7 @@ public class MazeGameActivity extends Activity
 		screenWidth = display.getWidth();
 
 		// Get instance of Vibrator from current Context
-		gameVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE); //todo: needed?
+		gameVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
 		b_playerHasTouchedWall = false;
 		
@@ -146,22 +132,18 @@ public class MazeGameActivity extends Activity
 		//initLevels();
 		n_gameLevel = getIntent().getIntExtra("levelId", 0);
 		m_currentLevel = MazeLevelFactory.BuildMazeLevel(n_gameLevel);
-		gameLevelView = new GameLevelView(this);
-		gameLevelView.setGameLevel(m_currentLevel);
+		mazeLevelView = new MazeLevelView(this, m_currentLevel);
 		
-		progressWheelView = new TimerWheel(this, m_currentLevel.getSCREEN_SIZE());
+		progressWheelView = new TimerWheelView(this, m_currentLevel.getSCREEN_SIZE());
 		
 		m_monster = new Monster(m_currentLevel.getStartPosition().x,
 				m_currentLevel.getStartPosition().y, m_currentLevel.MAZE_OBSTACLE_SIZE);
 		monsterView = new MonsterView(this, m_monster);
 		
 		StartOffsetCircleView.Draw = true;
-		circleView = new StartOffsetCircleView(this,m_currentLevel.getStartPosition(), (int)m_monster.getSIZE());
+		circleView = new StartOffsetCircleView(this,m_currentLevel.getStartPosition(), m_monster);
 		
-		m_mazeView = new MazeView(this);
-		m_mazeView.setViews(gameLevelView, monsterView, circleView,progressWheelView);
-
-		
+		m_mazeView = new MazeView(this, mazeLevelView, monsterView, circleView, progressWheelView);
 		
 		// endregion
 		
@@ -175,11 +157,11 @@ public class MazeGameActivity extends Activity
 
 
         timerWheelThread = new Timer();
-        timerWheelThread.schedule(new timerTask(),0,timerGameOverInMilliseconds);
+        timerWheelThread.schedule(new timerTask(),0,timerGameOverInMilliseconds); //todo: start when first touched
 
 		camSurface = (SurfaceView) findViewById(R.id.dummySurface);
 
-        camSurface.setVisibility(SurfaceView.GONE);
+        //camSurface.setVisibility(SurfaceView.GONE);//todo: remove all games with gone and not gone... that's not our performance problem probably.
 		//addContentView(camSurface, new LayoutParams(LayoutParams.WRAP_CONTENT));
 	}
 
@@ -236,7 +218,7 @@ public class MazeGameActivity extends Activity
 		{
 			if(!initOffsetCircle(event))
 			{
-				return super.onTouchEvent(event);
+				return false;
 			}
 			
 		}
@@ -244,22 +226,25 @@ public class MazeGameActivity extends Activity
 		
 		if (b_playerHasTouchedWall) 
 		{
-			return super.onTouchEvent(event);
+			return false;
 		}
 
 		final int action = event.getAction();
 
-		switch (action) {
-		case MotionEvent.ACTION_UP:
-			onPlayerStopTouchingMonster();
-			return super.onTouchEvent(event);
-		case MotionEvent.ACTION_MOVE:
-			break;
-		}
+        switch (action) {
+            case MotionEvent.ACTION_UP:
+                onPlayerStopTouchingMonster();
+                return true;
+            case MotionEvent.ACTION_MOVE:
+                break;
+            default:
+                return false;
+        }
 
 		
 		// Moves The Monster On Screen
 		m_monster.move(event.getX() + Monster.X_OFFSET, event.getY() + Monster.Y_OFFSET);
+        monsterView.invalidate(); //todo: move both lines to mazeview
 
 		// Gets The Maze Obstacle The Monster Has Touched.
 		MazeObstacles touchedMazeObstacle = m_currentLevel
@@ -311,9 +296,9 @@ public class MazeGameActivity extends Activity
 		}
 
 		// Paint The Game With The New Monster Position.
-		m_mazeView.setViews(gameLevelView, monsterView, circleView,progressWheelView);
+		//m_mazeView.setViews(mazeLevelView, monsterView, circleView,progressWheelView);
         //camSurface.draw(canvas);
-		setContentView(dynamicView);
+		//setContentView(dynamicView);
 		
 //		if(!n_Surface_Gone)
 //		{
@@ -334,7 +319,6 @@ public class MazeGameActivity extends Activity
 //		}
 
 		return (super.onTouchEvent(event));
-
 	}
 
 	/*
@@ -423,7 +407,7 @@ public class MazeGameActivity extends Activity
 //                levels[0].getStartPosition().y);
 //        circleView = new StartOffsetCircleView(this,levels[n_gameLevel].getStartPosition(), (int) m_monster.getSIZE());
 //        // Set The Views To Paint The Monster In Start Position
-//        m_mazeView.setViews(gameLevelView, monsterView, circleView, progressWheelView);
+//        m_mazeView.setViews(mazeLevelView, monsterView, circleView, progressWheelView);
 //        setContentView(dynamicView);
 //    }
 
@@ -484,12 +468,13 @@ public class MazeGameActivity extends Activity
 		b_canMove = false;
 		StartOffsetCircleView.Draw = true;
 		// The Monster Return To Start Position
-		m_monster.move(m_currentLevel.getStartPosition().x,
-				m_currentLevel.getStartPosition().y);
-		circleView = new StartOffsetCircleView(this,m_currentLevel.getStartPosition(), (int) m_monster.getSIZE());
+        monsterView.MoveMonster(m_currentLevel.getStartPosition().x, m_currentLevel.getStartPosition().y);
+		//m_monster.move(m_currentLevel.getStartPosition().x,
+		//		m_currentLevel.getStartPosition().y);
+		circleView = new StartOffsetCircleView(this,m_currentLevel.getStartPosition(), m_monster); //todo: change to invalidate()
 		// Set The Views To Paint The Monster In Start Position
-		m_mazeView.setViews(gameLevelView, monsterView, circleView, progressWheelView);
-		setContentView(dynamicView);
+		m_mazeView.setViews(mazeLevelView, monsterView, circleView, progressWheelView); //todo: delete
+		setContentView(dynamicView); //todo: delete
 	}
 	
 	@SuppressLint("NewApi")
@@ -501,8 +486,7 @@ public class MazeGameActivity extends Activity
 		if(n_gameLevel < MazeLevelFactory.NumberOfLevels())
 		{
 			m_currentLevel = MazeLevelFactory.BuildMazeLevel(n_gameLevel);
-			gameLevelView = new GameLevelView(this);
-			gameLevelView.setGameLevel(m_currentLevel);
+			mazeLevelView.SetLevel(m_currentLevel);
 		}
 
         if (n_gameLevel == (MazeLevelFactory.NumberOfLevels() - 1) && TesterActivity.bHasFrontCamera) {
@@ -544,8 +528,7 @@ public class MazeGameActivity extends Activity
 	        
 	        try
 	        {
-
-			        if(circleView.IsTouchCircle(x,y))
+			        if(circleView.IsTouchCircle(x, y))
 			        {
 			        	PointF circleCenter = StartOffsetCircleView.CircleCenter;
 			        	Monster.Y_OFFSET =  -(y - (circleCenter.y));

@@ -12,12 +12,15 @@ import com.example.booya.MazeGameActivity;
 public class MazeLevel {
 	//region members
 
-    Point _startPos;
+    Point _startPoint;
+
+    // The Maze Obstacles matrix.
+    protected MazeObstacles[][] _levelMatrix;
 
 
     
     // Wall Width and Height - Preferred To Be A Square
-    private final float SCREEN_SIZE = Math.min(MazeGameActivity.screenWidth,MazeGameActivity.screenHeight); //todo: what does it mean?
+    private final float SCREEN_SIZE = Math.min(MazeGameActivity.screenWidth, MazeGameActivity.screenHeight); //todo: what does it mean?
     private float MIN_COL_ROW;
     public  float MAZE_OBSTACLE_SIZE;
     
@@ -30,16 +33,15 @@ public class MazeLevel {
     		Math.max((MazeGameActivity.screenWidth - MazeGameActivity.screenHeight), 0);
 
     public int getLevelMatrixRowsNum() {
-        return _level.length;
+        return _levelMatrix.length;
     }
 
     public int getLevelMatrixColsNum() {
-        return _level[0].length;
+        return _levelMatrix[0].length;
     }
     
 
-    // The Maze Obstacles matrix.
-    protected MazeObstacles[][] _level;
+
     
     //endregion
     
@@ -51,8 +53,8 @@ public class MazeLevel {
      */
     public MazeLevel(MazeObstacles[][] level, Point startingPos)
     {
-        this._level = level;
-        this._startPos = startingPos;
+        _levelMatrix = level;
+        _startPoint = startingPos;
         MIN_COL_ROW = Math.min(getLevelMatrixRowsNum(), getLevelMatrixColsNum());
         MAZE_OBSTACLE_SIZE = SCREEN_SIZE / MIN_COL_ROW;
     }
@@ -155,7 +157,7 @@ public class MazeLevel {
      */
     public MazeObstacles mazeObstacleAt(int row, int col)
     {
-    	return (this._level[row][col]);
+    	return (this._levelMatrix[row][col]);
     }
     
     
@@ -339,8 +341,8 @@ public class MazeLevel {
      */
     public PointF getStartPosition() //todo: change to Point?
     {
-    	float x = (this.GetMazeObstacleLeft(_startPos.x) + this.GetMazeObstacleRight(_startPos.x))/2;
-    	float y = (this.GetMazeObstacleTop(_startPos.y) + this.GetMazeObstacleBottom(_startPos.y))/2;
+    	float x = (this.GetMazeObstacleLeft(_startPoint.x) + this.GetMazeObstacleRight(_startPoint.x))/2;
+    	float y = (this.GetMazeObstacleTop(_startPoint.y) + this.GetMazeObstacleBottom(_startPoint.y))/2;
     	return (new PointF(x,y));
     }
 

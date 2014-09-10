@@ -32,9 +32,10 @@ public class StartOffsetCircleView  extends View
 	
 	//region C'tors
 	
-	public StartOffsetCircleView(Context context, PointF pntf_StartPos, int monsterSize)
+	public StartOffsetCircleView(Context context, PointF pntf_StartPos, Monster monster)
 	{
 		super(context);
+        float monsterSize = monster.getSIZE();
 		this.pntf_StartPos = new PointF(pntf_StartPos.x + (monsterSize /2),
 				pntf_StartPos.y - (monsterSize /2));
 		CircleCenter = this.pntf_StartPos;
@@ -54,7 +55,7 @@ public class StartOffsetCircleView  extends View
 		{
 				super.onDraw(canvas);
 		
-				try
+				try //todo: why?
 				{
 		
 					canvas.drawCircle(
@@ -72,7 +73,6 @@ public class StartOffsetCircleView  extends View
 
 	protected Paint getCirclePaint() 
 	{
-	
 		if(m_circlePaint == null)
 		{
 			m_circlePaint = new Paint();
@@ -109,8 +109,4 @@ public class StartOffsetCircleView  extends View
 	}
 	
 	//endregion
-	
-	
-	
-
 }

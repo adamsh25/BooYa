@@ -17,7 +17,7 @@ public class MonsterView extends View {
      *
      */
     private Paint m_monsterPaint; // The Wall Design Member
-    private Monster m_theMonster;
+    private Monster _monster;
 
     //endregion
 
@@ -29,12 +29,17 @@ public class MonsterView extends View {
      */
     public MonsterView(Context context, Monster monster) {
         super(context);
-        this.m_theMonster = monster;
+        _monster = monster;
     }
 
     //endregion
 
     //region Methods
+
+    public void MoveMonster(float x, float y) {
+        _monster.move(x, y);
+        invalidate();
+    }
 
     /* (non-Javadoc)
      * @see android.view.View#onDraw(android.graphics.Canvas)
@@ -43,13 +48,13 @@ public class MonsterView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        try { //todo: why?
+        try { //todo: why try catch?
             //canvas.drawBitmap(this.getMonsterBitmap(),
-            //m_theMonster.getX(),
-            //m_theMonster.getY(),
+            //_monster.getX(),
+            //_monster.getY(),
             //null);
-            canvas.drawRect(m_theMonster.getLeft(), m_theMonster.getTop(),
-                    m_theMonster.getRight(), m_theMonster.getBottom(),
+            canvas.drawRect(_monster.getLeft(), _monster.getTop(),
+                    _monster.getRight(), _monster.getBottom(),
                     getMonsterPaint());
         } catch (Exception e) {
             e.printStackTrace();
