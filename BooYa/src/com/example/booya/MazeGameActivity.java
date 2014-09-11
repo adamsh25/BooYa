@@ -140,8 +140,8 @@ public class MazeGameActivity extends Activity
 				m_currentLevel.getStartPosition().y, m_currentLevel.MAZE_OBSTACLE_SIZE);
 		monsterView = new MonsterView(this, m_monster);
 		
-		StartOffsetCircleView.Draw = true;
-		circleView = new StartOffsetCircleView(this,m_currentLevel.getStartPosition(), m_monster);
+		//StartOffsetCircleView._shouldDraw = true;
+		circleView = new StartOffsetCircleView(this,m_currentLevel, m_monster);
 		
 		m_mazeView = new MazeView(this, mazeLevelView, monsterView, circleView, progressWheelView);
 		
@@ -214,15 +214,15 @@ public class MazeGameActivity extends Activity
             n_Surface_Gone = true;
         }
 	
-		if(StartOffsetCircleView.Draw == true)
-		{
-			if(!initOffsetCircle(event))
-			{
-				return false;
-			}
-			
-		}
-		StartOffsetCircleView.Draw = false;
+//		if(StartOffsetCircleView._shouldDraw == true)
+//		{
+//			if(!initOffsetCircle(event))
+//			{
+//				return false;
+//			}
+//
+//		}
+//		StartOffsetCircleView._shouldDraw = false;
 		
 		if (b_playerHasTouchedWall) 
 		{
@@ -243,8 +243,9 @@ public class MazeGameActivity extends Activity
 
 		
 		// Moves The Monster On Screen
-		m_monster.move(event.getX() + Monster.X_OFFSET, event.getY() + Monster.Y_OFFSET);
-        monsterView.invalidate(); //todo: move both lines to mazeview
+        monsterView.MoveMonster(event.getX() + circleView.get_xOffset(), event.getY() + circleView.get_yOffset());
+		//m_monster.move( + Monster.get_xOffset(), event.getY() + Monster.get_yOffset());
+        //monsterView.invalidate(); //todo: move both lines to mazeview
 
 		// Gets The Maze Obstacle The Monster Has Touched.
 		MazeObstacles touchedMazeObstacle = m_currentLevel
@@ -401,7 +402,7 @@ public class MazeGameActivity extends Activity
 //    private void returnToFirstLevel() {
 //        // The Player C'ant Move Till He Touches The Monster In Start Position.
 //        b_canMove = false;
-//        StartOffsetCircleView.Draw = true;
+//        StartOffsetCircleView._shouldDraw = true;
 //        // The Monster Return To Start Position
 //        m_monster.move(levels[0].getStartPosition().x,
 //                levels[0].getStartPosition().y);
@@ -466,15 +467,15 @@ public class MazeGameActivity extends Activity
 	{
 		// The Player C'ant Move Till He Touches The Monster In Start Position.
 		b_canMove = false;
-		StartOffsetCircleView.Draw = true;
+		//StartOffsetCircleView._shouldDraw = true;
 		// The Monster Return To Start Position
         monsterView.MoveMonster(m_currentLevel.getStartPosition().x, m_currentLevel.getStartPosition().y);
 		//m_monster.move(m_currentLevel.getStartPosition().x,
 		//		m_currentLevel.getStartPosition().y);
-		circleView = new StartOffsetCircleView(this,m_currentLevel.getStartPosition(), m_monster); //todo: change to invalidate()
+		circleView.Redraw(m_currentLevel);
 		// Set The Views To Paint The Monster In Start Position
-		m_mazeView.setViews(mazeLevelView, monsterView, circleView, progressWheelView); //todo: delete
-		setContentView(dynamicView); //todo: delete
+		//m_mazeView.setViews(mazeLevelView, monsterView, circleView, progressWheelView); //todo: delete
+		//setContentView(dynamicView); //todo: delete
 	}
 	
 	@SuppressLint("NewApi")
@@ -519,35 +520,35 @@ public class MazeGameActivity extends Activity
 //
 //	}
 
-	private boolean initOffsetCircle(MotionEvent event)
-	{
-
-	        int x = (int)event.getX();
-	        int y = (int)event.getY();
-	        
-	        
-	        try
-	        {
-			        if(circleView.IsTouchCircle(x, y))
-			        {
-			        	PointF circleCenter = StartOffsetCircleView.CircleCenter;
-			        	Monster.Y_OFFSET =  -(y - (circleCenter.y));
-			        	Monster.X_OFFSET =  -(x - (circleCenter.x));
-			    		StartOffsetCircleView.Draw = false;
-			        	return true;
-			        }
-			        else
-			        {
-			        	return false;
-			        }
-			        
-			        }
-			        catch(Exception ex)
-			        {
-			        	
-			        }
-	        return false;
-		}
+//	private boolean initOffsetCircle(MotionEvent event)
+//	{
+//
+//	        int x = (int)event.getX();
+//	        int y = (int)event.getY();
+//
+//
+//	        try
+//	        {
+//			        if(circleView.IsTouchCircle(x, y))
+//			        {
+//			        	PointF circleCenter = StartOffsetCircleView.CircleCenter;
+//			        	Monster.set_yOffset(-(y - (circleCenter.y)));
+//			        	Monster.set_xOffset(-(x - (circleCenter.x)));
+//			    		StartOffsetCircleView._shouldDraw = false;
+//			        	return true;
+//			        }
+//			        else
+//			        {
+//			        	return false;
+//			        }
+//
+//			        }
+//			        catch(Exception ex)
+//			        {
+//
+//			        }
+//	        return false;
+//		}
 		
 		
 	public void onTimeEnd()

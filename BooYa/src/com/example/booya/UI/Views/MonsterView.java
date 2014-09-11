@@ -70,5 +70,7 @@ public class MonsterView extends View {
         return (m_monsterPaint);
     }
 
+
+
     //endregion
 }

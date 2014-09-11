@@ -1,5 +1,6 @@
 package com.example.booya.BL;
 
+import android.graphics.PointF;
 import com.example.booya.MazeGameActivity;
 
 public class Monster extends MovableObject
@@ -15,13 +16,12 @@ public class Monster extends MovableObject
 	
 	//endregion
 	
-	public static float X_OFFSET = 0;
-	public static float Y_OFFSET = 0;
+
 	public static final float RADIUS = Math.min(MazeGameActivity.screenHeight, 
 			MazeGameActivity.screenWidth) * 0.17f;
-										
-	
-	//endregion
+
+
+    //endregion
 	
 	//region Properties
 	
@@ -51,12 +51,14 @@ public class Monster extends MovableObject
 	
 	public Monster(float startX, float startY, float obstacleSize)
 	{
-		this.x = startX;
-		this.y = startY;
+		x = startX;
+		y = startY;
         this.SIZE = ((0.70f) * obstacleSize);
 	}
-	
-	//endregion
+
+
+
+    //endregion
 	
 	//region Methods
 	
@@ -88,8 +90,8 @@ public class Monster extends MovableObject
 	@Override
 	public synchronized void move(float xPos, float yPos) 
 	{
-		this.x = xPos;
-		this.y = yPos;
+		x = xPos;
+		y = yPos;
 	}
 
     public float getSIZE() {

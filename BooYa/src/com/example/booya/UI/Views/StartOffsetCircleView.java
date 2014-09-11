@@ -1,5 +1,7 @@
 package com.example.booya.UI.Views;
 
+import android.view.MotionEvent;
+import com.example.booya.BL.MazeLevel;
 import com.example.booya.BL.Monster;
 
 import android.annotation.SuppressLint;
@@ -19,26 +21,31 @@ public class StartOffsetCircleView  extends View
 	//region members
 	private Paint m_circlePaint; // The Wall Design Member
 
-	private PointF pntf_StartPos;
+	private PointF _circleCenter;
+
+    private Monster _monster;
 	
-	public static boolean Draw = true;
+	private boolean _shouldDraw;
+
+    private float _xOffset = 0;
+    private float _yOffset = 0;
 	//endregion
 	
 	//region Properties
 	
-	public static PointF CircleCenter = null;
+	public static PointF CircleCenter = null; //todo: delete
 	
 	//endregion
 	
 	//region C'tors
 	
-	public StartOffsetCircleView(Context context, PointF pntf_StartPos, Monster monster)
+	public StartOffsetCircleView(Context context, MazeLevel level, Monster monster)
 	{
 		super(context);
-        float monsterSize = monster.getSIZE();
-		this.pntf_StartPos = new PointF(pntf_StartPos.x + (monsterSize /2),
-				pntf_StartPos.y - (monsterSize /2));
-		CircleCenter = this.pntf_StartPos;
+        _monster = monster;
+		_circleCenter = GetCircleCenter(level.getStartPosition());
+		CircleCenter = _circleCenter;
+        _shouldDraw = true;
 	}
 	
 	//endregion
@@ -51,15 +58,14 @@ public class StartOffsetCircleView  extends View
 	@Override
 	protected void onDraw(Canvas canvas)
 	{
-		if(Draw)
+        super.onDraw(canvas);
+
+		if(_shouldDraw)
 		{
-				super.onDraw(canvas);
-		
 				try //todo: why?
 				{
-		
 					canvas.drawCircle(
-							this.pntf_StartPos.x , this.pntf_StartPos.y ,
+							this._circleCenter.x , this._circleCenter.y ,
 							Math.abs(Monster.RADIUS), getCirclePaint());
 					
 				} 
@@ -88,17 +94,44 @@ public class StartOffsetCircleView  extends View
 		return (m_circlePaint);
 		
 	}
-	
 
-	
-	//endregion
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (!_shouldDraw) {
+            return false;
+        }
+
+        float x = event.getX();
+        float y = event.getY();
+
+        if (!IsTouchCircle(x, y)) {
+            return true; // We tell we handled the touch event to prevent event bubbling up the view hierarchy
+        }
+
+        _yOffset = _circleCenter.y - y;
+        _xOffset = _circleCenter.x - x;
+
+        _shouldDraw = false;
+        invalidate();
+        return true;
+    }
+
+    //endregion
 	
 	//region Methods
+
+    public void Redraw(MazeLevel level) {
+        _circleCenter = GetCircleCenter(level.getStartPosition());
+        CircleCenter = this._circleCenter;
+        _shouldDraw = true;
+        _xOffset = _yOffset = 0;
+        invalidate();
+    }
 	
-	public boolean IsTouchCircle(int x, int y)
+	public boolean IsTouchCircle(float x, float y)
 	{
-		double r = Math.sqrt(Math.pow((x-this.pntf_StartPos.x),2) + Math.pow((y-this.pntf_StartPos.y),2));
-		if( r <= (1.2*Monster.RADIUS))
+		double r = Math.sqrt(Math.pow((x - _circleCenter.x),2) + Math.pow((y - _circleCenter.y),2));
+		if( r <= (1.2 * Monster.RADIUS)) //todo: what is this magic number?
 		{
 			return true;
 		}
@@ -107,6 +140,19 @@ public class StartOffsetCircleView  extends View
 			return false;
 		}
 	}
+
+    private PointF GetCircleCenter(PointF point) {
+        return new PointF(point.x + (_monster.getSIZE() /2),
+                point.y - (_monster.getSIZE() /2));
+    }
+
+    public float get_xOffset() {
+        return _xOffset;
+    }
+
+    public float get_yOffset() {
+        return _yOffset;
+    }
 	
 	//endregion
 }
