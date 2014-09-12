@@ -18,17 +18,17 @@ public class MazeLevel {
     protected MazeObstacles[][] _levelMatrix;
     
     // Wall Width and Height - Preferred To Be A Square
-    private final float SCREEN_SIZE = Math.min(MazeGameActivity.screenWidth, MazeGameActivity.screenHeight); //todo: what does it mean?
+    private final float SCREEN_SIZE = Math.min(MazeGameActivity.mazeViewWidth, MazeGameActivity.mazeViewHeight); //todo: what does it mean?
     private float MIN_COL_ROW;
     public  float MAZE_OBSTACLE_SIZE;
     
     // Space from the top screen from which the Walls will be drawn 
     public final float TOP_PADDING = ((0.5f) *
-    		Math.max((MazeGameActivity.screenHeight - MazeGameActivity.screenWidth), 0));
+    		Math.max((MazeGameActivity.mazeViewHeight - MazeGameActivity.mazeViewWidth), 0));
  
     // Space from the top screen from which the Walls will be drawn 
     public final float LEFT_PADDING =
-    		Math.max((MazeGameActivity.screenWidth - MazeGameActivity.screenHeight), 0);
+    		Math.max((MazeGameActivity.mazeViewWidth - MazeGameActivity.mazeViewHeight), 0);
 
     public int getLevelMatrixRowsNum() {
         return _levelMatrix.length;

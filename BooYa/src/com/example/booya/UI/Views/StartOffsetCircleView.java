@@ -18,8 +18,8 @@ import com.example.booya.MazeGameActivity;
 @SuppressLint("ViewConstructor")
 public class StartOffsetCircleView  extends View
 {
-    public final float RADIUS = Math.min(MazeGameActivity.screenHeight,
-            MazeGameActivity.screenWidth) * 0.17f;
+    public final float RADIUS = Math.min(MazeGameActivity.mazeViewHeight,
+            MazeGameActivity.mazeViewWidth) * 0.17f;
 
 	//region members
 	private Paint m_circlePaint; // The Wall Design Member

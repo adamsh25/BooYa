@@ -3,7 +3,6 @@ package com.example.booya;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.graphics.Camera;
 import android.os.*;
 import android.os.Process;
 import android.util.Log;
@@ -21,7 +20,6 @@ import android.content.Intent;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MotionEvent;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.booya.video.recording.RecordingIntentService;
@@ -64,18 +62,13 @@ public class MazeGameActivity extends Activity
 	// Timer members
 	private TimerWheelView progressWheelView;
 	private Timer timerWheelThread = new Timer();
-	private final float timerGameOverInSeconds = 30;
-	private final float timerGameOverMinutes = ((float)timerGameOverInSeconds/60); 
-	private final long  timerGameOverInMilliseconds = ((long)(1000 * timerGameOverMinutes));
-	
-	// Camera members
-//	private CameraHelper cameraHelper;
+	private final long SECONDS_TO_GAME_OVER = 30;
+
 	private Vibrator gameVibrator; //todo: use
 	
 	// Design members 
-	public static int screenWidth, screenHeight;
+	public static int mazeViewWidth, mazeViewHeight;
 	private SurfaceView camSurface;
-	private View dynamicView;
 	private boolean n_Start_Rec =false;
 	public static boolean n_Surface_Gone =false;
 	
@@ -108,15 +101,10 @@ public class MazeGameActivity extends Activity
 		
 		// region initialise members
 
-		Display display = getWindowManager().getDefaultDisplay();
+		Display display = getWindowManager().getDefaultDisplay(); //todo: extract to a special class
 
-		/*
-		 * api 13+ Point size = new Point(); display.getSize(size); screenWidth
-		 * = size.x; screenHeight = size.y;
-		 */
-
-		screenHeight = display.getHeight() - 1;
-		screenWidth = display.getWidth();
+		mazeViewHeight = display.getHeight() - 1;
+		mazeViewWidth = display.getWidth();
 
 		// Get instance of Vibrator from current Context
 		gameVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -143,18 +131,16 @@ public class MazeGameActivity extends Activity
 		mazeView = new MazeView(this, mazeLevelView, monsterView, circleView, progressWheelView);
 		
 		// endregion
-		
-		LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		dynamicView = vi.inflate(R.layout.activity_maze_game, null);
 
-		LinearLayout ll = (LinearLayout) dynamicView.findViewById(R.id.testing);
-		// insert into main view
-		ll.addView(mazeView);
-		setContentView(dynamicView);
+		setContentView(R.layout.activity_maze_game);
 
+        RelativeLayout mazeGameView = ((RelativeLayout)findViewById(R.id.relative));
+        mazeGameView.addView(mazeView, ViewGroup.LayoutParams.MATCH_PARENT);
 
         timerWheelThread = new Timer();
-        timerWheelThread.schedule(new timerTask(),0,timerGameOverInMilliseconds); //todo: start when first touched?
+        long timerGameOverMinutes = SECONDS_TO_GAME_OVER / 60;
+        long timerGameOverInMilliseconds = 1000 * timerGameOverMinutes;
+        timerWheelThread.schedule(new timerTask(), 0, timerGameOverInMilliseconds); //todo: start when first touched?
 
 		camSurface = (SurfaceView) findViewById(R.id.dummySurface);
 

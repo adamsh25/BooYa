@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import com.example.booya.video.recording.CameraHelper;
 
 public class GenericGameActivity extends Activity {
 	
@@ -25,15 +26,16 @@ public class GenericGameActivity extends Activity {
 		//TODO check what game are we in
 		Intent myIntent = getIntent(); // gets the previously created intent
 		PrankMethod curPrankMethod = (PrankMethod) myIntent.getParcelableExtra("curPrankMethod");
-		switch(curPrankMethod.getN_prank_id())
-		{
-		case 1:setContentView(R.layout.activity_maze_game_main);
-		break;
-		case 2:setContentView(R.layout.activity_cups_game_main);
-		break;
-		}
-		// Check if have front camera
-		if(TesterActivity.bHasFrontCamera)
+        switch (curPrankMethod.getN_prank_id()) {
+            case 1:
+                setContentView(R.layout.activity_maze_game_main);
+                break;
+            case 2:
+                setContentView(R.layout.activity_cups_game_main);
+                break;
+        }
+        // Check if have front camera
+		if(CameraHelper.getInstance().HasFrontFacingCamera()) //todo: what are we checking here?
 		{
 			// For Recording Stuff
 			mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView2);
