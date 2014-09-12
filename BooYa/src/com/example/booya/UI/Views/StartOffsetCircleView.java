@@ -13,11 +13,14 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.PointF;
 import android.view.View;
+import com.example.booya.MazeGameActivity;
 
 @SuppressLint("ViewConstructor")
 public class StartOffsetCircleView  extends View
 {
-	
+    public final float RADIUS = Math.min(MazeGameActivity.screenHeight,
+            MazeGameActivity.screenWidth) * 0.17f;
+
 	//region members
 	private Paint m_circlePaint; // The Wall Design Member
 
@@ -66,7 +69,7 @@ public class StartOffsetCircleView  extends View
 				{
 					canvas.drawCircle(
 							this._circleCenter.x , this._circleCenter.y ,
-							Math.abs(Monster.RADIUS), getCirclePaint());
+							Math.abs(RADIUS), getCirclePaint());
 					
 				} 
 				catch (Exception e)
@@ -131,7 +134,7 @@ public class StartOffsetCircleView  extends View
 	public boolean IsTouchCircle(float x, float y)
 	{
 		double r = Math.sqrt(Math.pow((x - _circleCenter.x),2) + Math.pow((y - _circleCenter.y),2));
-		if( r <= (1.2 * Monster.RADIUS)) //todo: what is this magic number?
+		if( r <= (1.2 * RADIUS)) //todo: what is this magic number?
 		{
 			return true;
 		}

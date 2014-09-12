@@ -13,9 +13,6 @@ public class MonsterView extends View {
 
     //region members
 
-    /**
-     *
-     */
     private Paint m_monsterPaint; // The Wall Design Member
     private Monster _monster;
 
@@ -69,7 +66,6 @@ public class MonsterView extends View {
 
         return (m_monsterPaint);
     }
-
 
 
     //endregion

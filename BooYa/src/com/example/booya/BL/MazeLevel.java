@@ -12,12 +12,10 @@ import com.example.booya.MazeGameActivity;
 public class MazeLevel {
 	//region members
 
-    Point _startPoint;
+    private Point _startPoint;
 
     // The Maze Obstacles matrix.
     protected MazeObstacles[][] _levelMatrix;
-
-
     
     // Wall Width and Height - Preferred To Be A Square
     private final float SCREEN_SIZE = Math.min(MazeGameActivity.screenWidth, MazeGameActivity.screenHeight); //todo: what does it mean?

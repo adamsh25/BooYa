@@ -1,6 +1,5 @@
 package com.example.booya;
 
-import com.example.booya.video.recording.CameraHelper;
 import com.example.booya.video.recording.CameraRecorderActivity;
 
 import android.app.Activity;
@@ -11,13 +10,11 @@ import android.view.View;
 import android.widget.CheckBox;
 
 public class TesterActivity extends Activity {
-	public static Boolean bIsDUBUG = Boolean.FALSE;
-	public static boolean bHasFrontCamera;
+	public static boolean bIsDUBUG = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tester);
-		DetectFrontFacingCamera();
 	}
 
 	@Override
@@ -45,10 +42,7 @@ public class TesterActivity extends Activity {
 	{
 		return bIsDUBUG;
 	}
-	public static void DetectFrontFacingCamera()
-	{
-		bHasFrontCamera = (CameraHelper.getInstance().hasFrontFacingCamera());
-	}
+
 	public void onCheckboxClicked(View view) 
 	{
 	    // Is the view now checked?
@@ -56,7 +50,7 @@ public class TesterActivity extends Activity {
 	   
 	    if(!checked)
 	    {
-	    	bHasFrontCamera = Boolean.FALSE;
+	    	//bHasFrontCamera = Boolean.FALSE; //todo: do something else
 	    	bIsDUBUG = Boolean.TRUE;
 	    }
 	    

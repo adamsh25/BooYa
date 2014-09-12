@@ -27,12 +27,10 @@ public class TimerWheelView extends View
 	private int circleColor = 0x00000000;
 
 	//Paints
-	private Paint barPaint = new Paint();
-	private Paint circlePaint = new Paint();
-	private Paint textPaint = new Paint();
+	private Paint barPaint, circlePaint, textPaint;
 
 	//Rectangles
-	private RectF circleBounds = new RectF();
+	private RectF circleBounds;
 
 	float progress = 0;
 
@@ -50,15 +48,18 @@ public class TimerWheelView extends View
 	
 	private void setupPaints() 
 	{
+        barPaint = new Paint();
 		barPaint.setColor(Color.RED);
         barPaint.setAntiAlias(true);
         barPaint.setStyle(Style.FILL_AND_STROKE);
         barPaint.setStrokeWidth(barWidth);
-        
+
+        circlePaint = new Paint();
         circlePaint.setColor(Color.WHITE);
         circlePaint.setAntiAlias(true);
         circlePaint.setStyle(Style.FILL);
-        
+
+        textPaint = new Paint();
         textPaint.setColor(Color.RED);
         textPaint.setAntiAlias(true);
 	}

@@ -9,16 +9,10 @@ public class Monster extends MovableObject
 	//region members
 	
 	//region finals
-	
 
-	private float SIZE;
-	
+	private final float SIZE;
 	
 	//endregion
-	
-
-	public static final float RADIUS = Math.min(MazeGameActivity.screenHeight, 
-			MazeGameActivity.screenWidth) * 0.17f;
 
 
     //endregion
@@ -53,7 +47,7 @@ public class Monster extends MovableObject
 	{
 		x = startX;
 		y = startY;
-        this.SIZE = ((0.70f) * obstacleSize);
+        SIZE = ((0.70f) * obstacleSize);
 	}
 
 

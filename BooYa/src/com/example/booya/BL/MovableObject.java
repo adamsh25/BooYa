@@ -6,7 +6,7 @@ package com.example.booya.BL;
  * some dimensions which can be determined by calling the methods
  * getLeft(), getRight(), getTop(),getBottom()
  */
-public abstract class MovableObject 
+public abstract class MovableObject
 {
 		protected float x; //current horizontal position of the center of the object
 	    protected float y; //current vertical position of the center of the object
@@ -37,9 +37,4 @@ public abstract class MovableObject
 	    
 	    //This method should move the object
 	    public abstract void move(float xPos, float yPos);
-	   
-
-	    
-	   
-
 }

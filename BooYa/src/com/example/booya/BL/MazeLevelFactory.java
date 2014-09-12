@@ -1,9 +1,6 @@
 package com.example.booya.BL;
 
 import android.graphics.Point;
-import com.example.booya.BL.Cups.GameLevel;
-
-import java.util.logging.Level;
 
 /**
  * Created by Rony on 04/09/2014.

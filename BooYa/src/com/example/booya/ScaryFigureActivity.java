@@ -1,11 +1,7 @@
 package com.example.booya;
 
 
-import android.content.Context;
-import android.media.AudioManager;
-import android.os.Handler;
 import android.util.Log;
-import com.example.booya.video.recording.CameraHelper;
 import com.example.booya.video.recording.RecordingIntentService;
 
 import android.media.MediaPlayer;

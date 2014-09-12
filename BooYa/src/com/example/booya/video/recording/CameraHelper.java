@@ -1,28 +1,22 @@
 package com.example.booya.video.recording;
 
 import java.io.IOException;
-import java.util.concurrent.Semaphore;
 
-import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
-import android.media.AudioManager;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.Surface;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 //documentation: http://developer.android.com/guide/topics/media/camera.html
 
 public class CameraHelper {
-	private static final CameraHelper INSTANCE = new CameraHelper();
-	private final String TAG = CameraHelper.class.getSimpleName();
+    private static final CameraHelper INSTANCE = new CameraHelper();
+    private static final int NO_FRONT_FACING_CAMERA = -1;
+    private final String TAG = CameraHelper.class.getSimpleName();
 	Surface previewSurface;
-    //SurfaceHolder surfaceHolder;
 	private Camera camera;
 	private MediaRecorder recorder;
 	private int frontFacingCameraId;
@@ -47,15 +41,15 @@ public class CameraHelper {
         //surfaceHolder = view.getHolder();
 	}
 
-    public boolean hasFrontFacingCamera() {
-        return frontFacingCameraId != -1;
+    public boolean HasFrontFacingCamera() {
+        return frontFacingCameraId != NO_FRONT_FACING_CAMERA;
     }
 
 	/**
 	 * SetSurfaceView(view) must be called before!
 	 * Starts recording if hasn't already.
 	 */
-	public void StartRecordingOld() {
+	public void StartRecordingOld() { //todo: delete
 		if (isRecording) {
             Log.d(TAG, "Asked to start, but already recording");
             return;
@@ -70,7 +64,7 @@ public class CameraHelper {
 		recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 		// recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 		recorder.setProfile(CamcorderProfile.get(frontFacingCameraId,
-				CamcorderProfile.QUALITY_HIGH));
+				CamcorderProfile.QUALITY_HIGH)); //todo: always?
 		recorder.setOutputFile("/sdcard/video.mp4"); // TODO: change to dir from db
 		recorder.setVideoFrameRate(15);
 		recorder.setPreviewDisplay(previewSurface);
@@ -284,7 +278,7 @@ public class CameraHelper {
 	}
 
 	private int findFrontFacingCameraId() {
-		int cameraId = -1;
+		int cameraId = NO_FRONT_FACING_CAMERA;
 
 		// Search for a front facing camera
 		int numberOfCameras = Camera.getNumberOfCameras();

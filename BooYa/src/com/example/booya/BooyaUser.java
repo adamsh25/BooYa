@@ -3,12 +3,7 @@ package com.example.booya;
 import java.util.List;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Application;
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Vibrator;
 
 import com.example.booya.video.recording.CameraHelper;
@@ -41,7 +36,7 @@ public class BooyaUser {
 		bCanVibrate = false;
 		
 		// Check camera
-		bHasFrontCamera = (CameraHelper.getInstance().hasFrontFacingCamera());
+		bHasFrontCamera = (CameraHelper.getInstance().HasFrontFacingCamera());
 		
 		if(nAndroidApiVersion>10)
 		{

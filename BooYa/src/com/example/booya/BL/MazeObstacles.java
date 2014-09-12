@@ -1,21 +1,18 @@
 package com.example.booya.BL;
 
-public enum MazeObstacles 
+public enum MazeObstacles
 {
-	
 	SAFE(0),
 	START(1),
     WALL(2),
     FIN(3),
 	BOOYA(4),
 	BOUNDARIES(5);
-	
-	
-	private int obstacleValue;
-	private MazeObstacles(int obstacle)
+
+	private int mValue;
+	private MazeObstacles(int obstacleValue)
 	{
-		this.obstacleValue = obstacle;
-		
+        mValue = obstacleValue;
 	}
 	
 	// Get The Maze Enumerated Obstacle Name By A Given Indexed Number
@@ -36,11 +33,5 @@ public enum MazeObstacles
 	        	return BOUNDARIES;
 	        }
 	        return null;
-	}
-	
-	public int GetObstacleValue()
-	{
-		return this.obstacleValue;
-		
 	}
 }

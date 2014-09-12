@@ -3,6 +3,7 @@ package com.example.booya;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.graphics.Camera;
 import android.os.*;
 import android.os.Process;
 import android.util.Log;
@@ -17,7 +18,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PointF;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -48,15 +48,14 @@ public class MazeGameActivity extends Activity
 	
 	// region members
 	
-	private MazeView m_mazeView;
+	private MazeView mazeView;
 	
 	// Monster members
-	private Monster m_monster;
+	private Monster monster;
 	private MonsterView monsterView;
 	
 	// Game Level members
-	//private MazeLevel[] levels;
-	private MazeLevel m_currentLevel;
+	private MazeLevel currentLevel;
 	private MazeLevelView mazeLevelView;
 	
 	// Offset Circle members 
@@ -79,8 +78,6 @@ public class MazeGameActivity extends Activity
 	private View dynamicView;
 	private boolean n_Start_Rec =false;
 	public static boolean n_Surface_Gone =false;
-
-
 	
 	// flag - true if the player has touched a wall.
 	public static boolean b_playerHasTouchedWall = false;
@@ -131,19 +128,19 @@ public class MazeGameActivity extends Activity
 
 		//initLevels();
 		n_gameLevel = getIntent().getIntExtra("levelId", 0);
-		m_currentLevel = MazeLevelFactory.BuildMazeLevel(n_gameLevel);
-		mazeLevelView = new MazeLevelView(this, m_currentLevel);
+		currentLevel = MazeLevelFactory.BuildMazeLevel(n_gameLevel);
+		mazeLevelView = new MazeLevelView(this, currentLevel);
 		
-		progressWheelView = new TimerWheelView(this, m_currentLevel.getSCREEN_SIZE());
+		progressWheelView = new TimerWheelView(this, currentLevel.getSCREEN_SIZE());
 		
-		m_monster = new Monster(m_currentLevel.getStartPosition().x,
-				m_currentLevel.getStartPosition().y, m_currentLevel.MAZE_OBSTACLE_SIZE);
-		monsterView = new MonsterView(this, m_monster);
+		monster = new Monster(currentLevel.getStartPosition().x,
+				currentLevel.getStartPosition().y, currentLevel.MAZE_OBSTACLE_SIZE);
+		monsterView = new MonsterView(this, monster);
 		
 		//StartOffsetCircleView._shouldDraw = true;
-		circleView = new StartOffsetCircleView(this,m_currentLevel, m_monster);
+		circleView = new StartOffsetCircleView(this, currentLevel, monster);
 		
-		m_mazeView = new MazeView(this, mazeLevelView, monsterView, circleView, progressWheelView);
+		mazeView = new MazeView(this, mazeLevelView, monsterView, circleView, progressWheelView);
 		
 		// endregion
 		
@@ -152,12 +149,12 @@ public class MazeGameActivity extends Activity
 
 		LinearLayout ll = (LinearLayout) dynamicView.findViewById(R.id.testing);
 		// insert into main view
-		ll.addView(m_mazeView);
+		ll.addView(mazeView);
 		setContentView(dynamicView);
 
 
         timerWheelThread = new Timer();
-        timerWheelThread.schedule(new timerTask(),0,timerGameOverInMilliseconds); //todo: start when first touched
+        timerWheelThread.schedule(new timerTask(),0,timerGameOverInMilliseconds); //todo: start when first touched?
 
 		camSurface = (SurfaceView) findViewById(R.id.dummySurface);
 
@@ -169,7 +166,7 @@ public class MazeGameActivity extends Activity
     protected void onResume() {
         super.onResume();
 
-        if (TesterActivity.bHasFrontCamera) {
+        if (CameraHelper.getInstance().HasFrontFacingCamera()) {
             Intent i = new Intent(this, RecordingIntentService.class);
             i.setAction(RecordingIntentService.ACTION_OPEN_CAMERA);
             startService(i);
@@ -180,7 +177,7 @@ public class MazeGameActivity extends Activity
     protected void onPause() {
         super.onPause();
 
-        if (!b_gotToBooya && TesterActivity.bHasFrontCamera) {
+        if (!b_gotToBooya && CameraHelper.getInstance().HasFrontFacingCamera()) { //todo: not really has but also want to use camera (tester)
             RecordingIntentService.setShouldRecord(false);
             Intent i = new Intent(this, RecordingIntentService.class);
             i.setAction(RecordingIntentService.ACTION_STOP_RECORDING);
@@ -213,7 +210,7 @@ public class MazeGameActivity extends Activity
             ((RelativeLayout)findViewById(R.id.relative)).removeView(camSurface); //TODO: maybe only change to gone
             n_Surface_Gone = true;
         }
-	
+
 //		if(StartOffsetCircleView._shouldDraw == true)
 //		{
 //			if(!initOffsetCircle(event))
@@ -244,12 +241,12 @@ public class MazeGameActivity extends Activity
 		
 		// Moves The Monster On Screen
         monsterView.MoveMonster(event.getX() + circleView.get_xOffset(), event.getY() + circleView.get_yOffset());
-		//m_monster.move( + Monster.get_xOffset(), event.getY() + Monster.get_yOffset());
+		//monster.move( + Monster.get_xOffset(), event.getY() + Monster.get_yOffset());
         //monsterView.invalidate(); //todo: move both lines to mazeview
 
 		// Gets The Maze Obstacle The Monster Has Touched.
-		MazeObstacles touchedMazeObstacle = m_currentLevel
-				.touchedMazeObstacle(m_monster);
+		MazeObstacles touchedMazeObstacle = currentLevel
+				.touchedMazeObstacle(monster);
 
 		if (!b_canMove)// If The Monster Has Left The Monster - Stopped Touching
 						// Him.
@@ -297,7 +294,7 @@ public class MazeGameActivity extends Activity
 		}
 
 		// Paint The Game With The New Monster Position.
-		//m_mazeView.setViews(mazeLevelView, monsterView, circleView,progressWheelView);
+		//mazeView.setViews(mazeLevelView, monsterView, circleView,progressWheelView);
         //camSurface.draw(canvas);
 		//setContentView(dynamicView);
 		
@@ -312,11 +309,11 @@ public class MazeGameActivity extends Activity
 //			
 //			LinearLayout ll = (LinearLayout) root.findViewById(R.id.testing);
 //			
-//			((ViewGroup)m_mazeView.getParent()).removeView(m_mazeView);
+//			((ViewGroup)mazeView.getParent()).removeView(mazeView);
 //			((ViewGroup)ll.getParent()).removeView(ll);
 //
 //
-//			setContentView(m_mazeView);
+//			setContentView(mazeView);
 //		}
 
 		return (super.onTouchEvent(event));
@@ -372,7 +369,7 @@ public class MazeGameActivity extends Activity
 
 
 			// Check if have front camera
-			if (TesterActivity.bHasFrontCamera && CameraHelper.getInstance().isRecording) {
+			if (CameraHelper.getInstance().HasFrontFacingCamera() && CameraHelper.getInstance().isRecording) { //todo: not really has but also want to use camera (tester)
 				// // Stopping the service, which stops the video recording
 				// Intent intentService = new Intent(this,
 				// RecorderService.class);
@@ -404,11 +401,11 @@ public class MazeGameActivity extends Activity
 //        b_canMove = false;
 //        StartOffsetCircleView._shouldDraw = true;
 //        // The Monster Return To Start Position
-//        m_monster.move(levels[0].getStartPosition().x,
+//        monster.move(levels[0].getStartPosition().x,
 //                levels[0].getStartPosition().y);
-//        circleView = new StartOffsetCircleView(this,levels[n_gameLevel].getStartPosition(), (int) m_monster.getSIZE());
+//        circleView = new StartOffsetCircleView(this,levels[n_gameLevel].getStartPosition(), (int) monster.getSIZE());
 //        // Set The Views To Paint The Monster In Start Position
-//        m_mazeView.setViews(mazeLevelView, monsterView, circleView, progressWheelView);
+//        mazeView.setViews(mazeLevelView, monsterView, circleView, progressWheelView);
 //        setContentView(dynamicView);
 //    }
 
@@ -433,7 +430,7 @@ public class MazeGameActivity extends Activity
 			if(!TesterActivity.bIsDUBUG)
 			BooyaUser.IncreaseNumberOfVictims();
 
-            if (TesterActivity.bHasFrontCamera) {
+            if (CameraHelper.getInstance().HasFrontFacingCamera()) { //todo: not really has but also want to use camera (tester)
                 RecordingIntentService.setShouldRecord(false);
                 Intent i = new Intent(this, RecordingIntentService.class);
                 i.setAction(RecordingIntentService.ACTION_STOP_RECORDING);
@@ -469,12 +466,12 @@ public class MazeGameActivity extends Activity
 		b_canMove = false;
 		//StartOffsetCircleView._shouldDraw = true;
 		// The Monster Return To Start Position
-        monsterView.MoveMonster(m_currentLevel.getStartPosition().x, m_currentLevel.getStartPosition().y);
-		//m_monster.move(m_currentLevel.getStartPosition().x,
-		//		m_currentLevel.getStartPosition().y);
-		circleView.Redraw(m_currentLevel);
+        monsterView.MoveMonster(currentLevel.getStartPosition().x, currentLevel.getStartPosition().y);
+		//monster.move(currentLevel.getStartPosition().x,
+		//		currentLevel.getStartPosition().y);
+		circleView.Redraw(currentLevel);
 		// Set The Views To Paint The Monster In Start Position
-		//m_mazeView.setViews(mazeLevelView, monsterView, circleView, progressWheelView); //todo: delete
+		//mazeView.setViews(mazeLevelView, monsterView, circleView, progressWheelView); //todo: delete
 		//setContentView(dynamicView); //todo: delete
 	}
 	
@@ -486,11 +483,11 @@ public class MazeGameActivity extends Activity
 
 		if(n_gameLevel < MazeLevelFactory.NumberOfLevels())
 		{
-			m_currentLevel = MazeLevelFactory.BuildMazeLevel(n_gameLevel);
-			mazeLevelView.SetLevel(m_currentLevel);
+			currentLevel = MazeLevelFactory.BuildMazeLevel(n_gameLevel);
+			mazeLevelView.SetLevel(currentLevel);
 		}
 
-        if (n_gameLevel == (MazeLevelFactory.NumberOfLevels() - 1) && TesterActivity.bHasFrontCamera) {
+        if (n_gameLevel == (MazeLevelFactory.NumberOfLevels() - 1) && CameraHelper.getInstance().HasFrontFacingCamera()) { //todo: not really has but also want to use camera (tester)
             camSurface.setVisibility(SurfaceView.VISIBLE);
             n_Start_Rec = true;
 //            ((RelativeLayout)findViewById(R.id.relative)).removeView(camSurface);
