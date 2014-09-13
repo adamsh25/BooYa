@@ -76,7 +76,7 @@ public class MazeGameActivity extends Activity
 	public static boolean b_playerHasTouchedWall = false;
 
 	// flag - true if the player can move
-	public static boolean b_canMove = false;
+	//public static boolean b_canMove = false;
 
     public boolean b_gotToBooya = false;
 
@@ -111,7 +111,7 @@ public class MazeGameActivity extends Activity
 
 		b_playerHasTouchedWall = false;
 		
-		b_canMove = false;
+		//b_canMove = false;
         b_gotToBooya = false;
 
 		//initLevels();
@@ -138,9 +138,9 @@ public class MazeGameActivity extends Activity
         mazeGameView.addView(mazeView, ViewGroup.LayoutParams.MATCH_PARENT);
 
         timerWheelThread = new Timer();
-        long timerGameOverMinutes = SECONDS_TO_GAME_OVER / 60;
-        long timerGameOverInMilliseconds = 1000 * timerGameOverMinutes;
-        timerWheelThread.schedule(new timerTask(), 0, timerGameOverInMilliseconds); //todo: start when first touched?
+        double timerGameOverMinutes = SECONDS_TO_GAME_OVER / 60.0;
+        long timerInterval =  (long) (1000 * timerGameOverMinutes);
+        timerWheelThread.schedule(new timerTask(), 0, timerInterval); //todo: start when first touched?
 
 		camSurface = (SurfaceView) findViewById(R.id.dummySurface);
 
@@ -234,24 +234,24 @@ public class MazeGameActivity extends Activity
 		MazeObstacles touchedMazeObstacle = currentLevel
 				.touchedMazeObstacle(monster);
 
-		if (!b_canMove)// If The Monster Has Left The Monster - Stopped Touching
-						// Him.
-		{
-
-			if (touchedMazeObstacle != MazeObstacles.START) // If The Player
-															// Didn't Touched
-															// The Monster
-															// Placed On Start
-															// Position.
-			{
-				// Check Next Player Touch (Move).
-				return (super.onTouchEvent(event));
-			} else {
-				// The Monster Can Now Move - The Game Start Again. (Still Same
-				// Intent - Same Activity)
-				b_canMove = true;
-			}
-		}
+//		if (!b_canMove)// If The Monster Has Left The Monster - Stopped Touching
+//						// Him.
+//		{
+//
+//			if (touchedMazeObstacle != MazeObstacles.START) // If The Player
+//															// Didn't Touched
+//															// The Monster
+//															// Placed On Start
+//															// Position.
+//			{
+//				// Check Next Player Touch (Move).
+//				return (super.onTouchEvent(event));
+//			} else {
+//				// The Monster Can Now Move - The Game Start Again. (Still Same
+//				// Intent - Same Activity)
+//				b_canMove = true;
+//			}
+//		}
 
 		// Do Different Actions For Each Touched Obstacle
 		switch (touchedMazeObstacle) {
@@ -449,7 +449,7 @@ public class MazeGameActivity extends Activity
 	private void onPlayerStopTouchingMonster() 
 	{
 		// The Player C'ant Move Till He Touches The Monster In Start Position.
-		b_canMove = false;
+		//b_canMove = false;
 		//StartOffsetCircleView._shouldDraw = true;
 		// The Monster Return To Start Position
         monsterView.MoveMonster(currentLevel.getStartPosition().x, currentLevel.getStartPosition().y);
